@@ -2,7 +2,7 @@ title: Parchment
 author: pro-panda
 subtitle: The life of a frustrated engineer
 
-url: "https://rahulbothra.com"
+url: "https://hxxdev.github.io"
 baseurl: "/parchment"
 
 footer_only_homepage: true
@@ -21,4 +21,4 @@ navbar:
  - name: "About"
    link: "about"
  - name: "Resume"
-   absolute-link: "https://rahulbothra.com/cv.pdf"
+   absolute-link: "https://google.com"
