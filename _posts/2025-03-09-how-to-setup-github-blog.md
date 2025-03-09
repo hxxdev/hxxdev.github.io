@@ -5,22 +5,18 @@ subtitle: This post explains how you can make your own Github blog.
 tags: [github]
 ---
 
-This post explains how to setup [Github](https://github.com) blog.
+This post explains how to setup your own [Github](https://github.com) blog.  
+Let's get started!  
 
 -------------
-Step 1. Make Github repository  
+**Step 1. Make Github repository**  
 Make your own [Github](https://github.com) repository.  
 Make sure you name your repository as `<username>.github.io` and make it public.  
 Then clone your repository into your local.  
-`git clone your_repository`
+`git clone <your_repository>`
 
 ---------------------
-Step 2. Install Ruby 2.7.0  
-```c
-int main() {
-    printf("Hello World!");
-}
-```
+**Step 2. Install Ruby 2.7.0**    
 ```bash
 git clone https://github.com/rbenv/rbenv.git ~/.rbenv
 cd ~/.rbenv/
@@ -29,12 +25,12 @@ echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.bashrc
 echo 'eval "$(rbenv init -)"' >> ~/.bashrc
 git clone https://github.com/rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build
 echo 'export PATH="$HOME/.rbenv/plugins/ruby-build/bin:$PATH"' >> ~/.bashrc
-exec $SHELL
 rbenv install 2.7.0
 rbenv global 2.7.0
+exec $SHELL
 ```
 ---------------------
-Step 3. Install Bundler and Jekyll using Gem  
+**Step 3. Install Bundler and Jekyll using Gem**  
 ```bash
 gem install jekyll
 gem install bundler 
@@ -45,18 +41,18 @@ bundle update
 bundle add webrick
 ```
 ---------------------
-Step 4. Basic configurations
+**Step 4. Basic configurations**  
 Edit `./_config.yml` to your needs.  
 ```yml
 url: <user_name>.github.io
-baseurl: "/parchment"
+baseurl: ""
 ```
 ---------------------
 
-Step 5. Get your preferred theme into your repository.  
+**Step 5. Get your preferred theme into your repository.**  
 In this example we will use [Parchment Theme](https://github.com/rhl-bthr/parchment).  
 ```git
-git clone https://github.com/rhl-bthr/parchment ./<your local repostiroy path>
+git clone https://github.com/rhl-bthr/parchment ./<your local repository path>
 ```
 Running `bundle install` will trigger installation of packages listed in `Gemfile`.
 Since we have installed the necessary packages for our theme, let's play with syntax highlighting.
@@ -111,7 +107,7 @@ code {
 
 
 ---------------------
- <span class="highlight-blue">Step 6. Commit your work to Git!</span><br>
+**Step 6. Commit your work to Git!**  
 It's time to commit & push your work.  
 Your modifications will be deployed by Github and displayed at `<username>.github.io`.  
 If it is not showing up at your website, go to `Actions` tab in your Github repository.  
