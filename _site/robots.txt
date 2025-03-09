@@ -1,1 +1,5 @@
-Sitemap: http://localhost:4000/parchment/sitemap.xml
+User-agent: *
+Allow: /
+
+Sitemap: https://hxxdev.github.io/sitemap.xml
+

@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    
+    
+    
+
+    <title>How to make your own Github Blog. - Parchment</title>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="blog, pro-panda, Parchment, jekyll">
+    <meta name="author" content="pro-panda">
+
+    <meta name="description" content="This post explains how you can make your own Github blog.">
+    <link href='https://fonts.googleapis.com/css?family=Inconsolata:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="http://localhost:4000/parchment/css/main.css">
+    <link rel="icon" type="image/ico" href="http://localhost:4000/parchment/assets/favicon.ico">
+    <link rel="shortcut-icon" type="image/ico" href="http://localhost:4000/parchment/assets/favicon.ico">
+
+    <!-- For Facebook -->
+    <meta property="og:title" content="How to make your own Github Blog. - Parchment" />
+    <meta property="og:image" itemprop="image" content="http://localhost:4000/parchment/assets/favicon.ico" />
+    <meta property="og:description" content="This post explains how you can make your own Github blog." />
+
+    <!-- For Twitter -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="How to make your own Github Blog. - Parchment" />
+    <meta name="twitter:description" content="This post explains how you can make your own Github blog." />
+    <meta name="twitter:image" content="http://localhost:4000/parchment/assets/favicon.ico" />
+</head>
+
+
+<body>
+    <div class="container">
+        <div class="navbar">
+    <a class="site-title" href="http://localhost:4000/parchment/">Parchment</a>
+
+    <ul class="pull-right">
+        
+        <li class="pull-left">
+            
+            <a href="http://localhost:4000/parchment/about">About</a>
+            /
+        </li>
+        
+        <li class="pull-left">
+            
+            <a href="https://google.com">Google</a>
+            /
+        </li>
+        
+        <li class="pull-left">
+            
+            <a href="http://localhost:4000/parchment/tags">Tags</a>
+            
+        </li>
+        
+    </ul>
+
+    <hr>
+</div>
+        <div class="page-title">
+            How to make your own Github Blog.
+        </div>
+        <div class="content">
+            <div class="page-subtitle">
+    
+        
+            <b>[</b>
+        
+        <a href="/parchment/tags/#github" title="github">github</a>
+        
+            <b>]</b>
+        
+    
+</div>
+
+<p>This post explains how to setup <a href="https://github.com">Github</a> blog.</p>
+
+<hr />
+<p><span class="color-blue">Step 1. Make github repository</span><br />
+Make your <a href="https://github.com">Github</a> repository.<br />
+Make sure you name your repository as <code class="highlighter-rouge">&lt;username&gt;.github.io</code> and make it <code class="highlighter-rouge">public</code>.
+Then clone your repository into your local.<br />
+<code class="highlighter-rouge">git clone your_repository</code></p>
+
+<hr />
+<p><span class="color-blue">Step 2. Install Ruby 2.7.0</span><br /></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git clone https://github.com/rbenv/rbenv.git ~/.rbenv
+<span class="nb">cd</span> ~/.rbenv/
+<span class="nb">echo</span> <span class="s1">'export RUBYOPT='</span><span class="nt">-W0</span><span class="s1">''</span> <span class="o">&gt;&gt;</span> ~/.bashrc
+<span class="nb">echo</span> <span class="s1">'export PATH="$HOME/.rbenv/bin:$PATH"'</span> <span class="o">&gt;&gt;</span> ~/.bashrc
+<span class="nb">echo</span> <span class="s1">'eval "$(rbenv init -)"'</span> <span class="o">&gt;&gt;</span> ~/.bashrc
+git clone https://github.com/rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build
+<span class="nb">echo</span> <span class="s1">'export PATH="$HOME/.rbenv/plugins/ruby-build/bin:$PATH"'</span> <span class="o">&gt;&gt;</span> ~/.bashrc
+<span class="nb">exec</span> <span class="nv">$SHELL</span>
+rbenv <span class="nb">install </span>2.7.0
+rbenv global 2.7.0
+</code></pre></div></div>
+<hr />
+<p><span class="color-blue">Step 3. Install Bundler and Jekyll using Gem</span><br /></p>
+<pre>
+    <code class="bash">
+        gem install jekyll
+        gem install bundler 
+        gem install webrick
+        bundle update
+        bundle add webrick
+    </code>
+</pre>
+<hr />
+<p><span class="color-blue">Step 4. Get your preferred theme into your repository.</span><br />
+In this example we will use <a href="https://github.com/rhl-bthr/parchment">Parchment Theme</a>.</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git clone https://github.com/rhl-bthr/parchment ./&lt;your <span class="nb">local </span>repostiroy path&gt;
+bundle <span class="nb">install</span>
+</code></pre></div></div>
+<p>Running <code class="highlighter-rouge">bundle install</code> will trigger installation of packages listed in <code class="highlighter-rouge">Gemfile</code>.</p>
+
+<hr />
+<p><span class="color-blue">Step 5. Configure to your preference.</span><br />
+Edit <code class="highlighter-rouge">./_config.yml</code> to your needs.</p>
+<div class="language-yml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">url</span><span class="pi">:</span> <span class="s">&lt;user_name&gt;.github.io</span>
+<span class="na">baseurl</span><span class="pi">:</span> <span class="s2">"</span><span class="s">/parchment"</span>
+</code></pre></div></div>
+<p>Edit <code class="highlighter-rouge">./css/main.scss</code> to your needs.</p>
+
+<hr />
+
+<p><span class="highlight-blue">And</span>
+<span class="highlight-green">some</span>
+<span class="highlight-orange">highlighting</span>
+<span class="highlight-red">styles.</span></p>
+
+<p><strong>Here is a bulleted list,</strong></p>
+<ul>
+  <li>This is a bullet point</li>
+  <li>This is another bullet point</li>
+</ul>
+
+<p><strong>Here is a numbered list,</strong></p>
+<ol>
+  <li>You can also number things down.</li>
+  <li>And so on.</li>
+</ol>
+
+<p><strong>Here is a sample code snippet in C,</strong></p>
+<pre><code class="language-C">#include &lt;stdio.h&gt;
+
+int main(void){
+    printf("hello world!");
+}
+</code></pre>
+
+<p><strong>Here is a horizontal rule,</strong></p>
+
+<hr />
+
+<p><strong>Here is a blockquote,</strong></p>
+
+<blockquote>
+  <p>There is no such thing as a hopeless situation. Every single 
+circumstances of your life can change!</p>
+</blockquote>
+
+<p><strong>Here is a table,</strong></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Subject</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>201</td>
+      <td>John</td>
+      <td>Physics</td>
+    </tr>
+    <tr>
+      <td>202</td>
+      <td>Doe</td>
+      <td>Chemistry</td>
+    </tr>
+    <tr>
+      <td>203</td>
+      <td>Samson</td>
+      <td>Biology</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>Here is a link,</strong><br />
+<a href="https://github.com">GitHub Inc.</a> is a web-based hosting service
+for version control using Git</p>
+
+<p><strong>Here is an image,</strong><br />
+<img src="../assets/autumn.jpg" alt="" /></p>
+
+
+        </div>
+        <div class="footer">
+    
+        <br>
+    
+</div>
+
+    </div>
+</body>

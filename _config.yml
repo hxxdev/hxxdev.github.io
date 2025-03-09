@@ -20,5 +20,7 @@ sass:
 navbar:
  - name: "About"
    link: "about"
- - name: "Resume"
+ - name: "Google"
    absolute-link: "https://google.com"
+ - name: "Tags"
+   link: "tags"

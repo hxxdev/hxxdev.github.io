@@ -2,12 +2,13 @@
 layout: post
 title: Or maybe Markdown
 subtitle: This post explains how you can write posts using Markdown.
-tags: [guide, markdown]
+tags: [guide]
+private: true
 ---
 
-This post is written in markdown, but you can also write a [post using html]({% link _posts/2020-02-27-html-posts.html %}).
+This post is written in markdown, but you can also write a [post using html]({% link parchment-master/_posts/2020-02-27-html-posts.html %}).
 
-<span class="color-red">[NEW]:</span> Now you can also create a private post, which will not be visible on the blog homepage, but is accessible via a URL. See [this secret post]({% link _posts/2020-04-05-private-example.html %}) as an example.
+<span class="color-red">[NEW]:</span> Now you can also create a private post, which will not be visible on the blog homepage, but is accessible via a URL. See [this secret post]({% link parchment-master/_posts/2020-04-05-private-example.html %}) as an example.
 
 Posts should be named as `%yyyy-%mm-%dd-your-post-title-here.md`, and placed in the `_posts/` directory. Drafts can be kept in `_drafts/` directory.
 
