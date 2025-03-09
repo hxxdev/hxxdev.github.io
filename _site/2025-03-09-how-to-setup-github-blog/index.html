@@ -15,33 +15,33 @@
 
     <meta name="description" content="This post explains how you can make your own Github blog.">
     <link href='https://fonts.googleapis.com/css?family=Inconsolata:400,700' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" href="http://localhost:4000/parchment/css/main.css">
-    <link rel="icon" type="image/ico" href="http://localhost:4000/parchment/assets/favicon.ico">
-    <link rel="shortcut-icon" type="image/ico" href="http://localhost:4000/parchment/assets/favicon.ico">
+    <link rel="stylesheet" href="http://localhost:4000/css/main.css">
+    <link rel="icon" type="image/ico" href="http://localhost:4000/assets/favicon.ico">
+    <link rel="shortcut-icon" type="image/ico" href="http://localhost:4000/assets/favicon.ico">
 
     <!-- For Facebook -->
     <meta property="og:title" content="How to make your own Github Blog. - Parchment" />
-    <meta property="og:image" itemprop="image" content="http://localhost:4000/parchment/assets/favicon.ico" />
+    <meta property="og:image" itemprop="image" content="http://localhost:4000/assets/favicon.ico" />
     <meta property="og:description" content="This post explains how you can make your own Github blog." />
 
     <!-- For Twitter -->
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:title" content="How to make your own Github Blog. - Parchment" />
     <meta name="twitter:description" content="This post explains how you can make your own Github blog." />
-    <meta name="twitter:image" content="http://localhost:4000/parchment/assets/favicon.ico" />
+    <meta name="twitter:image" content="http://localhost:4000/assets/favicon.ico" />
 </head>
 
 
 <body>
     <div class="container">
         <div class="navbar">
-    <a class="site-title" href="http://localhost:4000/parchment/">Parchment</a>
+    <a class="site-title" href="http://localhost:4000/">Parchment</a>
 
     <ul class="pull-right">
         
         <li class="pull-left">
             
-            <a href="http://localhost:4000/parchment/about">About</a>
+            <a href="http://localhost:4000/about">About</a>
             /
         </li>
         
@@ -53,7 +53,7 @@
         
         <li class="pull-left">
             
-            <a href="http://localhost:4000/parchment/tags">Tags</a>
+            <a href="http://localhost:4000/tags">Tags</a>
             
         </li>
         
@@ -70,7 +70,7 @@
         
             <b>[</b>
         
-        <a href="/parchment/tags/#github" title="github">github</a>
+        <a href="/tags/#github" title="github">github</a>
         
             <b>]</b>
         
@@ -80,14 +80,18 @@
 <p>This post explains how to setup <a href="https://github.com">Github</a> blog.</p>
 
 <hr />
-<p><span class="color-blue">Step 1. Make github repository</span><br />
-Make your <a href="https://github.com">Github</a> repository.<br />
-Make sure you name your repository as <code class="highlighter-rouge">&lt;username&gt;.github.io</code> and make it <code class="highlighter-rouge">public</code>.
+<p>Step 1. Make Github repository<br />
+Make your own <a href="https://github.com">Github</a> repository.<br />
+Make sure you name your repository as <code class="highlighter-rouge">&lt;username&gt;.github.io</code> and make it public.<br />
 Then clone your repository into your local.<br />
 <code class="highlighter-rouge">git clone your_repository</code></p>
 
 <hr />
-<p><span class="color-blue">Step 2. Install Ruby 2.7.0</span><br /></p>
+<p>Step 2. Install Ruby 2.7.0</p>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"Hello World!"</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git clone https://github.com/rbenv/rbenv.git ~/.rbenv
 <span class="nb">cd</span> ~/.rbenv/
 <span class="nb">echo</span> <span class="s1">'export RUBYOPT='</span><span class="nt">-W0</span><span class="s1">''</span> <span class="o">&gt;&gt;</span> ~/.bashrc
@@ -100,31 +104,80 @@ rbenv <span class="nb">install </span>2.7.0
 rbenv global 2.7.0
 </code></pre></div></div>
 <hr />
-<p><span class="color-blue">Step 3. Install Bundler and Jekyll using Gem</span><br /></p>
-<pre>
-    <code class="bash">
-        gem install jekyll
-        gem install bundler 
-        gem install webrick
-        bundle update
-        bundle add webrick
-    </code>
-</pre>
-<hr />
-<p><span class="color-blue">Step 4. Get your preferred theme into your repository.</span><br />
-In this example we will use <a href="https://github.com/rhl-bthr/parchment">Parchment Theme</a>.</p>
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git clone https://github.com/rhl-bthr/parchment ./&lt;your <span class="nb">local </span>repostiroy path&gt;
-bundle <span class="nb">install</span>
+<p>Step 3. Install Bundler and Jekyll using Gem</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gem <span class="nb">install </span>jekyll
+gem <span class="nb">install </span>bundler 
+gem <span class="nb">install </span>webrick
+gem <span class="nb">install </span>kramdown
+gem <span class="nb">install </span>rouge
+bundle update
+bundle add webrick
 </code></pre></div></div>
-<p>Running <code class="highlighter-rouge">bundle install</code> will trigger installation of packages listed in <code class="highlighter-rouge">Gemfile</code>.</p>
-
 <hr />
-<p><span class="color-blue">Step 5. Configure to your preference.</span><br />
+<p>Step 4. Basic configurations
 Edit <code class="highlighter-rouge">./_config.yml</code> to your needs.</p>
 <div class="language-yml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">url</span><span class="pi">:</span> <span class="s">&lt;user_name&gt;.github.io</span>
 <span class="na">baseurl</span><span class="pi">:</span> <span class="s2">"</span><span class="s">/parchment"</span>
 </code></pre></div></div>
-<p>Edit <code class="highlighter-rouge">./css/main.scss</code> to your needs.</p>
+<hr />
+
+<p>Step 5. Get your preferred theme into your repository.<br />
+In this example we will use <a href="https://github.com/rhl-bthr/parchment">Parchment Theme</a>.</p>
+<pre><code class="language-git">git clone https://github.com/rhl-bthr/parchment ./&lt;your local repostiroy path&gt;
+</code></pre>
+<p>Running <code class="highlighter-rouge">bundle install</code> will trigger installation of packages listed in <code class="highlighter-rouge">Gemfile</code>.
+Since we have installed the necessary packages for our theme, let’s play with syntax highlighting.
+add the code for markdown to html conversion in <code class="highlighter-rouge">_config.yml</code>.</p>
+<div class="language-yml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">markdown</span><span class="pi">:</span> <span class="s">kramdown</span>
+<span class="na">kramdown</span><span class="pi">:</span>
+  <span class="na">input</span><span class="pi">:</span> <span class="s">GFM</span>
+  <span class="na">syntax_highlighter</span><span class="pi">:</span> <span class="s">rouge</span>
+</code></pre></div></div>
+<p>Now let’s generate <code class="highlighter-rouge">css</code> for our syntax highlighting. Running this will generate css for <code class="highlighter-rouge">github</code> style syntax:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rougify style github <span class="o">&gt;</span> ./css/syntax.css
+</code></pre></div></div>
+<p>Then add the following line to your <code class="highlighter-rouge">main.css</code>.</p>
+<div class="language-css highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">@import</span> <span class="s1">"syntax.css"</span>
+</code></pre></div></div>
+<p>Since we have our syntax highlighter ready, now we can deal with code snippets!
+In markdown, small code snippets will be converted to html element <code class="highlighter-rouge">code</code> with class <code class="highlighter-rouge">highlighter-rounge</code> and block code snippets(let’s say cpp is used as language.) will be converted to html element <code class="highlighter-rouge">pre</code> with class <code class="highlighter-rouge">language-cpp highlighter-rounge</code>. Therefore, we can decorate our code snippets by defining <code class="highlighter-rouge">code</code> and <code class="highlighter-rouge">pre</code> in <code class="highlighter-rouge">main.css</code>.</p>
+<div class="language-css highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">pre</span> <span class="p">{</span>
+    <span class="nl">border-radius</span><span class="p">:</span> <span class="m">15px</span><span class="p">;</span>
+    <span class="nl">background-color</span><span class="p">:</span> <span class="m">#f7f7f8</span><span class="p">;</span>
+    <span class="nl">page-break-inside</span><span class="p">:</span> <span class="nb">avoid</span><span class="p">;</span>
+    <span class="nl">font-size</span><span class="p">:</span> <span class="m">13px</span><span class="p">;</span>
+    <span class="nl">line-height</span><span class="p">:</span> <span class="m">1.4</span><span class="p">;</span>
+    <span class="nl">margin-bottom</span><span class="p">:</span> <span class="m">1.6em</span><span class="p">;</span>
+    <span class="nl">max-width</span><span class="p">:</span> <span class="m">100%</span><span class="p">;</span>
+    <span class="nl">overflow</span><span class="p">:</span> <span class="nb">auto</span><span class="p">;</span>
+    <span class="nl">padding</span><span class="p">:</span> <span class="m">1em</span> <span class="m">1.5em</span><span class="p">;</span>
+    <span class="nl">display</span><span class="p">:</span> <span class="nb">block</span><span class="p">;</span>
+    <span class="nl">word-wrap</span><span class="p">:</span> <span class="n">break-word</span><span class="p">;</span>
+    <span class="nl">white-space</span><span class="p">:</span> <span class="n">pre-wrap</span><span class="p">;</span>
+    <span class="nl">white-space</span><span class="p">:</span> <span class="n">-moz-pre-wrap</span><span class="p">;</span>
+    <span class="nl">white-space</span><span class="p">:</span> <span class="n">-o-pre-wrap</span><span class="p">;</span>
+    <span class="nl">white-space</span><span class="p">:</span> <span class="n">-ms-pre-wrap</span><span class="p">;</span>
+    <span class="nl">text-indent</span><span class="p">:</span> <span class="m">0px</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nt">code</span> <span class="p">{</span>
+    <span class="nl">display</span><span class="p">:</span> <span class="n">inline-block</span><span class="p">;</span>
+    <span class="nl">font-family</span><span class="p">:</span> <span class="s1">"Fira Code"</span><span class="p">,</span> <span class="n">Consolas</span><span class="p">,</span> <span class="s1">"Courier New"</span><span class="p">,</span> <span class="nb">monospace</span><span class="p">;</span>
+    <span class="nl">font-size</span><span class="p">:</span> <span class="m">13px</span><span class="p">;</span>
+    <span class="nl">font-weight</span><span class="p">:</span> <span class="m">400</span><span class="p">;</span>
+    <span class="nl">border-radius</span><span class="p">:</span> <span class="m">3px</span><span class="p">;</span>
+    <span class="nl">background-color</span><span class="p">:</span> <span class="m">#f7f7f8</span><span class="p">;</span>
+    <span class="nl">color</span><span class="p">:</span> <span class="m">#424242</span><span class="p">;</span>
+    <span class="nl">padding</span><span class="p">:</span> <span class="m">2px</span> <span class="m">4px</span><span class="p">;</span>
+    <span class="nl">line-height</span><span class="p">:</span> <span class="m">1.4</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<hr />
+<p><span class="highlight-blue">Step 6. Commit your work to Git!</span><br />
+It’s time to commit &amp; push your work.<br />
+Your modifications will be deployed by Github and displayed at <code class="highlighter-rouge">&lt;username&gt;.github.io</code>.<br />
+If it is not showing up at your website, go to <code class="highlighter-rouge">Actions</code> tab in your Github repository.<br />
+Then select <code class="highlighter-rouge">Re-run everything</code>.</p>
 
 <hr />
 
