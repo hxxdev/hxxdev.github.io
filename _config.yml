@@ -5,6 +5,11 @@ subtitle: The life of a frustrated engineer
 url: "https://hxxdev.github.io"
 baseurl: ""
 
+markdown: kramdown
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+
 footer_only_homepage: true
 footer_url: "https://github.com/rhl-bthr"
 footer_text: "Theme by rhl-bthr"

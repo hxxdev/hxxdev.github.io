@@ -31,7 +31,7 @@ hr {
     border-bottom: 1px solid rgba(255, 255, 255, 0.3);
 }
 pre {
-    border-radius: 3px;
+    border-radius: 15px;
     background-color: #f7f7f8;
     page-break-inside: avoid;
     font-size: 13px;
@@ -319,3 +319,5 @@ table tr th :first-child, table tr td :first-child {
 table tr th :last-child, table tr td :last-child {
     margin: 0;
 }
+
+@import "syntax.css"
