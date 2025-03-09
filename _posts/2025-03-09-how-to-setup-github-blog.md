@@ -2,7 +2,7 @@
 layout: post
 title: How to make your own Github Blog.
 subtitle: This post explains how you can make your own Github blog.
-tags: [github]
+tags: [git]
 ---
 
 This post explains how to setup your own [Github](https://github.com) blog.  
