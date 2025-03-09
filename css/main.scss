@@ -30,9 +30,34 @@ hr {
     border-top: 1px solid rgba(0, 0, 0, 0.1);
     border-bottom: 1px solid rgba(255, 255, 255, 0.3);
 }
+pre {
+    border-radius: 3px;
+    background-color: #f7f7f8;
+    page-break-inside: avoid;
+    font-size: 13px;
+    line-height: 1.4;
+    margin-bottom: 1.6em;
+    max-width: 100%;
+    overflow: auto;
+    padding: 1em 1.5em;
+    display: block;
+    word-wrap: break-word;
+    white-space: pre-wrap;
+    white-space: -moz-pre-wrap;
+    white-space: -o-pre-wrap;
+    white-space: -ms-pre-wrap;
+    text-indent: 0px;
+}
 code {
-    background-color: #d8e7ff;
-    color: #002b72;
+    display: inline-block;
+    font-family: "Fira Code", Consolas, "Courier New", monospace;
+    font-size: 13px;
+    font-weight: 400;
+    border-radius: 3px;
+    background-color: #f7f7f8;
+    color: #424242;
+    padding: 2px 4px;
+    line-height: 1.4;
 }
 
 // divs
