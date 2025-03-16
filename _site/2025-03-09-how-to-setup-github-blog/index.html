@@ -70,28 +70,25 @@
         
             <b>[</b>
         
-        <a href="/tags/#github" title="github">github</a>
+        <a href="/tags/#git" title="git">git</a>
         
             <b>]</b>
         
     
 </div>
 
-<p>This post explains how to setup <a href="https://github.com">Github</a> blog.</p>
+<p>This post explains how to setup your own <a href="https://github.com">Github</a> blog.<br />
+Let’s get started!</p>
 
 <hr />
-<p>Step 1. Make Github repository<br />
+<p><strong>Step 1. Make Github repository</strong><br />
 Make your own <a href="https://github.com">Github</a> repository.<br />
 Make sure you name your repository as <code class="highlighter-rouge">&lt;username&gt;.github.io</code> and make it public.<br />
 Then clone your repository into your local.<br />
-<code class="highlighter-rouge">git clone your_repository</code></p>
+<code class="highlighter-rouge">git clone &lt;your_repository&gt;</code></p>
 
 <hr />
-<p>Step 2. Install Ruby 2.7.0</p>
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-    <span class="n">printf</span><span class="p">(</span><span class="s">"Hello World!"</span><span class="p">);</span>
-<span class="p">}</span>
-</code></pre></div></div>
+<p><strong>Step 2. Install Ruby 2.7.0</strong></p>
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git clone https://github.com/rbenv/rbenv.git ~/.rbenv
 <span class="nb">cd</span> ~/.rbenv/
 <span class="nb">echo</span> <span class="s1">'export RUBYOPT='</span><span class="nt">-W0</span><span class="s1">''</span> <span class="o">&gt;&gt;</span> ~/.bashrc
@@ -99,12 +96,12 @@ Then clone your repository into your local.<br />
 <span class="nb">echo</span> <span class="s1">'eval "$(rbenv init -)"'</span> <span class="o">&gt;&gt;</span> ~/.bashrc
 git clone https://github.com/rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build
 <span class="nb">echo</span> <span class="s1">'export PATH="$HOME/.rbenv/plugins/ruby-build/bin:$PATH"'</span> <span class="o">&gt;&gt;</span> ~/.bashrc
-<span class="nb">exec</span> <span class="nv">$SHELL</span>
 rbenv <span class="nb">install </span>2.7.0
 rbenv global 2.7.0
+<span class="nb">exec</span> <span class="nv">$SHELL</span>
 </code></pre></div></div>
 <hr />
-<p>Step 3. Install Bundler and Jekyll using Gem</p>
+<p><strong>Step 3. Install Bundler and Jekyll using Gem</strong></p>
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gem <span class="nb">install </span>jekyll
 gem <span class="nb">install </span>bundler 
 gem <span class="nb">install </span>webrick
@@ -114,16 +111,16 @@ bundle update
 bundle add webrick
 </code></pre></div></div>
 <hr />
-<p>Step 4. Basic configurations
+<p><strong>Step 4. Basic configurations</strong><br />
 Edit <code class="highlighter-rouge">./_config.yml</code> to your needs.</p>
 <div class="language-yml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">url</span><span class="pi">:</span> <span class="s">&lt;user_name&gt;.github.io</span>
-<span class="na">baseurl</span><span class="pi">:</span> <span class="s2">"</span><span class="s">/parchment"</span>
+<span class="na">baseurl</span><span class="pi">:</span> <span class="s2">"</span><span class="s">"</span>
 </code></pre></div></div>
 <hr />
 
-<p>Step 5. Get your preferred theme into your repository.<br />
+<p><strong>Step 5. Get your preferred theme into your repository.</strong><br />
 In this example we will use <a href="https://github.com/rhl-bthr/parchment">Parchment Theme</a>.</p>
-<pre><code class="language-git">git clone https://github.com/rhl-bthr/parchment ./&lt;your local repostiroy path&gt;
+<pre><code class="language-git">git clone https://github.com/rhl-bthr/parchment ./&lt;your local repository path&gt;
 </code></pre>
 <p>Running <code class="highlighter-rouge">bundle install</code> will trigger installation of packages listed in <code class="highlighter-rouge">Gemfile</code>.
 Since we have installed the necessary packages for our theme, let’s play with syntax highlighting.
@@ -173,85 +170,13 @@ In markdown, small code snippets will be converted to html element <code class="
 </code></pre></div></div>
 
 <hr />
-<p><span class="highlight-blue">Step 6. Commit your work to Git!</span><br />
+<p><strong>Step 6. Commit your work to Git!</strong><br />
 It’s time to commit &amp; push your work.<br />
 Your modifications will be deployed by Github and displayed at <code class="highlighter-rouge">&lt;username&gt;.github.io</code>.<br />
 If it is not showing up at your website, go to <code class="highlighter-rouge">Actions</code> tab in your Github repository.<br />
 Then select <code class="highlighter-rouge">Re-run everything</code>.</p>
 
 <hr />
-
-<p><span class="highlight-blue">And</span>
-<span class="highlight-green">some</span>
-<span class="highlight-orange">highlighting</span>
-<span class="highlight-red">styles.</span></p>
-
-<p><strong>Here is a bulleted list,</strong></p>
-<ul>
-  <li>This is a bullet point</li>
-  <li>This is another bullet point</li>
-</ul>
-
-<p><strong>Here is a numbered list,</strong></p>
-<ol>
-  <li>You can also number things down.</li>
-  <li>And so on.</li>
-</ol>
-
-<p><strong>Here is a sample code snippet in C,</strong></p>
-<pre><code class="language-C">#include &lt;stdio.h&gt;
-
-int main(void){
-    printf("hello world!");
-}
-</code></pre>
-
-<p><strong>Here is a horizontal rule,</strong></p>
-
-<hr />
-
-<p><strong>Here is a blockquote,</strong></p>
-
-<blockquote>
-  <p>There is no such thing as a hopeless situation. Every single 
-circumstances of your life can change!</p>
-</blockquote>
-
-<p><strong>Here is a table,</strong></p>
-
-<table>
-  <thead>
-    <tr>
-      <th>ID</th>
-      <th>Name</th>
-      <th>Subject</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>201</td>
-      <td>John</td>
-      <td>Physics</td>
-    </tr>
-    <tr>
-      <td>202</td>
-      <td>Doe</td>
-      <td>Chemistry</td>
-    </tr>
-    <tr>
-      <td>203</td>
-      <td>Samson</td>
-      <td>Biology</td>
-    </tr>
-  </tbody>
-</table>
-
-<p><strong>Here is a link,</strong><br />
-<a href="https://github.com">GitHub Inc.</a> is a web-based hosting service
-for version control using Git</p>
-
-<p><strong>Here is an image,</strong><br />
-<img src="../assets/autumn.jpg" alt="" /></p>
 
 
         </div>
