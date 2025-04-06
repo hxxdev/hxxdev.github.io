@@ -4,7 +4,7 @@
   <id>http://localhost:4000/</id>
   <title>hxxdev</title>
   <subtitle>An archive of cooking and development.</subtitle>
-  <updated>2025-04-07T00:26:28+09:00</updated>
+  <updated>2025-04-07T00:43:46+09:00</updated>
   <author>
     <name>hxxdev</name>
     <uri>http://localhost:4000/</uri>
@@ -17,6 +17,32 @@
   <icon>/assets/img/favicons/favicon.ico</icon>
   <logo>/assets/img/favicons/favicon-96x96.png</logo>
 
+
+  
+  <entry>
+    <title>State assignment rule of mealy machine</title>
+    <link href="http://localhost:4000/posts/state-assignment-rule-of-mealy-machine/" rel="alternate" type="text/html" title="State assignment rule of mealy machine" />
+    <published>2025-04-07T00:00:00+09:00</published>
+  
+    <updated>2025-04-07T00:00:00+09:00</updated>
+  
+    <id>http://localhost:4000/posts/state-assignment-rule-of-mealy-machine/</id>
+    <content type="text/html" src="http://localhost:4000/posts/state-assignment-rule-of-mealy-machine/" />
+    <author>
+      <name>hxxdev</name>
+    </author>
+
+  
+    
+    <category term="circuit" />
+    
+    <category term="digital" />
+    
+  
+
+  <summary>State assignment란, sequential machine의 state에 binary값을 할당하는 작업이다.  아무값이나 할당해도 되지만 값을 어떻게 할당하냐에 따라 좀 더 optimal한 회로가 설계된다.                 [##_Image       kage@bxsLl7/btsFiuIeSn3/7YazSyUgqFkwFpuoWkCibk/img.png       CDM       1.3       {“originWidth”:2492,”originHeight”:1427,”style”:”alignCenter”,”width”:642,”height”:368,”caption”:”Mealy Machine”}_##]           위 그림은 밀리 머신이다.  State assignment를 어...</summary>
+
+  </entry>
 
   
   <entry>

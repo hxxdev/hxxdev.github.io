@@ -1,5 +1,13 @@
 [
   {
+    "title": "State assignment rule of mealy machine",
+    "url": "/posts/state-assignment-rule-of-mealy-machine/",
+    "categories": "circuit, digital",
+    "tags": "digital, mealy machine",
+    "date": "2025-04-07 00:00:00 +0900",
+    "content": "State assignment란, sequential machine의 state에 binary값을 할당하는 작업이다.  아무값이나 할당해도 되지만 값을 어떻게 할당하냐에 따라 좀 더 optimal한 회로가 설계된다.                 [##_Image       kage@bxsLl7/btsFiuIeSn3/7YazSyUgqFkwFpuoWkCi..."
+  },
+  {
     "title": "How to make your own Github Blog.",
     "url": "/posts/how-to-setup-github-blog/",
     "categories": "dev, git",
