@@ -71,10 +71,10 @@ avatar: /path/to/your/profile/image
 ---------------------
 ## Configure to your taste: Background color
 Each can be configured in the following files:
-- Background Colors(Light): `/_sass/themes/_light.scss`
-- Background Colors(Dark): `/_sass/themes/_dark.scss`
-- Fonts: `/_sass/abstracts/_variables.scss`
-- Code snippet: `/_sass/base/_syntax.scss`
+- Background Colors(Light): `/_sass/themes/_light.scss`{: .filepath}
+- Background Colors(Dark): `/_sass/themes/_dark.scss`{: .filepath}
+- Fonts: `/_sass/abstracts/_variables.scss`{: .filepath}
+- Code snippet: `/_sass/base/_syntax.scss`{: .filepath}
 
 ---------------------
 ## Configure to your taste: Code snippets
