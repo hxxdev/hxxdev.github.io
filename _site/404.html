@@ -212,7 +212,7 @@
 
 <aside aria-label="Sidebar" id="sidebar" class="d-flex flex-column align-items-end">
   <header class="profile-wrapper">
-    <a href="/" id="avatar" class="rounded-circle"></a>
+    <a href="/" id="avatar" class="rounded-circle"><img src="https://chirpy-img.netlify.app/commons/avatar.jpg" width="112" height="112" alt="avatar" onerror="this.style.display='none'"></a>
 
     <a class="site-title d-block" href="/">Chirpy</a>
     <p class="site-subtitle fst-italic mb-0">A text-focused Jekyll theme</p>
@@ -405,7 +405,7 @@
     </nav>
     <!-- endof #breadcrumb -->
 
-    <button type="button" id="sidebar-trigger" class="btn btn-link">
+    <button type="button" id="sidebar-trigger" class="btn btn-link" aria-label="Sidebar">
       <i class="fas fa-bars fa-fw"></i>
     </button>
 
@@ -413,7 +413,7 @@
       404: Page not found
     </div>
 
-    <button type="button" id="search-trigger" class="btn btn-link">
+    <button type="button" id="search-trigger" class="btn btn-link" aria-label="Search">
       <i class="fas fa-search fa-fw"></i>
     </button>
 
@@ -543,6 +543,42 @@
 
 
 
+  <section id="access-lastmod">
+    <h2 class="panel-heading">Recently Updated</h2>
+    <ul class="content list-unstyled ps-0 pb-1 ms-1 mt-2">
+      
+        
+        
+        
+        <li class="text-truncate lh-lg">
+          <a href="/posts/customize-the-favicon/">Customize the Favicon</a>
+        </li>
+      
+        
+        
+        
+        <li class="text-truncate lh-lg">
+          <a href="/posts/getting-started/">Getting Started</a>
+        </li>
+      
+        
+        
+        
+        <li class="text-truncate lh-lg">
+          <a href="/posts/write-a-new-post/">Writing a New Post</a>
+        </li>
+      
+        
+        
+        
+        <li class="text-truncate lh-lg">
+          <a href="/posts/text-and-typography/">Text and Typography</a>
+        </li>
+      
+    </ul>
+  </section>
+  <!-- #access-lastmod -->
+
 
               <!-- The trending tags list -->
 
@@ -560,7 +596,104 @@
 
 
 
+  
+    
+    
+    
+    
+      
+        
+        
 
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+
+
+  <section>
+    <h2 class="panel-heading">Trending Tags</h2>
+    <div class="d-flex flex-wrap mt-3 mb-1 me-3">
+      
+        
+        <a class="post-tag btn btn-outline-primary" href="/tags/favicon/">favicon</a>
+      
+        
+        <a class="post-tag btn btn-outline-primary" href="/tags/getting-started/">getting started</a>
+      
+        
+        <a class="post-tag btn btn-outline-primary" href="/tags/typography/">typography</a>
+      
+        
+        <a class="post-tag btn btn-outline-primary" href="/tags/writing/">writing</a>
+      
+    </div>
+  </section>
 
 
             </div>
@@ -634,7 +767,104 @@
 
 
 
+  
+    
+    
+    
+    
+      
+        
+        
 
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+
+
+  <section>
+    <h2 class="panel-heading">Trending Tags</h2>
+    <div class="d-flex flex-wrap mt-3 mb-1 me-3">
+      
+        
+        <a class="post-tag btn btn-outline-primary" href="/tags/favicon/">favicon</a>
+      
+        
+        <a class="post-tag btn btn-outline-primary" href="/tags/getting-started/">getting started</a>
+      
+        
+        <a class="post-tag btn btn-outline-primary" href="/tags/typography/">typography</a>
+      
+        
+        <a class="post-tag btn btn-outline-primary" href="/tags/writing/">writing</a>
+      
+    </div>
+  </section>
 
 
     </div>
@@ -701,7 +931,7 @@
       searchInput: document.getElementById('search-input'),
       resultsContainer: document.getElementById('search-results'),
       json: '/assets/js/data/search.json',
-      searchResultTemplate: '  <article class="px-1 px-sm-2 px-lg-4 px-xl-0">    <header>      <h2><a href="{url}">{title}</a></h2>      <div class="post-meta d-flex flex-column flex-sm-row text-muted mt-1 mb-1">        {categories}        {tags}      </div>    </header>    <p>{snippet}</p>  </article>',
+      searchResultTemplate: '  <article class="px-1 px-sm-2 px-lg-4 px-xl-0">    <header>      <h2><a href="{url}">{title}</a></h2>      <div class="post-meta d-flex flex-column flex-sm-row text-muted mt-1 mb-1">        {categories}        {tags}      </div>    </header>    <p>{content}</p>  </article>',
       noResultsText: '<p class="mt-5">Oops! No results found.</p>',
       templateMiddleware: function(prop, value, template) {
         if (prop === 'categories') {
