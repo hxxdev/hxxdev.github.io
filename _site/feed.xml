@@ -4,7 +4,7 @@
   <id>http://localhost:4000/</id>
   <title>hxxdev</title>
   <subtitle>An archive of cooking and development.</subtitle>
-  <updated>2025-04-07T23:31:40+09:00</updated>
+  <updated>2025-04-07T23:42:07+09:00</updated>
   <author>
     <name>hxxdev</name>
     <uri>http://localhost:4000/</uri>
@@ -21,13 +21,13 @@
   
   <entry>
     <title>State assignment rule of mealy machine</title>
-    <link href="http://localhost:4000/posts/state-assignment-rule-of-mealy-machine/index.html" rel="alternate" type="text/html" title="State assignment rule of mealy machine" />
+    <link href="http://localhost:4000/posts/state-assignment-rule-of-mealy-machine" rel="alternate" type="text/html" title="State assignment rule of mealy machine" />
     <published>2025-04-07T00:00:00+09:00</published>
   
     <updated>2025-04-07T00:00:00+09:00</updated>
   
-    <id>http://localhost:4000/posts/state-assignment-rule-of-mealy-machine/index.html</id>
-    <content type="text/html" src="http://localhost:4000/posts/state-assignment-rule-of-mealy-machine/index.html" />
+    <id>http://localhost:4000/posts/state-assignment-rule-of-mealy-machine</id>
+    <content type="text/html" src="http://localhost:4000/posts/state-assignment-rule-of-mealy-machine" />
     <author>
       <name>hxxdev</name>
     </author>
@@ -47,13 +47,13 @@
   
   <entry>
     <title>How to make your own Github Blog.</title>
-    <link href="http://localhost:4000/posts/how-to-setup-github-blog/index.html" rel="alternate" type="text/html" title="How to make your own Github Blog." />
+    <link href="http://localhost:4000/posts/how-to-setup-github-blog" rel="alternate" type="text/html" title="How to make your own Github Blog." />
     <published>2025-03-09T00:00:00+09:00</published>
   
     <updated>2025-04-07T22:50:57+09:00</updated>
   
-    <id>http://localhost:4000/posts/how-to-setup-github-blog/index.html</id>
-    <content type="text/html" src="http://localhost:4000/posts/how-to-setup-github-blog/index.html" />
+    <id>http://localhost:4000/posts/how-to-setup-github-blog</id>
+    <content type="text/html" src="http://localhost:4000/posts/how-to-setup-github-blog" />
     <author>
       <name>hxxdev</name>
     </author>
@@ -73,13 +73,13 @@
   
   <entry>
     <title>Frittata, the best egg-based Italian dish...</title>
-    <link href="http://localhost:4000/posts/frittata/index.html" rel="alternate" type="text/html" title="Frittata, the best egg-based Italian dish..." />
+    <link href="http://localhost:4000/posts/frittata" rel="alternate" type="text/html" title="Frittata, the best egg-based Italian dish..." />
     <published>2025-03-09T00:00:00+09:00</published>
   
     <updated>2025-04-07T00:47:45+09:00</updated>
   
-    <id>http://localhost:4000/posts/frittata/index.html</id>
-    <content type="text/html" src="http://localhost:4000/posts/frittata/index.html" />
+    <id>http://localhost:4000/posts/frittata</id>
+    <content type="text/html" src="http://localhost:4000/posts/frittata" />
     <author>
       <name>hxxdev</name>
     </author>
