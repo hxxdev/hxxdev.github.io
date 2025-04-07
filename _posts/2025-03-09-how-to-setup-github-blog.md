@@ -94,6 +94,9 @@ Make your own [favicons](https://www.favicon-generator.org/about/) at [Favicons 
 Then replace all `png` files in `/assets/img/favicons` with the one your generated.
 
 ---------------------
+## Google Search Console
+[**Google Search Console**](https://search.google.com/search-console/about)
+---------------------
 ## Commit your work to Git!
 It's time to commit & push your work.  
 Your modifications will be deployed by Github and displayed at `<username>.github.io`.  
