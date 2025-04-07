@@ -6,8 +6,6 @@ Gemfile.lock
 # Jekyll cache
 .jekyll-cache
 .jekyll-metadata
-_site
-_site/*
 tutorial
 
 # RubyGems
