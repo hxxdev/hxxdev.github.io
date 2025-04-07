@@ -99,7 +99,11 @@ Go to [**Google Search Console**](https://search.google.com/search-console/about
 Generate your `goolexxxxxx.html` and place it in your Github repository.  
 Generate your website `sitemap.xml` at [**XML-Sitemaps.com](https://xml-sitemaps.com).  
 Place the generated `sitemap.xml` at your Github repository.  
-Navigate to <kbd>Sitemaps</kbd> in Google Search Console and then add your new `sitemap.xml` to your Google Search Console.
+Add/commit `sitemap.xml` and push.  
+
+Navigate to <kbd>URL Check</kbd> and enter `https://your/website/url/sitemap.xml`.  
+Validate your URL and click <kbd>Index creation request</kbd>. This might take a while.  
+After, navigate to <kbd>Sitemaps</kbd> in Google Search Console and then add your new `sitemap.xml` to your Google Search Console.
 
 ---------------------
 ## Commit your work to Git!
