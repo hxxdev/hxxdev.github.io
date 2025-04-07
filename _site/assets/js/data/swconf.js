@@ -1,16 +1,16 @@
 const swconf = {
   
-    cacheName: 'chirpy-1744035948',resources: [
-      '/https://hxxdev.github.io/assets/css/jekyll-theme-chirpy.css',
-      '/https://hxxdev.github.io/',
+    cacheName: 'chirpy-1744036301',resources: [
+      '/assets/css/jekyll-theme-chirpy.css',
+      '/',
       
-        '/https://hxxdev.github.io/categories/',
+        '/categories/',
       
-        '/https://hxxdev.github.io/tags/',
+        '/tags/',
       
-        '/https://hxxdev.github.io/archives/',
+        '/archives/',
       
-        '/https://hxxdev.github.io/about/',
+        '/about/',
       
 
       
