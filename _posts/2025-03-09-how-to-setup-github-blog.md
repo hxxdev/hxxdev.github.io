@@ -95,16 +95,20 @@ Then replace all `png` files in `/assets/img/favicons` with the one your generat
 
 ---------------------
 ## Google Search Console
-Go to [**Google Search Console**](https://search.google.com/search-console/about).
+Go to [**Google Search Console**](https://search.google.com/search-console/about).  
+Generate your `goolexxxxxx.html` and place it in your Github repository.  
+Generate your website `sitemap.xml` at [**XML-Sitemaps.com](https://xml-sitemaps.com).  
+Place the generated `sitemap.xml` at your Github repository.  
+Navigate to <kbd>Sitemaps</kbd> in Google Search Console and then add your new `sitemap.xml` to your Google Search Console.
 
 ---------------------
 ## Commit your work to Git!
 It's time to commit & push your work.  
 Your modifications will be deployed by Github and displayed at `<username>.github.io`.  
 If it is not showing up at your website, go to <kbd>Actions</kbd> tab in your Github repository.  
-Then select <kbd>Re-run everything</kbd>.
-Navigate to <kbd>Settings</kbd> - <kbd>Pages</kbd>.
-Under <kbd>Build and deployment</kbd>, change `Source` to `Github Actions`.
+Then select <kbd>Re-run everything</kbd>.  
+Navigate to <kbd>Settings</kbd> - <kbd>Pages</kbd>.  
+Under <kbd>Build and deployment</kbd>, change `Source` to `Github Actions`.  
 
 
 ---------------------
