@@ -52,6 +52,7 @@ _check_status() {
 }
 
 _check_init() {
+  echo "debug"
   if [[ $(git rev-parse HEAD^1) == "$RELEASE_HASH" ]]; then
     echo "Already initialized."
     exit 0
