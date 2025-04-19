@@ -13,7 +13,7 @@ Let's get started!
 ## Make Github repository
 
 Make your own [Github](https://github.com) repository.  
-Make sure you name your repository as `<username>.github.io` and make it public.  
+Make sure to name your repository as `<username>.github.io` and make it public.  
 Then clone your repository into your local.  
 `git clone <your_repository>`
 
@@ -113,14 +113,15 @@ Then replace `/_sass/base/_syntax.scss` with the one we generated.
 
 ## Configure: Favicons
 
-Make your own [favicons](https://www.favicon-generator.org/about/) at [Favicons Generator](https://www.favicon-generator.org/).  
+Create your own [favicons](https://www.favicon-generator.org/about/) at [Favicons Generator](https://www.favicon-generator.org/).  
 Then replace all `png` files in `/assets/img/favicons` with the one your generated.
 
 ---------------------
 
 ## Configure: jekyll plugins
 
-We will add [jekyll plugin](https://github.com/yegor256/jekyll-plantuml) here.  
+Jekyll plugins can be very useful.  
+We will learn how to add [Jekyll PlantUML](https://github.com/yegor256/jekyll-plantuml) here.  
 
 - Install `PlantUML`.
 
@@ -153,15 +154,21 @@ require "jekyll-plantuml"
 gem "jekyll-plantuml"
 ```
 
+- Update bundle.
+
+```shell
+bundle update
+```
+Check if any error occurs.
+
 - You can draw diagrams in posts. The syntax:
 
 ```
+Caution: Make sure to exclude `!`.
 {!% plantuml %}
 [First] - [Second]
 {!% endplantuml %}
 ```
-
-Note: Make sure to exclude `!`.
 
 ---------------------
 
