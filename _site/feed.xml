@@ -4,7 +4,7 @@
   <id>http://localhost:4000/</id>
   <title>hxxdev</title>
   <subtitle>An archive of cooking and development.</subtitle>
-  <updated>2025-04-20T00:04:47+09:00</updated>
+  <updated>2025-04-20T00:15:16+09:00</updated>
   <author>
     <name>hxxdev</name>
     <uri>http://localhost:4000/</uri>
@@ -24,7 +24,7 @@
     <link href="http://localhost:4000/posts/tmux-tutorial" rel="alternate" type="text/html" title="Mastering Terminal Multitasking, Beginner&amp;apos;s Guide to tmux" />
     <published>2025-04-19T00:00:00+09:00</published>
   
-    <updated>2025-04-20T00:01:16+09:00</updated>
+    <updated>2025-04-20T00:05:11+09:00</updated>
   
     <id>http://localhost:4000/posts/tmux-tutorial</id>
     <content type="text/html" src="http://localhost:4000/posts/tmux-tutorial" />
@@ -118,7 +118,7 @@
     
   
 
-  <summary>This post explains how to setup your own Github blog. Let’s get started!    Make Github repository Make your own Github repository. Make sure you name your repository as &amp;amp;lt;username&amp;amp;gt;.github.io and make it public. Then clone your repository into your local. git clone &amp;amp;lt;your_repository&amp;amp;gt;    Install Ruby git clone https://github.com/rbenv/rbenv.git ~/.rbenv cd ~/.rbenv/ echo &amp;#39;export RUBYOP...</summary>
+  <summary>This post explains how to setup your own Github blog. Let’s get started!    Make Github repository  Make your own Github repository. Make sure you name your repository as &amp;amp;lt;username&amp;amp;gt;.github.io and make it public. Then clone your repository into your local. git clone &amp;amp;lt;your_repository&amp;amp;gt;    Install Ruby  git clone https://github.com/rbenv/rbenv.git ~/.rbenv cd ~/.rbenv/ echo &amp;#39;export RUBY...</summary>
 
   </entry>
 
