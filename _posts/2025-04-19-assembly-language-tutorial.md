@@ -1,6 +1,6 @@
 ---
 title: Assembly Language Tutorial
-date: 2025-04-16
+date: 2025-04-19
 categories: [dev, assembly]
 tags: [asm]
 ---

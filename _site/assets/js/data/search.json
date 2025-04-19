@@ -1,10 +1,18 @@
 [
   {
+    "title": "Mastering Terminal Multitasking, A Beginner's Guide to tmux",
+    "url": "/posts/tmux-tutorial",
+    "categories": "dev, shell",
+    "tags": "tmux",
+    "date": "2025-04-19 00:00:00 +0900",
+    "content": "This post explains about what tmux is, how to install tmux and use tmux.    Installation  If you are using Ubuntu, tmux can be installed using command:  sudo apt-get install tmux     Concept  recta..."
+  },
+  {
     "title": "Assembly Language Tutorial",
     "url": "/posts/assembly-language-tutorial",
     "categories": "dev, assembly",
     "tags": "asm",
-    "date": "2025-04-16 00:00:00 +0900",
+    "date": "2025-04-19 00:00:00 +0900",
     "content": "This post explains Application Binary Interface(ABI), hardware, and how to write assemblies. This post is rewritten based on sonictk’s artice    Application Binary Interface(ABI)  Application Binar..."
   },
   {
