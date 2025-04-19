@@ -1,5 +1,5 @@
 ---
-title: Mastering Terminal Multitasking, A Beginner's Guide to tmux
+title: Mastering Terminal Multitasking, Beginner's Guide to tmux
 date: 2025-04-19
 categories: [dev, shell]
 tags: [tmux]
@@ -21,7 +21,7 @@ sudo apt-get install tmux
 
 ### Concept
 
-```plantuml
+{% plantuml %}
 rectangle "session" as session1
 rectangle "session" as session2
 rectangle "window" as window1
@@ -48,9 +48,7 @@ window3 -down-> pane4
 window3 -down-> pane5
 window3 -down-> pane6
 window4 -down-> pane7
-
-
-```
+{% endplantuml %}
 
 Using `tmux`, you can make many **sessions**.  
 A single **session** can have a lot of **windows**.  
@@ -59,7 +57,7 @@ A single **window** can again have a lot of **panes**.
 Run `tmux` in the terminal.  
 The bottom green status bar will show up. It indicates the **session name** and **the windows in the session**.  
 
-![Desktop View](./../assets/posts/tmux_tutorial/tmux.png){: width="300" .right}
+![Desktop View](./../assets/posts/tmux_tutorial/tmux.png){: width="300" .left}
 
 - `[1]` indicates the session name.
 - `Session 1` has **4 windows**.

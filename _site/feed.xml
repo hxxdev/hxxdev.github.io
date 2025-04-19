@@ -4,7 +4,7 @@
   <id>http://localhost:4000/</id>
   <title>hxxdev</title>
   <subtitle>An archive of cooking and development.</subtitle>
-  <updated>2025-04-19T23:29:33+09:00</updated>
+  <updated>2025-04-20T00:00:49+09:00</updated>
   <author>
     <name>hxxdev</name>
     <uri>http://localhost:4000/</uri>
@@ -20,11 +20,11 @@
 
   
   <entry>
-    <title>Mastering Terminal Multitasking, A Beginner's Guide to tmux</title>
-    <link href="http://localhost:4000/posts/tmux-tutorial" rel="alternate" type="text/html" title="Mastering Terminal Multitasking, A Beginner&amp;apos;s Guide to tmux" />
+    <title>Mastering Terminal Multitasking, Beginner's Guide to tmux</title>
+    <link href="http://localhost:4000/posts/tmux-tutorial" rel="alternate" type="text/html" title="Mastering Terminal Multitasking, Beginner&amp;apos;s Guide to tmux" />
     <published>2025-04-19T00:00:00+09:00</published>
   
-    <updated>2025-04-19T00:00:00+09:00</updated>
+    <updated>2025-04-19T23:30:00+09:00</updated>
   
     <id>http://localhost:4000/posts/tmux-tutorial</id>
     <content type="text/html" src="http://localhost:4000/posts/tmux-tutorial" />
@@ -40,7 +40,7 @@
     
   
 
-  <summary>This post explains about what tmux is, how to install tmux and use tmux.    Installation  If you are using Ubuntu, tmux can be installed using command:  sudo apt-get install tmux     Concept  rectangle &amp;quot;session&amp;quot; as session1 rectangle &amp;quot;session&amp;quot; as session2 rectangle &amp;quot;window&amp;quot; as window1 rectangle &amp;quot;window&amp;quot; as window2 rectangle &amp;quot;window&amp;quot; as window3 rectangle &amp;quot;window&amp;quot; as window4 rectangle &amp;quot;pane&amp;quot; as p...</summary>
+  <summary>This post explains about what tmux is, how to install tmux and use tmux.    Installation  If you are using Ubuntu, tmux can be installed using command:  sudo apt-get install tmux     Concept    Using tmux, you can make many sessions. A single session can have a lot of windows. A single window can again have a lot of panes.  Run tmux in the terminal. The bottom green status bar will show up. It ...</summary>
 
   </entry>
 

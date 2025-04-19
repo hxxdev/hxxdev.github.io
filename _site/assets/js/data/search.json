@@ -1,11 +1,11 @@
 [
   {
-    "title": "Mastering Terminal Multitasking, A Beginner's Guide to tmux",
+    "title": "Mastering Terminal Multitasking, Beginner's Guide to tmux",
     "url": "/posts/tmux-tutorial",
     "categories": "dev, shell",
     "tags": "tmux",
     "date": "2025-04-19 00:00:00 +0900",
-    "content": "This post explains about what tmux is, how to install tmux and use tmux.    Installation  If you are using Ubuntu, tmux can be installed using command:  sudo apt-get install tmux     Concept  recta..."
+    "content": "This post explains about what tmux is, how to install tmux and use tmux.    Installation  If you are using Ubuntu, tmux can be installed using command:  sudo apt-get install tmux     Concept    Usi..."
   },
   {
     "title": "Assembly Language Tutorial",
