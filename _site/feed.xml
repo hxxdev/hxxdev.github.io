@@ -4,7 +4,7 @@
   <id>http://localhost:4000/</id>
   <title>hxxdev</title>
   <subtitle>An archive of cooking and development.</subtitle>
-  <updated>2025-04-08T00:10:54+09:00</updated>
+  <updated>2025-04-19T21:27:16+09:00</updated>
   <author>
     <name>hxxdev</name>
     <uri>http://localhost:4000/</uri>
@@ -17,6 +17,32 @@
   <icon>/assets/img/favicons/favicon.ico</icon>
   <logo>/assets/img/favicons/favicon-96x96.png</logo>
 
+
+  
+  <entry>
+    <title>Assembly Language Tutorial</title>
+    <link href="http://localhost:4000/posts/assembly-language-tutorial" rel="alternate" type="text/html" title="Assembly Language Tutorial" />
+    <published>2025-04-16T00:00:00+09:00</published>
+  
+    <updated>2025-04-16T00:00:00+09:00</updated>
+  
+    <id>http://localhost:4000/posts/assembly-language-tutorial</id>
+    <content type="text/html" src="http://localhost:4000/posts/assembly-language-tutorial" />
+    <author>
+      <name>hxxdev</name>
+    </author>
+
+  
+    
+    <category term="dev" />
+    
+    <category term="assembly" />
+    
+  
+
+  <summary>This post explains Application Binary Interface(ABI), hardware, and how to write assemblies. This post is rewritten based on sonictk’s artice    Application Binary Interface(ABI)  Application Binary Interface(ABI) refers to set of conventions, rules, and guidelines that govern how programs interact with the operating system. Therefore, it is defined by OS designer.  ABI includes:     how functi...</summary>
+
+  </entry>
 
   
   <entry>
@@ -50,7 +76,7 @@
     <link href="http://localhost:4000/posts/how-to-setup-github-blog" rel="alternate" type="text/html" title="How to make your own Github Blog." />
     <published>2025-03-09T00:00:00+09:00</published>
   
-    <updated>2025-04-08T00:03:33+09:00</updated>
+    <updated>2025-04-08T00:11:20+09:00</updated>
   
     <id>http://localhost:4000/posts/how-to-setup-github-blog</id>
     <content type="text/html" src="http://localhost:4000/posts/how-to-setup-github-blog" />

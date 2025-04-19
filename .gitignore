@@ -26,3 +26,7 @@ package-lock.json
 # Misc
 _sass/vendors
 assets/js/dist
+:kill
+:start
+_site/:kill
+_site/:start

@@ -1,5 +1,13 @@
 [
   {
+    "title": "Assembly Language Tutorial",
+    "url": "/posts/assembly-language-tutorial",
+    "categories": "dev, assembly",
+    "tags": "asm",
+    "date": "2025-04-16 00:00:00 +0900",
+    "content": "This post explains Application Binary Interface(ABI), hardware, and how to write assemblies. This post is rewritten based on sonictk’s artice    Application Binary Interface(ABI)  Application Binar..."
+  },
+  {
     "title": "State assignment rule of mealy machine",
     "url": "/posts/state-assignment-rule-of-mealy-machine",
     "categories": "circuit, digital",
