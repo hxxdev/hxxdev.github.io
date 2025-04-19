@@ -4,7 +4,7 @@
   <id>http://localhost:4000/</id>
   <title>hxxdev</title>
   <subtitle>An archive of cooking and development.</subtitle>
-  <updated>2025-04-19T23:24:39+09:00</updated>
+  <updated>2025-04-19T23:29:33+09:00</updated>
   <author>
     <name>hxxdev</name>
     <uri>http://localhost:4000/</uri>
@@ -50,7 +50,7 @@
     <link href="http://localhost:4000/posts/assembly-language-tutorial" rel="alternate" type="text/html" title="Assembly Language Tutorial" />
     <published>2025-04-19T00:00:00+09:00</published>
   
-    <updated>2025-04-19T00:00:00+09:00</updated>
+    <updated>2025-04-19T23:25:53+09:00</updated>
   
     <id>http://localhost:4000/posts/assembly-language-tutorial</id>
     <content type="text/html" src="http://localhost:4000/posts/assembly-language-tutorial" />
@@ -76,7 +76,7 @@
     <link href="http://localhost:4000/posts/state-assignment-rule-of-mealy-machine" rel="alternate" type="text/html" title="State assignment rule of mealy machine" />
     <published>2025-04-07T00:00:00+09:00</published>
   
-    <updated>2025-04-19T21:27:37+09:00</updated>
+    <updated>2025-04-19T23:25:53+09:00</updated>
   
     <id>http://localhost:4000/posts/state-assignment-rule-of-mealy-machine</id>
     <content type="text/html" src="http://localhost:4000/posts/state-assignment-rule-of-mealy-machine" />
@@ -102,7 +102,7 @@
     <link href="http://localhost:4000/posts/how-to-setup-github-blog" rel="alternate" type="text/html" title="How to make your own Github Blog." />
     <published>2025-03-09T00:00:00+09:00</published>
   
-    <updated>2025-04-19T21:27:37+09:00</updated>
+    <updated>2025-04-19T23:25:53+09:00</updated>
   
     <id>http://localhost:4000/posts/how-to-setup-github-blog</id>
     <content type="text/html" src="http://localhost:4000/posts/how-to-setup-github-blog" />
@@ -128,7 +128,7 @@
     <link href="http://localhost:4000/posts/frittata" rel="alternate" type="text/html" title="Frittata, the best egg-based Italian dish..." />
     <published>2025-03-09T00:00:00+09:00</published>
   
-    <updated>2025-04-19T21:27:37+09:00</updated>
+    <updated>2025-04-19T23:25:53+09:00</updated>
   
     <id>http://localhost:4000/posts/frittata</id>
     <content type="text/html" src="http://localhost:4000/posts/frittata" />

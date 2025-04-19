@@ -89,6 +89,7 @@ The bottom green status bar will show up. It indicates the **session name** and 
 |`ctrl-b n` | go to next window.|
 |`ctrl-b p` | go to previous window.|
 |`ctrl-b w`| change session/window.|
+|`ctrl-b ,` | rename window/pane. |
 |`ctrl-b d` | close window/pane. |
 
 #### Panes
