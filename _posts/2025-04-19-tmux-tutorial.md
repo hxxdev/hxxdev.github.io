@@ -97,3 +97,11 @@ The bottom green status bar will show up. It indicates the **session name** and 
 |`ctrl-b %` | split horizontal pane. |
 |`ctrl-b "` | split vertical pane. |
 |`ctrl-b d` | close window/pane. |
+
+#### Others
+
+|command|description|
+|:-:|:-|
+|`ctrl-b [` | scroll mode. `q` to quit. |
+|`ctrl-b Pgup` | scroll mode. go one page up. `q` to quit. |
+
