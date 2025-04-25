@@ -4,7 +4,7 @@
   <id>http://localhost:4000/</id>
   <title>hxxdev</title>
   <subtitle>An archive of cooking and development.</subtitle>
-  <updated>2025-04-20T00:19:50+09:00</updated>
+  <updated>2025-04-25T10:53:29+09:00</updated>
   <author>
     <name>hxxdev</name>
     <uri>http://localhost:4000/</uri>
@@ -20,11 +20,37 @@
 
   
   <entry>
+    <title>Assembly Language Tutorial</title>
+    <link href="http://localhost:4000/posts/about-clang-and-llvm" rel="alternate" type="text/html" title="Assembly Language Tutorial" />
+    <published>2025-04-19T00:00:00+09:00</published>
+  
+    <updated>2025-04-19T00:00:00+09:00</updated>
+  
+    <id>http://localhost:4000/posts/about-clang-and-llvm</id>
+    <content type="text/html" src="http://localhost:4000/posts/about-clang-and-llvm" />
+    <author>
+      <name>hxxdev</name>
+    </author>
+
+  
+    
+    <category term="dev" />
+    
+    <category term="assembly" />
+    
+  
+
+  <summary>This post explains Application Binary Interface(ABI), hardware, and how to write assemblies. This post is rewritten based on sonictk’s artice    Application Binary Interface(ABI)  Application Binary Interface(ABI) refers to set of conventions, rules, and guidelines that govern how programs interact with the operating system. Therefore, it is defined by OS designer.  ABI includes:     how functi...</summary>
+
+  </entry>
+
+  
+  <entry>
     <title>Mastering Terminal Multitasking, Beginner's Guide to tmux</title>
     <link href="http://localhost:4000/posts/tmux-tutorial" rel="alternate" type="text/html" title="Mastering Terminal Multitasking, Beginner&amp;apos;s Guide to tmux" />
     <published>2025-04-19T00:00:00+09:00</published>
   
-    <updated>2025-04-20T00:05:11+09:00</updated>
+    <updated>2025-04-25T10:46:03+09:00</updated>
   
     <id>http://localhost:4000/posts/tmux-tutorial</id>
     <content type="text/html" src="http://localhost:4000/posts/tmux-tutorial" />
@@ -102,7 +128,7 @@
     <link href="http://localhost:4000/posts/how-to-setup-github-blog" rel="alternate" type="text/html" title="How to make your own Github Blog." />
     <published>2025-03-09T00:00:00+09:00</published>
   
-    <updated>2025-04-20T00:15:40+09:00</updated>
+    <updated>2025-04-20T00:20:13+09:00</updated>
   
     <id>http://localhost:4000/posts/how-to-setup-github-blog</id>
     <content type="text/html" src="http://localhost:4000/posts/how-to-setup-github-blog" />
@@ -119,32 +145,6 @@
   
 
   <summary>This post explains how to setup your own Github blog. Let’s get started!    Make Github repository  Make your own Github repository. Make sure to name your repository as &amp;amp;lt;username&amp;amp;gt;.github.io and make it public. Then clone your repository into your local. git clone &amp;amp;lt;your_repository&amp;amp;gt;    Install Ruby  git clone https://github.com/rbenv/rbenv.git ~/.rbenv cd ~/.rbenv/ echo &amp;#39;export RUBYO...</summary>
-
-  </entry>
-
-  
-  <entry>
-    <title>Frittata, the best egg-based Italian dish...</title>
-    <link href="http://localhost:4000/posts/frittata" rel="alternate" type="text/html" title="Frittata, the best egg-based Italian dish..." />
-    <published>2025-03-09T00:00:00+09:00</published>
-  
-    <updated>2025-04-19T23:25:53+09:00</updated>
-  
-    <id>http://localhost:4000/posts/frittata</id>
-    <content type="text/html" src="http://localhost:4000/posts/frittata" />
-    <author>
-      <name>hxxdev</name>
-    </author>
-
-  
-    
-    <category term="cook" />
-    
-    <category term="italian" />
-    
-  
-
-  <summary>Prepare ingredients Ingredients spinach, beef, bell pepper, cherry tomatoes, shiitake mushrooms, onion, minced garlic, salt, milk, eggs             Sauté!!! Heat some oil in a frying pan and sauté the spinach, onion, minced garlic, and bell pepper.            Make batter Crack 3 eggs into a bowl, add 100mL of milk, and a pinch of salt. Mix everything together to make a batter.            Pour i...</summary>
 
   </entry>
 
