@@ -138,7 +138,11 @@ gem install jekyll-plantuml
 - add gem to `_config.yml`
 
 ```
-gems: ['jekyll-plantuml', ... your other plugins]
+plugins:
+  - jekyll-sitemap
+  - jekyll-admin
+  - jekyll-feed
+  - jekyll-plantuml
 ```
 
 - add `plantuml-plugin.rb` into `_plugins` directory.
