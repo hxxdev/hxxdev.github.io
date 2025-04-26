@@ -38,7 +38,7 @@ This post explains how to setup neovim in WSL2.
 brew install neovim
 ```
 
-- Download (package)[https://downgit.github.io/#/home?url=https://github.com/hxxdev/hxxdev.github.io/tree/main/assets/posts/setting_up_nvim/nvim]
+- Download [package](https://downgit.github.io/#/home?url=https://github.com/hxxdev/hxxdev.github.io/tree/main/assets/posts/setting_up_nvim/nvim)
 
 The packages include:
 
