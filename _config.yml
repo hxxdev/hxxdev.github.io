@@ -2,7 +2,7 @@
 
 # Import the theme
 theme: jekyll-theme-chirpy
-gems: ['jekyll-plantuml']
+
 # The language of the webpage › http://www.lingoes.net/en/translator/langcode.htm
 # If it has the same name as one of the files in folder `_data/locales`, the layout language will also be changed,
 # otherwise, the layout language will use the default value of 'en'.
@@ -24,7 +24,11 @@ description: >- # used by seo meta and the atom feed
 # Fill in the protocol & hostname for your site.
 # E.g. 'https://username.github.io', note that it does not end with a '/'.
 url: "https://hxxdev.github.io"
-
+plugins:
+  - jekyll-sitemap
+  - jekyll-admin
+  - jekyll-feed
+  - jekyll-plantuml
 github:
   username: hxxdev # change to your GitHub username
 

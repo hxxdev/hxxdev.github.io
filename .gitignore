@@ -7,7 +7,6 @@ Gemfile.lock
 .jekyll-cache
 .jekyll-metadata
 tutorial
-_site
 
 # RubyGems
 *.gem
@@ -26,6 +25,8 @@ package-lock.json
 # Misc
 _sass/vendors
 assets/js/dist
+
+# Scripts
 :kill
 :start
 _site/:kill

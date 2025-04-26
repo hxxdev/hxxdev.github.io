@@ -1,6 +1,0 @@
-Configuration file: /home/hxxdev/dev/hxxdev.github.io/_config.yml
-            Source: /home/hxxdev/dev/hxxdev.github.io
-       Destination: /home/hxxdev/dev/hxxdev.github.io/_site
- Incremental build: disabled. Enable with --incremental
-      Generating... 
-sh: 1: plantuml: not found

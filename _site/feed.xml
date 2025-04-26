@@ -1,153 +1,2124 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.4.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en" /><updated>2025-04-26T14:54:31+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">hxxdev</title><subtitle>An archive of cooking and development.</subtitle><entry><title type="html">Assembly Language Tutorial</title><link href="http://localhost:4000/posts/assembly-language-tutorial" rel="alternate" type="text/html" title="Assembly Language Tutorial" /><published>2025-04-19T00:00:00+09:00</published><updated>2025-04-19T23:25:53+09:00</updated><id>http://localhost:4000/posts/assembly-language-tutorial</id><content type="html" xml:base="http://localhost:4000/posts/assembly-language-tutorial"><![CDATA[<p>This post explains Application Binary Interface(ABI), hardware, and how to write assemblies.<br />
+This post is rewritten based on <a href="https://sonictk.github.io/asm_tutorial/">sonictk’s artice</a></p>
 
+<hr />
 
-<feed xmlns="http://www.w3.org/2005/Atom">
-  <id>http://localhost:4000/</id>
-  <title>hxxdev</title>
-  <subtitle>An archive of cooking and development.</subtitle>
-  <updated>2025-04-25T10:53:29+09:00</updated>
-  <author>
-    <name>hxxdev</name>
-    <uri>http://localhost:4000/</uri>
-  </author>
-  <link rel="self" type="application/atom+xml" href="http://localhost:4000/feed.xml"/>
-  <link rel="alternate" type="text/html" hreflang="en"
-    href="http://localhost:4000/"/>
-  <generator uri="https://jekyllrb.com/" version="4.4.1">Jekyll</generator>
-  <rights> © 2025 hxxdev </rights>
-  <icon>/assets/img/favicons/favicon.ico</icon>
-  <logo>/assets/img/favicons/favicon-96x96.png</logo>
+<h2 id="application-binary-interfaceabi">Application Binary Interface(ABI)</h2>
 
+<p>Application Binary Interface(ABI) refers to set of conventions, rules, and guidelines that govern how programs interact with the operating system. Therefore, it is defined by OS designer.</p>
 
-  
-  <entry>
-    <title>Assembly Language Tutorial</title>
-    <link href="http://localhost:4000/posts/about-clang-and-llvm" rel="alternate" type="text/html" title="Assembly Language Tutorial" />
-    <published>2025-04-19T00:00:00+09:00</published>
-  
-    <updated>2025-04-19T00:00:00+09:00</updated>
-  
-    <id>http://localhost:4000/posts/about-clang-and-llvm</id>
-    <content type="text/html" src="http://localhost:4000/posts/about-clang-and-llvm" />
-    <author>
-      <name>hxxdev</name>
-    </author>
+<p>ABI includes:</p>
 
-  
-    
-    <category term="dev" />
-    
-    <category term="assembly" />
-    
-  
+<ul>
+  <li>how functions are called and returned(calling convention).</li>
+  <li>how data types are represented in memory(e.g. alignment, padding).</li>
+  <li>The format of the binary object code(e.g. <code class="language-plaintext highlighter-rouge">.obj</code>, <code class="language-plaintext highlighter-rouge">.exe</code>).</li>
+  <li>How dynamic linking works and how shared libraries are used.</li>
+  <li>How memory management, exception handling and system calls are structured.</li>
+</ul>
 
-  <summary>This post explains Application Binary Interface(ABI), hardware, and how to write assemblies. This post is rewritten based on sonictk’s artice    Application Binary Interface(ABI)  Application Binary Interface(ABI) refers to set of conventions, rules, and guidelines that govern how programs interact with the operating system. Therefore, it is defined by OS designer.  ABI includes:     how functi...</summary>
+<p>There are two types of ABI commonly used in Windows and LInux respectively:</p>
 
-  </entry>
+<ul>
+  <li>Microsoft X64</li>
+  <li>System V ABI</li>
+</ul>
 
-  
-  <entry>
-    <title>Mastering Terminal Multitasking, Beginner's Guide to tmux</title>
-    <link href="http://localhost:4000/posts/tmux-tutorial" rel="alternate" type="text/html" title="Mastering Terminal Multitasking, Beginner&amp;apos;s Guide to tmux" />
-    <published>2025-04-19T00:00:00+09:00</published>
-  
-    <updated>2025-04-25T10:46:03+09:00</updated>
-  
-    <id>http://localhost:4000/posts/tmux-tutorial</id>
-    <content type="text/html" src="http://localhost:4000/posts/tmux-tutorial" />
-    <author>
-      <name>hxxdev</name>
-    </author>
+<p>They differ in how they organize registers, calling conventions, and other details.</p>
 
-  
-    
-    <category term="dev" />
-    
-    <category term="shell" />
-    
-  
+<table>
+  <thead>
+    <tr>
+      <th> </th>
+      <th style="text-align: left">Microsoft X64</th>
+      <th style="text-align: left">System V ABI</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Registers</td>
+      <td style="text-align: left">16 general-purpose registers and 16 XMM/YMM registers</td>
+      <td style="text-align: left">Registers RDI, RSI, RDX, RCX, R8, R9, and XMM0–XMM7</td>
+    </tr>
+    <tr>
+      <td>Calling convention</td>
+      <td style="text-align: left">Four-register fast-call(<code class="language-plaintext highlighter-rouge">rcx</code>, <code class="language-plaintext highlighter-rouge">rdx</code>, <code class="language-plaintext highlighter-rouge">r8</code>, <code class="language-plaintext highlighter-rouge">r9</code>)</td>
+      <td style="text-align: left">Follows the AMD64 ABI calling convention</td>
+    </tr>
+    <tr>
+      <td>Use</td>
+      <td style="text-align: left">Used in Windows</td>
+      <td style="text-align: left">Used in Linux, FreeBSD, macOS, and Solaris</td>
+    </tr>
+    <tr>
+      <td>Features</td>
+      <td style="text-align: left">Includes a shadow store for callees</td>
+      <td style="text-align: left">Includes the Executable and Linkable Format (ELF)</td>
+    </tr>
+  </tbody>
+</table>
 
-  <summary>This post explains about what tmux is, how to install tmux and use tmux.    Installation  If you are using Ubuntu, tmux can be installed using command:  sudo apt-get install tmux     Concept    Using tmux, you can make many sessions. A single session can have a lot of windows. A single window can again have a lot of panes.  Run tmux in the terminal. The bottom green status bar will show up. It ...</summary>
+<hr />
 
-  </entry>
+<h3 id="general-purpose-registers">General-purpose registers</h3>
 
-  
-  <entry>
-    <title>Assembly Language Tutorial</title>
-    <link href="http://localhost:4000/posts/assembly-language-tutorial" rel="alternate" type="text/html" title="Assembly Language Tutorial" />
-    <published>2025-04-19T00:00:00+09:00</published>
-  
-    <updated>2025-04-19T23:25:53+09:00</updated>
-  
-    <id>http://localhost:4000/posts/assembly-language-tutorial</id>
-    <content type="text/html" src="http://localhost:4000/posts/assembly-language-tutorial" />
-    <author>
-      <name>hxxdev</name>
-    </author>
+<p>There are 16 GPRs on the x64 instruction set; they are 64-bit wide; they are referred to as
+<code class="language-plaintext highlighter-rouge">rax, rbx, rcx, rdx, rbp, rsi, rdi, rsp, r8, r9, r10, r11 r12, r13, r14 and r15</code>.<br />
+The prefix “general-purpose” is a little misleading; while they are technically general-purpose in the sense that the CPU itself doesn’t govern how they should be used, some of these registers have specific purposes and need to treated in specific ways according to ABI.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="rouge-code"><pre>General-purpose register Field
+--------------------------------------------------------------------
+&lt;-------&gt;&lt;-------&gt;&lt;----------------&gt;&lt;------------------------------&gt;  
+|   al   |   ah   |                                                |
+|        ax       |                                                |
+|                eax                |                              |
+|                                  rax                             |
+</pre></td></tr></tbody></table></code></pre></div></div>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+</pre></td><td class="rouge-code"><pre>--------------------------------------------------------------------
+&lt;-------&gt;&lt;-------&gt;&lt;----------------&gt;&lt;------------------------------&gt;  
+|   r8b  |                                                         |
+|        r8w      |                                                |
+|                r8d                |                              |
+|                                  r8                              |
+</pre></td></tr></tbody></table></code></pre></div></div>
+<hr />
 
-  
-    
-    <category term="dev" />
-    
-    <category term="assembly" />
-    
-  
+<h3 id="simd-registers">SIMD registers</h3>
 
-  <summary>This post explains Application Binary Interface(ABI), hardware, and how to write assemblies. This post is rewritten based on sonictk’s artice    Application Binary Interface(ABI)  Application Binary Interface(ABI) refers to set of conventions, rules, and guidelines that govern how programs interact with the operating system. Therefore, it is defined by OS designer.  ABI includes:     how functi...</summary>
+<p>There are 16 FPRs on the x64 instruction set; they are 128-bit wide; they are referred to as <code class="language-plaintext highlighter-rouge">xmm0</code> .. <code class="language-plaintext highlighter-rouge">xmm15</code>.</p>
 
-  </entry>
+<ul>
+  <li>128-bit <code class="language-plaintext highlighter-rouge">xmm</code> registers were introduced by Intel in 1999 as SSE(Streaming SIMD Extensions). When you execute an SSE instruction, it operates on the lower 128 bits of the register (<code class="language-plaintext highlighter-rouge">xmm</code>).</li>
+  <li>256-bit <code class="language-plaintext highlighter-rouge">ymm</code> registers were introduced as AVX(Advanced Vector Extensions). When you execute an AVX instruction, it uses the lower 256 bits of the register (<code class="language-plaintext highlighter-rouge">ymm</code>).</li>
+  <li><code class="language-plaintext highlighter-rouge">AVX2</code> was later introduced in 2013, expanding usage of <code class="language-plaintext highlighter-rouge">ymm</code> into integer operations while <code class="language-plaintext highlighter-rouge">AVX</code> focused only on floating-point operations.</li>
+  <li>512-bit <code class="language-plaintext highlighter-rouge">zmm</code> registers were introduced as AVX-512.</li>
+  <li>When you execute an AVX-512 instruction, it operates on the full 512-bit register (ZMM).</li>
+</ul>
 
-  
-  <entry>
-    <title>State assignment rule of mealy machine</title>
-    <link href="http://localhost:4000/posts/state-assignment-rule-of-mealy-machine" rel="alternate" type="text/html" title="State assignment rule of mealy machine" />
-    <published>2025-04-07T00:00:00+09:00</published>
-  
-    <updated>2025-04-19T23:25:53+09:00</updated>
-  
-    <id>http://localhost:4000/posts/state-assignment-rule-of-mealy-machine</id>
-    <content type="text/html" src="http://localhost:4000/posts/state-assignment-rule-of-mealy-machine" />
-    <author>
-      <name>hxxdev</name>
-    </author>
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center">Register Name</th>
+      <th style="text-align: center">Size</th>
+      <th style="text-align: center">Introduced In</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: center">XMM</td>
+      <td style="text-align: center">128-bit</td>
+      <td style="text-align: center">SSE</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">YMM</td>
+      <td style="text-align: center">256-bit</td>
+      <td style="text-align: center">AVX</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">ZMM</td>
+      <td style="text-align: center">512-bit</td>
+      <td style="text-align: center">AVX-512</td>
+    </tr>
+  </tbody>
+</table>
 
-  
-    
-    <category term="circuit" />
-    
-    <category term="digital" />
-    
-  
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+</pre></td><td class="rouge-code"><pre>SIMD Register Field
+--------------------------------------------------------------------
+&lt;-------&gt;&lt;-------&gt;&lt;----------------&gt;&lt;------------------------------&gt;  
+|       xmm       |                                                |
+|               ymm                 |                              |
+|                                 zmm                              |
+</pre></td></tr></tbody></table></code></pre></div></div>
+<hr />
 
-  <summary>State assignment란, sequential machine의 state에 binary값을 할당하는 작업이다.  아무값이나 할당해도 되지만 값을 어떻게 할당하냐에 따라 좀 더 optimal한 회로가 설계된다.                 [##_Image       kage@bxsLl7/btsFiuIeSn3/7YazSyUgqFkwFpuoWkCibk/img.png       CDM       1.3       {“originWidth”:2492,”originHeight”:1427,”style”:”alignCenter”,”width”:642,”height”:368,”caption”:”Mealy Machine”}_##]           위 그림은 밀리 머신이다.  State assignment를 어...</summary>
+<h3 id="special-purpose-registers">Special purpose registers</h3>
 
-  </entry>
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center">Register Name</th>
+      <th style="text-align: center">Size</th>
+      <th style="text-align: left">Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: center"><code class="language-plaintext highlighter-rouge">rip</code></td>
+      <td style="text-align: center">64-bit</td>
+      <td style="text-align: left">Points where the next instruction to be executed is at in the assembly code.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><code class="language-plaintext highlighter-rouge">rsp</code></td>
+      <td style="text-align: center">64-bit</td>
+      <td style="text-align: left">Points to the bottom of the stack. Calling convention shall be met.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><code class="language-plaintext highlighter-rouge">rbp</code></td>
+      <td style="text-align: center">64-bit</td>
+      <td style="text-align: left">Points to the original value of <code class="language-plaintext highlighter-rouge">rsp</code>. Allows us to unwind the stack when we leaven the current scope.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><code class="language-plaintext highlighter-rouge">rfl</code></td>
+      <td style="text-align: center">16-bit</td>
+      <td style="text-align: left">Status register. Set after certain instructions have been executed.</td>
+    </tr>
+  </tbody>
+</table>
 
-  
-  <entry>
-    <title>How to make your own Github Blog.</title>
-    <link href="http://localhost:4000/posts/how-to-setup-github-blog" rel="alternate" type="text/html" title="How to make your own Github Blog." />
-    <published>2025-03-09T00:00:00+09:00</published>
-  
-    <updated>2025-04-20T00:20:13+09:00</updated>
-  
-    <id>http://localhost:4000/posts/how-to-setup-github-blog</id>
-    <content type="text/html" src="http://localhost:4000/posts/how-to-setup-github-blog" />
-    <author>
-      <name>hxxdev</name>
-    </author>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre></td><td class="rouge-code"><pre>about rfl(flag register)
 
-  
-    
-    <category term="dev" />
-    
-    <category term="git" />
-    
-  
+| CF | PF | AF | ZF | SF | TF | IF | DF | OF | IOPL | NT | N/A |
 
-  <summary>This post explains how to setup your own Github blog. Let’s get started!    Make Github repository  Make your own Github repository. Make sure to name your repository as &amp;amp;lt;username&amp;amp;gt;.github.io and make it public. Then clone your repository into your local. git clone &amp;amp;lt;your_repository&amp;amp;gt;    Install Ruby  git clone https://github.com/rbenv/rbenv.git ~/.rbenv cd ~/.rbenv/ echo &amp;#39;export RUBYO...</summary>
+- CF : Carry flag     | PF : Parity flag  | AF : Adjust flag      | ZF : Zero flag
+- SF : Sign flag      | TF : Trp flag     | IF : Interrupt flag   | DF : Direction flag
+- OF : Overflow flag  
+- IOPL : I/O privilege lvel flag(legacy)
+- NT : Nested task flag(legacy)
+- N/A : reserved for future use
+</pre></td></tr></tbody></table></code></pre></div></div>
 
-  </entry>
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center">Flag</th>
+      <th style="text-align: left">Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: center"><code class="language-plaintext highlighter-rouge">DF(Description flag)</code></td>
+      <td style="text-align: left">Determines left/right direction for moving when comparing string.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><code class="language-plaintext highlighter-rouge">SF(Sign flag)</code></td>
+      <td style="text-align: left">Shows the sign of the result of an arithmetic operation. <code class="language-plaintext highlighter-rouge">1</code> means positive.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><code class="language-plaintext highlighter-rouge">ZF(Zero flag)</code></td>
+      <td style="text-align: left">Shows whether the result of operation is zero or not. <code class="language-plaintext highlighter-rouge">1</code> means zero.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><code class="language-plaintext highlighter-rouge">OF(Overflow flag)</code></td>
+      <td style="text-align: left">Set to <code class="language-plaintext highlighter-rouge">1</code> when the result did not fit in the number of bits used for the operation by the Arithmetic Logic Unit (ALU).</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><code class="language-plaintext highlighter-rouge">PF(Parity flag)</code></td>
+      <td style="text-align: left">Indicates the total number of bits that are set in the result. <code class="language-plaintext highlighter-rouge">1</code> means even number of bits have been set.</td>
+    </tr>
+  </tbody>
+</table>
 
-</feed>
+<hr />
 
+<h3 id="memory-segement">Memory Segement</h3>
 
+<svg width="600" height="600" xmlns="http://www.w3.org/2000/svg">
+  <!-- Draw the outer rectangle -->
+  <rect x="30" y="50" width="500" height="540" stroke="black" fill="none" stroke-width="6" />
+    <!-- Horizontal dividers -->
+    <line x1="30" y1="85" x2="530" y2="85" stroke="black" stroke-width="6" />
+    <line x1="30" y1="150" x2="530" y2="150" stroke="black" stroke-width="6" />
+    <line x1="30" y1="205" x2="530" y2="205" stroke="black" stroke-width="6" />
+    <line x1="30" y1="300" x2="530" y2="300" stroke="black" stroke-width="6" stroke-dasharray="10,10" />
+    <line x1="30" y1="435" x2="530" y2="435" stroke="black" stroke-width="6" stroke-dasharray="10,10" />
+    <!-- Texts -->
+    <text x="50" y="75" font-size="25" fill="black">text(.code)</text>
+    <text x="50" y="125" font-size="25" fill="black">data(.data)</text>
+    <text x="50" y="185" font-size="25" fill="black">bss(uninitialized data)</text>
+    <text x="50" y="260" font-size="25" fill="black">heap</text>
+    <text x="50" y="510" font-size="25" fill="black">stack</text>
+    <text x="0" y="20" font-size="25" fill="black">Address</text>
+    <text x="0" y="50" font-size="25" fill="black">0</text>
+    <text x="80" y="350" font-size="25" fill="black">call() malloc()</text>
+    <text x="350" y="400" font-size="25" fill="black">rsp--</text>
+    <!-- Upward Arrow -->
+    <line x1="320" y1="435" x2="320" y2="380" stroke="black" stroke-width="6" marker-end="url(#arrowhead)" /> 
+    <line x1="260" y1="300" x2="260" y2="355" stroke="black" stroke-width="6" marker-end="url(#arrowhead)" /> 
+    <!-- Arrowhead Definition -->
+    <defs>
+        <marker id="arrowhead" markerWidth="3" markerHeight="3" refX="1.5" refY="1.5" orient="auto">
+            <polygon points="0,3  3,1.5 0,0" fill="black" />
+        </marker>
+    </defs>
+</svg>
+<div class="imagecaption"><b style="font-style:normal;">Figure.</b> PE, ELF executable file format</div>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">Memory Segment</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">Text Segment</td>
+      <td>Contains the actual assembly instructions</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Data Segment</td>
+      <td>constants or initialized data (e.g. int a = 5; or const int a = 5;)</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">BSS Segment</td>
+      <td>variables that are uninitialzed (e.g. int a;)</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h3 id="virtual-memory-address-system">Virtual Memory Address System</h3>
+
+<ul>
+  <li>The program asks the OS for memory, and the OS provides virtual addresses.</li>
+  <li>The MMU translates these virtual addresses to physical addresses in RAM.</li>
+  <li>If the data isn’t in RAM, the OS will fetch it from storage (paging).</li>
+  <li>The TLB helps speed up the address translation process by caching recent translations.</li>
+  <li>This process makes the program think it has access to a large amount of memory (virtual memory).</li>
+</ul>
+
+<hr />
+
+<h3 id="datatypes">Datatypes</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center">DataType</th>
+      <th>Description</th>
+      <th style="text-align: center">C/C++</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: center">Bit</td>
+      <td>0 or 1. The smallest addressable form of memory.</td>
+      <td style="text-align: center">-</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">Nibble</td>
+      <td>4 bits.</td>
+      <td style="text-align: center">-</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">Byte</td>
+      <td>8 bits.</td>
+      <td style="text-align: center"><code class="language-plaintext highlighter-rouge">char</code></td>
+    </tr>
+    <tr>
+      <td style="text-align: center">WORD</td>
+      <td>On the x64 architecture, the word size is 16 bits.</td>
+      <td style="text-align: center"><code class="language-plaintext highlighter-rouge">short</code></td>
+    </tr>
+    <tr>
+      <td style="text-align: center">DWORD</td>
+      <td>Short for “double word”, this means 2 × 16 bit words, which means 32 bits.</td>
+      <td style="text-align: center"><code class="language-plaintext highlighter-rouge">int</code>, <code class="language-plaintext highlighter-rouge">float</code></td>
+    </tr>
+    <tr>
+      <td style="text-align: center">QWORD</td>
+      <td>Short for “quadra word”, this means 2 × 16 bit words, which means 32 bits.</td>
+      <td style="text-align: center"><code class="language-plaintext highlighter-rouge">long</code>, <code class="language-plaintext highlighter-rouge">double</code></td>
+    </tr>
+    <tr>
+      <td style="text-align: center">OWORD</td>
+      <td>Short for “octa-word” this means 8 × 16 bit words, which totals 128 bits. This term is used in NASM syntax.</td>
+      <td style="text-align: center">-</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">YWORD</td>
+      <td>Also used only in NASM syntax, this refers to 256 bits in terms of size (i.e. the size of ymm register.)</td>
+      <td style="text-align: center">-</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">Pointers</td>
+      <td>On the x64 ISA, pointers are all 64-bit addresses.</td>
+      <td style="text-align: center"> </td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h3 id="microsoft-x64-abi">Microsoft x64 ABI</h3>
+
+<h4 id="what-is-calling-convention">What is calling convention?</h4>
+
+<ul>
+  <li>Strict guidelines that our assembly code must adhere to when function is used, in order for the OS to be able to run our code.</li>
+</ul>
+
+<p>For x64 calling convention document, refer to <a href="https://learn.microsoft.com/en-us/cpp/build/x64-calling-convention">Microsoft Guide</a>.</p>
+
+<h4 id="function-parameters-and-return-values">Function parameters and return values</h4>
+
+<p>There are some rules that dictates how functions should be called and how they sould return their results.</p>
+
+<h4 id="integer-arugments">Integer arugments</h4>
+
+<p>The first four integer arguments are passed in registers. Integer values are passed in left-to-right order in <code class="language-plaintext highlighter-rouge">rcx</code>, <code class="language-plaintext highlighter-rouge">rdx</code>, <code class="language-plaintext highlighter-rouge">r8</code> and <code class="language-plaintext highlighter-rouge">r9</code>. Arugments five or higher are passed on the stack.</p>
+
+<h4 id="alignment-requirements">Alignment requirements</h4>
+
+<p>Most data structures must be aligned to a specific boundary.
+For example, stack pointer <code class="language-plaintext highlighter-rouge">rsp</code> must be aligend to a 16-byte boundary.</p>
+
+<p>For example, let’s assume we are calling the function <code class="language-plaintext highlighter-rouge">foo</code> defined below.</p>
+<pre><code class="language-C">void foo(int a, int b, int c, int d, int e)
+{
+    /// Some stuff happens here with the inputs passed in...
+    return;
+}
+</code></pre>
+<p>Before calling <code class="language-plaintext highlighter-rouge">foo()</code>, we must pass <code class="language-plaintext highlighter-rouge">a</code>, <code class="language-plaintext highlighter-rouge">b</code>, <code class="language-plaintext highlighter-rouge">c</code>, and <code class="language-plaintext highlighter-rouge">d</code> to registers <code class="language-plaintext highlighter-rouge">rcx</code>, <code class="language-plaintext highlighter-rouge">rdx</code>, <code class="language-plaintext highlighter-rouge">r8</code>, and <code class="language-plaintext highlighter-rouge">r9</code> and <code class="language-plaintext highlighter-rouge">e</code> to stack.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center">argument</th>
+      <th style="text-align: center">register</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: center">a</td>
+      <td style="text-align: center">rcx</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">b</td>
+      <td style="text-align: center">rdx</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">c</td>
+      <td style="text-align: center">r8</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">d</td>
+      <td style="text-align: center">r9</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">e</td>
+      <td style="text-align: center">stack</td>
+    </tr>
+  </tbody>
+</table>
+
+<h4 id="floating-point-arguments">Floating-point arguments</h4>
+
+<p>Floating-point arguments are passed to <code class="language-plaintext highlighter-rouge">xmm0</code>, <code class="language-plaintext highlighter-rouge">xmm1</code>, <code class="language-plaintext highlighter-rouge">xmm2</code> and <code class="language-plaintext highlighter-rouge">xmm3</code>.</p>
+<pre><code class="language-C">void foo_fp(float a, float b, float c, float d, float e)
+{
+    // Do something
+    return;
+}
+</code></pre>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center">argument</th>
+      <th style="text-align: center">register</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: center">a</td>
+      <td style="text-align: center">xmm0</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">b</td>
+      <td style="text-align: center">xmm1</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">c</td>
+      <td style="text-align: center">xmm2</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">d</td>
+      <td style="text-align: center">xmm3</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">e</td>
+      <td style="text-align: center">stack</td>
+    </tr>
+  </tbody>
+</table>
+
+<h4 id="mixing-arugment-types">Mixing arugment types</h4>
+
+<pre><code class="language-C">void foo_fp(float a, float b, float c, float d, float e)
+{
+    // Do something
+    return;
+}
+</code></pre>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center">argument</th>
+      <th style="text-align: center">register</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: center">a</td>
+      <td style="text-align: center">rcx</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">b</td>
+      <td style="text-align: center">rdx</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">c</td>
+      <td style="text-align: center">xmm2</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">d</td>
+      <td style="text-align: center">r9</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">e</td>
+      <td style="text-align: center">stack</td>
+    </tr>
+  </tbody>
+</table>
+
+<h4 id="other-argument-types">Other argument types</h4>
+
+<ul>
+  <li>Intrinsic types, arrays, and strings are never passed into a register. A point to their memory locations is passed to a register.</li>
+  <li>Structs/unions 8/16/32/64 bits in size may be passed as if they were integers of the same size. Those of other sizes are passed as a pointer as well.</li>
+  <li>For variadic arguments (i.e. <code class="language-plaintext highlighter-rouge">foo_var(int a, ...)</code>), the aforementioned conventions apply depending on the type of the arguments that are passed in. However, for floating-point values, both the integer and floating-point registers must have the same argument’s value, in case the callee expects the value in the integer registers.</li>
+  <li>For unprototyped functions (e.g. forward-declarations), the caller passes integer values as integers and floating-point values as double-precision. The same rule about floating-point values needing to be in both the integer and floating-point registers applies as well.</li>
+  <li>Example</li>
+</ul>
+
+<pre><code class="language-C">struct Foo
+{
+    int a, b, c; // Total of 96 bits. Too big to fit in one of the GPRs.
+}
+
+Foo foo_struct(int a, float b, int c)
+{
+    // Stuff happens...
+    return result; // This is a `Foo` struct.
+}
+
+Foo myStruct = foo_struct(1, 2.0f, 3);
+</code></pre>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center">argument</th>
+      <th style="text-align: center">register</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: center">*myStruct</td>
+      <td style="text-align: center">rcx</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">rdx</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">2.0f</td>
+      <td style="text-align: center">xmm2</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">3</td>
+      <td style="text-align: center">r9</td>
+    </tr>
+  </tbody>
+</table>
+
+<h5 id="return-values">Return values</h5>
+
+<ul>
+  <li>Any scalar return value less than 64-bit is passed to <code class="language-plaintext highlighter-rouge">rax</code>.</li>
+  <li>Any floating return value is passed to <code class="language-plaintext highlighter-rouge">xmm0</code>.</li>
+  <li>Any user-defined type return value with a size of 1/2/4/8/16/32/64-bit is passed to <code class="language-plaintext highlighter-rouge">rax</code>. Otherwise, a pointer to its memory shall be passed to <code class="language-plaintext highlighter-rouge">rcx</code> before function call.</li>
+</ul>
+
+<h5 id="volatile-and-non-volatile">Volatile and non-volatile</h5>
+
+<p>Registers are either volatile or non-volatile.</p>
+
+<ul>
+  <li>Volatile<br />
+Volatile registers are subject to change and are not guaranteed to be preserved between function calls and scope changes. <code class="language-plaintext highlighter-rouge">rax</code>, <code class="language-plaintext highlighter-rouge">rcx</code>, <code class="language-plaintext highlighter-rouge">rdx</code>, <code class="language-plaintext highlighter-rouge">r8</code>, <code class="language-plaintext highlighter-rouge">r9</code>, <code class="language-plaintext highlighter-rouge">r10</code>, and <code class="language-plaintext highlighter-rouge">r11</code> registers are considered volatile.</li>
+  <li>Non-volatile
+Non-volatile registers shall be guaranteed to <em>preserve</em> valid values. Therefore, we are responsible for <em>preserving</em> the state of the registers. <code class="language-plaintext highlighter-rouge">rbx</code>, <code class="language-plaintext highlighter-rouge">rbp</code>, <code class="language-plaintext highlighter-rouge">rdi</code>, <code class="language-plaintext highlighter-rouge">rsi</code>, <code class="language-plaintext highlighter-rouge">rsp</code>, and <code class="language-plaintext highlighter-rouge">r12~15</code> registers are considered non-volatile.</li>
+</ul>
+
+<h5 id="the-shadow-spacehome-space">The shadow space(home space)</h5>
+
+<p>Under the Microsoft x64 calling convention, there is an unique concept of what’s known as a <em>shadow space</em>, also referred to as a home space. This is a space that is reserved every time you enter a function and is equal to at least 32 bytes (which is enough space to hold 4 arguments). This space must be reserved whenever you’re <em>making use of the stack</em>, since it’s what is reserved for things leaving the register values on the stack for debuggers to inspect later on. While the calling convention does not explicitly require the callee to use the shadow space, you should allocate it regardless <em>when you are utilizing the stack</em>, especially in a <em>non-leaf</em> function.</p>
+
+<p>Also, as a reminder, no matter how much space you allocate for the shadow space and your own function’s variables, you still need to ensure that the stack pointer is aligned on a 16-byte boundary after all is said and done.</p>
+
+<hr />
+
+<h3 id="hello-world">Hello, World</h3>
+
+<pre><code class="language-C">bits 64
+default rel
+
+segment .data
+    msg db "Hello world!", 0xd, 0xa, 0
+
+segment .text
+global main
+extern ExitProcess
+extern _CRT_INIT
+
+extern printf
+
+main:
+    push    rbp
+    mov     rbp, rsp
+    sub     rsp, 32
+
+    call    _CRT_INIT
+
+    lea     rcx, [msg]
+    call    printf
+
+    xor     rax, rax
+    call    ExitProcess
+</code></pre>
+<hr />
+
+<h3 id="addressing-mode">Addressing mode</h3>
+
+<p>There are three types of addressing modes:</p>
+
+<ul>
+  <li>immediate addressing <code class="language-plaintext highlighter-rouge">mov rax, 0</code></li>
+  <li>register addressing <code class="language-plaintext highlighter-rouge">mov rax, rbx</code></li>
+  <li>indirect register addressing <code class="language-plaintext highlighter-rouge">mov rax, [rbx]</code></li>
+  <li>rip-relative addressing
+Before rip-relative addressing was available, the loader had to <em>fix up</em> all the codes to relocate any instances of memory addresses that were specified in an absolute manner and add displacement according the program’s base address. This <em>fix up</em> process was saved in format of instructions in <code class="language-plaintext highlighter-rouge">.reloc</code> section of PE file format. To tell our assembler(NASM) to compile our program with rip-relative addressing, the directive <code class="language-plaintext highlighter-rouge">default rel</code>  is used.</li>
+</ul>
+
+<hr />
+
+<h3 id="data-segment">Data Segment</h3>
+
+<pre><code class="language-asm">segment .data
+    msg db "Hello world!", 0xd, 0xa, 0
+</code></pre>
+
+<ul>
+  <li>define a variable named <code class="language-plaintext highlighter-rouge">msg</code> of type byte.</li>
+  <li><code class="language-plaintext highlighter-rouge">db</code> is mmemonic for “define byte”</li>
+  <li>0xd : CR(carriage return)</li>
+  <li>0xf : LF(line feed)</li>
+  <li>In Linux, only <code class="language-plaintext highlighter-rouge">LF</code> is used for line-ending.</li>
+</ul>
+
+<hr />
+
+<h3 id="importing-and-exporting-symbols">Importing and exporting symbols</h3>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">extern</code> keyword : used for <em>importing</em> symbols</li>
+  <li><code class="language-plaintext highlighter-rouge">global</code> keyword : used for <em>exporting</em> symbols</li>
+  <li><code class="language-plaintext highlighter-rouge">_CRT_INIT</code> refers to Microsoft Visual C++ standard run-time library(MSVCRT) which is Microsoft’s implementation of the C99 ISO standard. <code class="language-plaintext highlighter-rouge">libc/libc++</code> are the equivalents on Linux.</li>
+</ul>
+
+<hr />
+
+<h3 id="winmain-and-main"><code class="language-plaintext highlighter-rouge">WinMain</code> and <code class="language-plaintext highlighter-rouge">main</code></h3>
+
+<h4 id="what-is-c-runtime-crt">What is C Runtime (CRT)?</h4>
+
+<p><strong>The C Runtime Library (CRT)</strong> is a collection of functions, macros, and other resources that provide essential functionality required by C programs. It includes:</p>
+
+<ul>
+  <li>Memory management (malloc, free)</li>
+  <li>String manipulation (strcpy, strlen, etc.)</li>
+  <li>File I/O (fopen, fread, etc.)</li>
+  <li>Standard input/output (printf, scanf, etc.)</li>
+  <li>Mathematical functions (sin, cos, etc.)</li>
+  <li>Process and environment management (exit, getenv, etc.)</li>
+</ul>
+
+<h4 id="how-crt-works">How CRT Works</h4>
+
+<ol>
+  <li>Initialization Phase
+Before main() is called, the CRT sets up the environment.
+It initializes global variables, static variables, and handles command-line arguments. If necessary, it sets up thread-local storage and floating-point settings.</li>
+  <li>Execution Phase
+The actual user-defined main() function runs.</li>
+  <li>Termination Phase
+CRT cleans up resources like open file handles and allocated memory.
+Calls functions registered with atexit().
+Exits using exit() or _exit().</li>
+</ol>
+
+<h4 id="program-entry-point">Program Entry Point</h4>
+
+<p>The entry point of a C program is where execution begins. Although most programmers consider main() as the starting point, the actual entry point is determined by the runtime environment and the operating system.</p>
+
+<h4 id="common-entry-points">Common Entry Points</h4>
+
+<ul>
+  <li>Standard C Program:
+    <ul>
+      <li>The true entry point in most systems is _start (not main()).</li>
+      <li>_start is typically provided by the CRT or system startup code.</li>
+      <li>_start calls the CRT initialization routine and then calls main().</li>
+    </ul>
+  </li>
+  <li>Windows:
+    <ul>
+      <li>Windows programs use mainCRTStartup() (for console apps) or WinMainCRTStartup() (for GUI apps).</li>
+      <li>These functions initialize the CRT before calling main() or WinMain().</li>
+    </ul>
+  </li>
+  <li>Custom Entry Points:
+    <ul>
+      <li>In embedded systems or specialized environments, the entry point can be defined explicitly (e.g., using linker scripts).</li>
+    </ul>
+  </li>
+</ul>
+
+<h4 id="how-execution-flows">How Execution Flows</h4>
+
+<ol>
+  <li>OS loads the executable → Calls _start</li>
+  <li>CRT initializes → Sets up stack, heap, static/global variables</li>
+  <li>CRT calls main()</li>
+  <li>Program runs</li>
+  <li>CRT handles termination → Calls cleanup functions, exits</li>
+</ol>
+
+<blockquote>
+  <h5 id="from-microsoft-developer-networkmsdn">from Microsoft Developer Network(MSDN)</h5>
+
+  <p>If your project is built using /ENTRY, and if /ENTRY is passed a function other than <code class="language-plaintext highlighter-rouge">_DllMainCRTStartup</code>, the function must call <code class="language-plaintext highlighter-rouge">_CRT_INIT</code> to initialize the CRT. This call alone is not sufficient if your DLL uses /GS, requires static initializers, or is called in the context of MFC or ATL code. See DLLs and Visual C++ run-time library behavior for more information.</p>
+</blockquote>
+
+<hr />
+
+<h3 id="making-a-shadow-space">Making a shadow space</h3>
+
+<pre><code class="language-asm">push rbp
+mov rbp, rsp
+sub rsp, 32
+</code></pre>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">push rbp</code> : saves the base pointer of stack used by previous scope.</li>
+  <li><code class="language-plaintext highlighter-rouge">mov rbp, rsp</code> : pass the start point of stack used by current scope.</li>
+  <li><code class="language-plaintext highlighter-rouge">sub rsp, 32</code> : allocate 32-byte of stack to be used by current scope.</li>
+  <li>This snippet of code(or some variations) will be there at the beginning of every function writen in assembly!</li>
+</ul>
+
+<hr />
+
+<h3 id="shutting-down-the-program">Shutting down the program</h3>
+
+<ul>
+  <li>The return value for a function goes into <code class="language-plaintext highlighter-rouge">rax</code> register.</li>
+  <li>Example</li>
+</ul>
+
+<pre><code class="language-asm">xor rax, rax
+call ExitProcess
+</code></pre>
+
+<ul>
+  <li>It sets the return value of function <code class="language-plaintext highlighter-rouge">main</code> as <code class="language-plaintext highlighter-rouge">0</code> by xor-ing them out.</li>
+  <li>It calls Win32 ExitProcess function.</li>
+</ul>
+
+<hr />]]></content><author><name></name></author><category term="dev" /><category term="assembly" /><category term="asm" /><summary type="html"><![CDATA[This post explains Application Binary Interface(ABI), hardware, and how to write assemblies. This post is rewritten based on sonictk’s artice]]></summary></entry><entry><title type="html">Mastering Terminal Multitasking, Beginner’s Guide to tmux</title><link href="http://localhost:4000/posts/tmux-tutorial" rel="alternate" type="text/html" title="Mastering Terminal Multitasking, Beginner’s Guide to tmux" /><published>2025-04-19T00:00:00+09:00</published><updated>2025-04-25T10:46:03+09:00</updated><id>http://localhost:4000/posts/tmux-tutorial</id><content type="html" xml:base="http://localhost:4000/posts/tmux-tutorial"><![CDATA[<p>This post explains about <strong>what tmux is, how to install tmux and use tmux</strong>.</p>
+
+<hr />
+
+<h3 id="installation">Installation</h3>
+
+<p>If you are using Ubuntu, <code class="language-plaintext highlighter-rouge">tmux</code> can be installed using command:</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre><span class="nb">sudo </span>apt-get <span class="nb">install </span>tmux
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<hr />
+
+<h3 id="concept">Concept</h3>
+
+<p><object data="/uml/3211b8310938242ed0a1626cabc37095.svg" type="image/svg+xml" class="plantuml"></object></p>
+
+<p>Using <code class="language-plaintext highlighter-rouge">tmux</code>, you can make many <strong>sessions</strong>.<br />
+A single <strong>session</strong> can have a lot of <strong>windows</strong>.<br />
+A single <strong>window</strong> can again have a lot of <strong>panes</strong>.</p>
+
+<p>Run <code class="language-plaintext highlighter-rouge">tmux</code> in the terminal.<br />
+The bottom green status bar will show up. It indicates the <strong>session name</strong> and <strong>the windows in the session</strong>.</p>
+
+<p><img src="./../assets/posts/tmux_tutorial/tmux.png" alt="Desktop View" width="300" class="left" /></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">[1]</code> indicates the session name.</li>
+  <li><code class="language-plaintext highlighter-rouge">Session 1</code> has <strong>4 windows</strong>.</li>
+  <li>The asterix(<code class="language-plaintext highlighter-rouge">*</code>) next to <code class="language-plaintext highlighter-rouge">window 3</code> indicates the window that is displayed on the terminal.</li>
+</ul>
+
+<hr />
+
+<h3 id="commands">Commands</h3>
+
+<h4 id="sessions">Sessions</h4>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center">command</th>
+      <th style="text-align: left">description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: center"><code class="language-plaintext highlighter-rouge">tmux</code></td>
+      <td style="text-align: left">run tmux.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><code class="language-plaintext highlighter-rouge">ctrl-b :new</code></td>
+      <td style="text-align: left">make new session.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><code class="language-plaintext highlighter-rouge">ctrl-b :kill-session</code></td>
+      <td style="text-align: left">kill session.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><code class="language-plaintext highlighter-rouge">ctrl-b s</code> - <code class="language-plaintext highlighter-rouge">t</code> - <code class="language-plaintext highlighter-rouge">X</code></td>
+      <td style="text-align: left">kill tagged session(s).</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><code class="language-plaintext highlighter-rouge">ctrl-b s</code></td>
+      <td style="text-align: left">change session.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><code class="language-plaintext highlighter-rouge">ctrl-b w</code></td>
+      <td style="text-align: left">change session/window.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><code class="language-plaintext highlighter-rouge">ctrl-b $</code></td>
+      <td style="text-align: left">rename session.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h4 id="windows">Windows</h4>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center">command</th>
+      <th style="text-align: left">description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: center"><code class="language-plaintext highlighter-rouge">ctrl-b c</code></td>
+      <td style="text-align: left">create window.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><code class="language-plaintext highlighter-rouge">ctrl-b n</code></td>
+      <td style="text-align: left">go to next window.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><code class="language-plaintext highlighter-rouge">ctrl-b p</code></td>
+      <td style="text-align: left">go to previous window.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><code class="language-plaintext highlighter-rouge">ctrl-b w</code></td>
+      <td style="text-align: left">change session/window.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><code class="language-plaintext highlighter-rouge">ctrl-b ,</code></td>
+      <td style="text-align: left">rename window/pane.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><code class="language-plaintext highlighter-rouge">ctrl-b d</code></td>
+      <td style="text-align: left">close window/pane.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h4 id="panes">Panes</h4>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center">command</th>
+      <th style="text-align: left">description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: center"><code class="language-plaintext highlighter-rouge">ctrl-b %</code></td>
+      <td style="text-align: left">split horizontal pane.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><code class="language-plaintext highlighter-rouge">ctrl-b "</code></td>
+      <td style="text-align: left">split vertical pane.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><code class="language-plaintext highlighter-rouge">ctrl-b d</code></td>
+      <td style="text-align: left">close window/pane.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h4 id="others">Others</h4>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center">command</th>
+      <th style="text-align: left">description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: center"><code class="language-plaintext highlighter-rouge">ctrl-b [</code></td>
+      <td style="text-align: left">scroll mode. <code class="language-plaintext highlighter-rouge">q</code> to quit.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><code class="language-plaintext highlighter-rouge">ctrl-b Pgup</code></td>
+      <td style="text-align: left">scroll mode. go one page up. <code class="language-plaintext highlighter-rouge">q</code> to quit.</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h4 id="shortcuts">Shortcuts</h4>
+
+<p>Shortcuts can be configured in <code class="language-plaintext highlighter-rouge">~/.tmux.conf</code>.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+</pre></td><td class="rouge-code"><pre># switch between windows
+bind-key -n C-S-Left previous-window
+bind-key -n C-S-Right next-window
+
+# resize panes
+set -g repeat-time 1500
+bind-key -nr -T prefix       M-Up              resize-pane -U 5
+bind-key -nr -T prefix       M-Down            resize-pane -D 5
+bind-key -nr -T prefix       M-Left            resize-pane -L 5
+bind-key -nr -T prefix       M-Right           resize-pane -R 5
+bind-key -nr -T prefix       C-Up              resize-pane -U
+bind-key -nr -T prefix       C-Down            resize-pane -D
+bind-key -nr -T prefix       C-Left            resize-pane -L
+bind-key -nr -T prefix       C-Right           resize-pane -R
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">-n</code>: No prefix — This tells tmux that the key binding should not require the prefix key (usually Ctrl+b by default). So pressing just the key will trigger the binding.</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">-r</code>: Repeatable — This allows the key binding to be repeated when the key is held down, similar to how holding down an arrow key scrolls continuously.</p>
+  </li>
+</ul>]]></content><author><name></name></author><category term="dev" /><category term="shell" /><category term="tmux" /><summary type="html"><![CDATA[This post explains about what tmux is, how to install tmux and use tmux.]]></summary></entry><entry><title type="html">Assembly Language Tutorial</title><link href="http://localhost:4000/posts/about-clang-and-llvm" rel="alternate" type="text/html" title="Assembly Language Tutorial" /><published>2025-04-19T00:00:00+09:00</published><updated>2025-04-19T00:00:00+09:00</updated><id>http://localhost:4000/posts/about-clang-and-llvm</id><content type="html" xml:base="http://localhost:4000/posts/about-clang-and-llvm"><![CDATA[<p>This post explains Application Binary Interface(ABI), hardware, and how to write assemblies.<br />
+This post is rewritten based on <a href="https://sonictk.github.io/asm_tutorial/">sonictk’s artice</a></p>
+
+<hr />
+
+<h2 id="application-binary-interfaceabi">Application Binary Interface(ABI)</h2>
+
+<p>Application Binary Interface(ABI) refers to set of conventions, rules, and guidelines that govern how programs interact with the operating system. Therefore, it is defined by OS designer.</p>
+
+<p>ABI includes:</p>
+
+<ul>
+  <li>how functions are called and returned(calling convention).</li>
+  <li>how data types are represented in memory(e.g. alignment, padding).</li>
+  <li>The format of the binary object code(e.g. <code class="language-plaintext highlighter-rouge">.obj</code>, <code class="language-plaintext highlighter-rouge">.exe</code>).</li>
+  <li>How dynamic linking works and how shared libraries are used.</li>
+  <li>How memory management, exception handling and system calls are structured.</li>
+</ul>
+
+<p>There are two types of ABI commonly used in Windows and LInux respectively:</p>
+
+<ul>
+  <li>Microsoft X64</li>
+  <li>System V ABI</li>
+</ul>
+
+<p>They differ in how they organize registers, calling conventions, and other details.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th> </th>
+      <th style="text-align: left">Microsoft X64</th>
+      <th style="text-align: left">System V ABI</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Registers</td>
+      <td style="text-align: left">16 general-purpose registers and 16 XMM/YMM registers</td>
+      <td style="text-align: left">Registers RDI, RSI, RDX, RCX, R8, R9, and XMM0–XMM7</td>
+    </tr>
+    <tr>
+      <td>Calling convention</td>
+      <td style="text-align: left">Four-register fast-call(<code class="language-plaintext highlighter-rouge">rcx</code>, <code class="language-plaintext highlighter-rouge">rdx</code>, <code class="language-plaintext highlighter-rouge">r8</code>, <code class="language-plaintext highlighter-rouge">r9</code>)</td>
+      <td style="text-align: left">Follows the AMD64 ABI calling convention</td>
+    </tr>
+    <tr>
+      <td>Use</td>
+      <td style="text-align: left">Used in Windows</td>
+      <td style="text-align: left">Used in Linux, FreeBSD, macOS, and Solaris</td>
+    </tr>
+    <tr>
+      <td>Features</td>
+      <td style="text-align: left">Includes a shadow store for callees</td>
+      <td style="text-align: left">Includes the Executable and Linkable Format (ELF)</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h3 id="general-purpose-registers">General-purpose registers</h3>
+
+<p>There are 16 GPRs on the x64 instruction set; they are 64-bit wide; they are referred to as
+<code class="language-plaintext highlighter-rouge">rax, rbx, rcx, rdx, rbp, rsi, rdi, rsp, r8, r9, r10, r11 r12, r13, r14 and r15</code>.<br />
+The prefix “general-purpose” is a little misleading; while they are technically general-purpose in the sense that the CPU itself doesn’t govern how they should be used, some of these registers have specific purposes and need to treated in specific ways according to ABI.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="rouge-code"><pre>General-purpose register Field
+--------------------------------------------------------------------
+&lt;-------&gt;&lt;-------&gt;&lt;----------------&gt;&lt;------------------------------&gt;  
+|   al   |   ah   |                                                |
+|        ax       |                                                |
+|                eax                |                              |
+|                                  rax                             |
+</pre></td></tr></tbody></table></code></pre></div></div>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+</pre></td><td class="rouge-code"><pre>--------------------------------------------------------------------
+&lt;-------&gt;&lt;-------&gt;&lt;----------------&gt;&lt;------------------------------&gt;  
+|   r8b  |                                                         |
+|        r8w      |                                                |
+|                r8d                |                              |
+|                                  r8                              |
+</pre></td></tr></tbody></table></code></pre></div></div>
+<hr />
+
+<h3 id="simd-registers">SIMD registers</h3>
+
+<p>There are 16 FPRs on the x64 instruction set; they are 128-bit wide; they are referred to as <code class="language-plaintext highlighter-rouge">xmm0</code> .. <code class="language-plaintext highlighter-rouge">xmm15</code>.</p>
+
+<ul>
+  <li>128-bit <code class="language-plaintext highlighter-rouge">xmm</code> registers were introduced by Intel in 1999 as SSE(Streaming SIMD Extensions). When you execute an SSE instruction, it operates on the lower 128 bits of the register (<code class="language-plaintext highlighter-rouge">xmm</code>).</li>
+  <li>256-bit <code class="language-plaintext highlighter-rouge">ymm</code> registers were introduced as AVX(Advanced Vector Extensions). When you execute an AVX instruction, it uses the lower 256 bits of the register (<code class="language-plaintext highlighter-rouge">ymm</code>).</li>
+  <li><code class="language-plaintext highlighter-rouge">AVX2</code> was later introduced in 2013, expanding usage of <code class="language-plaintext highlighter-rouge">ymm</code> into integer operations while <code class="language-plaintext highlighter-rouge">AVX</code> focused only on floating-point operations.</li>
+  <li>512-bit <code class="language-plaintext highlighter-rouge">zmm</code> registers were introduced as AVX-512.</li>
+  <li>When you execute an AVX-512 instruction, it operates on the full 512-bit register (ZMM).</li>
+</ul>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center">Register Name</th>
+      <th style="text-align: center">Size</th>
+      <th style="text-align: center">Introduced In</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: center">XMM</td>
+      <td style="text-align: center">128-bit</td>
+      <td style="text-align: center">SSE</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">YMM</td>
+      <td style="text-align: center">256-bit</td>
+      <td style="text-align: center">AVX</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">ZMM</td>
+      <td style="text-align: center">512-bit</td>
+      <td style="text-align: center">AVX-512</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+</pre></td><td class="rouge-code"><pre>SIMD Register Field
+--------------------------------------------------------------------
+&lt;-------&gt;&lt;-------&gt;&lt;----------------&gt;&lt;------------------------------&gt;  
+|       xmm       |                                                |
+|               ymm                 |                              |
+|                                 zmm                              |
+</pre></td></tr></tbody></table></code></pre></div></div>
+<hr />
+
+<h3 id="special-purpose-registers">Special purpose registers</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center">Register Name</th>
+      <th style="text-align: center">Size</th>
+      <th style="text-align: left">Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: center"><code class="language-plaintext highlighter-rouge">rip</code></td>
+      <td style="text-align: center">64-bit</td>
+      <td style="text-align: left">Points where the next instruction to be executed is at in the assembly code.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><code class="language-plaintext highlighter-rouge">rsp</code></td>
+      <td style="text-align: center">64-bit</td>
+      <td style="text-align: left">Points to the bottom of the stack. Calling convention shall be met.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><code class="language-plaintext highlighter-rouge">rbp</code></td>
+      <td style="text-align: center">64-bit</td>
+      <td style="text-align: left">Points to the original value of <code class="language-plaintext highlighter-rouge">rsp</code>. Allows us to unwind the stack when we leaven the current scope.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><code class="language-plaintext highlighter-rouge">rfl</code></td>
+      <td style="text-align: center">16-bit</td>
+      <td style="text-align: left">Status register. Set after certain instructions have been executed.</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre></td><td class="rouge-code"><pre>about rfl(flag register)
+
+| CF | PF | AF | ZF | SF | TF | IF | DF | OF | IOPL | NT | N/A |
+
+- CF : Carry flag     | PF : Parity flag  | AF : Adjust flag      | ZF : Zero flag
+- SF : Sign flag      | TF : Trp flag     | IF : Interrupt flag   | DF : Direction flag
+- OF : Overflow flag  
+- IOPL : I/O privilege lvel flag(legacy)
+- NT : Nested task flag(legacy)
+- N/A : reserved for future use
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center">Flag</th>
+      <th style="text-align: left">Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: center"><code class="language-plaintext highlighter-rouge">DF(Description flag)</code></td>
+      <td style="text-align: left">Determines left/right direction for moving when comparing string.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><code class="language-plaintext highlighter-rouge">SF(Sign flag)</code></td>
+      <td style="text-align: left">Shows the sign of the result of an arithmetic operation. <code class="language-plaintext highlighter-rouge">1</code> means positive.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><code class="language-plaintext highlighter-rouge">ZF(Zero flag)</code></td>
+      <td style="text-align: left">Shows whether the result of operation is zero or not. <code class="language-plaintext highlighter-rouge">1</code> means zero.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><code class="language-plaintext highlighter-rouge">OF(Overflow flag)</code></td>
+      <td style="text-align: left">Set to <code class="language-plaintext highlighter-rouge">1</code> when the result did not fit in the number of bits used for the operation by the Arithmetic Logic Unit (ALU).</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><code class="language-plaintext highlighter-rouge">PF(Parity flag)</code></td>
+      <td style="text-align: left">Indicates the total number of bits that are set in the result. <code class="language-plaintext highlighter-rouge">1</code> means even number of bits have been set.</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h3 id="memory-segement">Memory Segement</h3>
+
+<svg width="600" height="600" xmlns="http://www.w3.org/2000/svg">
+  <!-- Draw the outer rectangle -->
+  <rect x="30" y="50" width="500" height="540" stroke="black" fill="none" stroke-width="6" />
+    <!-- Horizontal dividers -->
+    <line x1="30" y1="85" x2="530" y2="85" stroke="black" stroke-width="6" />
+    <line x1="30" y1="150" x2="530" y2="150" stroke="black" stroke-width="6" />
+    <line x1="30" y1="205" x2="530" y2="205" stroke="black" stroke-width="6" />
+    <line x1="30" y1="300" x2="530" y2="300" stroke="black" stroke-width="6" stroke-dasharray="10,10" />
+    <line x1="30" y1="435" x2="530" y2="435" stroke="black" stroke-width="6" stroke-dasharray="10,10" />
+    <!-- Texts -->
+    <text x="50" y="75" font-size="25" fill="black">text(.code)</text>
+    <text x="50" y="125" font-size="25" fill="black">data(.data)</text>
+    <text x="50" y="185" font-size="25" fill="black">bss(uninitialized data)</text>
+    <text x="50" y="260" font-size="25" fill="black">heap</text>
+    <text x="50" y="510" font-size="25" fill="black">stack</text>
+    <text x="0" y="20" font-size="25" fill="black">Address</text>
+    <text x="0" y="50" font-size="25" fill="black">0</text>
+    <text x="80" y="350" font-size="25" fill="black">call() malloc()</text>
+    <text x="350" y="400" font-size="25" fill="black">rsp--</text>
+    <!-- Upward Arrow -->
+    <line x1="320" y1="435" x2="320" y2="380" stroke="black" stroke-width="6" marker-end="url(#arrowhead)" /> 
+    <line x1="260" y1="300" x2="260" y2="355" stroke="black" stroke-width="6" marker-end="url(#arrowhead)" /> 
+    <!-- Arrowhead Definition -->
+    <defs>
+        <marker id="arrowhead" markerWidth="3" markerHeight="3" refX="1.5" refY="1.5" orient="auto">
+            <polygon points="0,3  3,1.5 0,0" fill="black" />
+        </marker>
+    </defs>
+</svg>
+<div class="imagecaption"><b style="font-style:normal;">Figure.</b> PE, ELF executable file format</div>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">Memory Segment</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">Text Segment</td>
+      <td>Contains the actual assembly instructions</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Data Segment</td>
+      <td>constants or initialized data (e.g. int a = 5; or const int a = 5;)</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">BSS Segment</td>
+      <td>variables that are uninitialzed (e.g. int a;)</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h3 id="virtual-memory-address-system">Virtual Memory Address System</h3>
+
+<ul>
+  <li>The program asks the OS for memory, and the OS provides virtual addresses.</li>
+  <li>The MMU translates these virtual addresses to physical addresses in RAM.</li>
+  <li>If the data isn’t in RAM, the OS will fetch it from storage (paging).</li>
+  <li>The TLB helps speed up the address translation process by caching recent translations.</li>
+  <li>This process makes the program think it has access to a large amount of memory (virtual memory).</li>
+</ul>
+
+<hr />
+
+<h3 id="datatypes">Datatypes</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center">DataType</th>
+      <th>Description</th>
+      <th style="text-align: center">C/C++</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: center">Bit</td>
+      <td>0 or 1. The smallest addressable form of memory.</td>
+      <td style="text-align: center">-</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">Nibble</td>
+      <td>4 bits.</td>
+      <td style="text-align: center">-</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">Byte</td>
+      <td>8 bits.</td>
+      <td style="text-align: center"><code class="language-plaintext highlighter-rouge">char</code></td>
+    </tr>
+    <tr>
+      <td style="text-align: center">WORD</td>
+      <td>On the x64 architecture, the word size is 16 bits.</td>
+      <td style="text-align: center"><code class="language-plaintext highlighter-rouge">short</code></td>
+    </tr>
+    <tr>
+      <td style="text-align: center">DWORD</td>
+      <td>Short for “double word”, this means 2 × 16 bit words, which means 32 bits.</td>
+      <td style="text-align: center"><code class="language-plaintext highlighter-rouge">int</code>, <code class="language-plaintext highlighter-rouge">float</code></td>
+    </tr>
+    <tr>
+      <td style="text-align: center">QWORD</td>
+      <td>Short for “quadra word”, this means 2 × 16 bit words, which means 32 bits.</td>
+      <td style="text-align: center"><code class="language-plaintext highlighter-rouge">long</code>, <code class="language-plaintext highlighter-rouge">double</code></td>
+    </tr>
+    <tr>
+      <td style="text-align: center">OWORD</td>
+      <td>Short for “octa-word” this means 8 × 16 bit words, which totals 128 bits. This term is used in NASM syntax.</td>
+      <td style="text-align: center">-</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">YWORD</td>
+      <td>Also used only in NASM syntax, this refers to 256 bits in terms of size (i.e. the size of ymm register.)</td>
+      <td style="text-align: center">-</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">Pointers</td>
+      <td>On the x64 ISA, pointers are all 64-bit addresses.</td>
+      <td style="text-align: center"> </td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h3 id="microsoft-x64-abi">Microsoft x64 ABI</h3>
+
+<h4 id="what-is-calling-convention">What is calling convention?</h4>
+
+<ul>
+  <li>Strict guidelines that our assembly code must adhere to when function is used, in order for the OS to be able to run our code.</li>
+</ul>
+
+<p>For x64 calling convention document, refer to <a href="https://learn.microsoft.com/en-us/cpp/build/x64-calling-convention">Microsoft Guide</a>.</p>
+
+<h4 id="function-parameters-and-return-values">Function parameters and return values</h4>
+
+<p>There are some rules that dictates how functions should be called and how they sould return their results.</p>
+
+<h4 id="integer-arugments">Integer arugments</h4>
+
+<p>The first four integer arguments are passed in registers. Integer values are passed in left-to-right order in <code class="language-plaintext highlighter-rouge">rcx</code>, <code class="language-plaintext highlighter-rouge">rdx</code>, <code class="language-plaintext highlighter-rouge">r8</code> and <code class="language-plaintext highlighter-rouge">r9</code>. Arugments five or higher are passed on the stack.</p>
+
+<h4 id="alignment-requirements">Alignment requirements</h4>
+
+<p>Most data structures must be aligned to a specific boundary.
+For example, stack pointer <code class="language-plaintext highlighter-rouge">rsp</code> must be aligend to a 16-byte boundary.</p>
+
+<p>For example, let’s assume we are calling the function <code class="language-plaintext highlighter-rouge">foo</code> defined below.</p>
+<pre><code class="language-C">void foo(int a, int b, int c, int d, int e)
+{
+    /// Some stuff happens here with the inputs passed in...
+    return;
+}
+</code></pre>
+<p>Before calling <code class="language-plaintext highlighter-rouge">foo()</code>, we must pass <code class="language-plaintext highlighter-rouge">a</code>, <code class="language-plaintext highlighter-rouge">b</code>, <code class="language-plaintext highlighter-rouge">c</code>, and <code class="language-plaintext highlighter-rouge">d</code> to registers <code class="language-plaintext highlighter-rouge">rcx</code>, <code class="language-plaintext highlighter-rouge">rdx</code>, <code class="language-plaintext highlighter-rouge">r8</code>, and <code class="language-plaintext highlighter-rouge">r9</code> and <code class="language-plaintext highlighter-rouge">e</code> to stack.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center">argument</th>
+      <th style="text-align: center">register</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: center">a</td>
+      <td style="text-align: center">rcx</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">b</td>
+      <td style="text-align: center">rdx</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">c</td>
+      <td style="text-align: center">r8</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">d</td>
+      <td style="text-align: center">r9</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">e</td>
+      <td style="text-align: center">stack</td>
+    </tr>
+  </tbody>
+</table>
+
+<h4 id="floating-point-arguments">Floating-point arguments</h4>
+
+<p>Floating-point arguments are passed to <code class="language-plaintext highlighter-rouge">xmm0</code>, <code class="language-plaintext highlighter-rouge">xmm1</code>, <code class="language-plaintext highlighter-rouge">xmm2</code> and <code class="language-plaintext highlighter-rouge">xmm3</code>.</p>
+<pre><code class="language-C">void foo_fp(float a, float b, float c, float d, float e)
+{
+    // Do something
+    return;
+}
+</code></pre>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center">argument</th>
+      <th style="text-align: center">register</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: center">a</td>
+      <td style="text-align: center">xmm0</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">b</td>
+      <td style="text-align: center">xmm1</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">c</td>
+      <td style="text-align: center">xmm2</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">d</td>
+      <td style="text-align: center">xmm3</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">e</td>
+      <td style="text-align: center">stack</td>
+    </tr>
+  </tbody>
+</table>
+
+<h4 id="mixing-arugment-types">Mixing arugment types</h4>
+
+<pre><code class="language-C">void foo_fp(float a, float b, float c, float d, float e)
+{
+    // Do something
+    return;
+}
+</code></pre>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center">argument</th>
+      <th style="text-align: center">register</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: center">a</td>
+      <td style="text-align: center">rcx</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">b</td>
+      <td style="text-align: center">rdx</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">c</td>
+      <td style="text-align: center">xmm2</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">d</td>
+      <td style="text-align: center">r9</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">e</td>
+      <td style="text-align: center">stack</td>
+    </tr>
+  </tbody>
+</table>
+
+<h4 id="other-argument-types">Other argument types</h4>
+
+<ul>
+  <li>Intrinsic types, arrays, and strings are never passed into a register. A point to their memory locations is passed to a register.</li>
+  <li>Structs/unions 8/16/32/64 bits in size may be passed as if they were integers of the same size. Those of other sizes are passed as a pointer as well.</li>
+  <li>For variadic arguments (i.e. <code class="language-plaintext highlighter-rouge">foo_var(int a, ...)</code>), the aforementioned conventions apply depending on the type of the arguments that are passed in. However, for floating-point values, both the integer and floating-point registers must have the same argument’s value, in case the callee expects the value in the integer registers.</li>
+  <li>For unprototyped functions (e.g. forward-declarations), the caller passes integer values as integers and floating-point values as double-precision. The same rule about floating-point values needing to be in both the integer and floating-point registers applies as well.</li>
+  <li>Example</li>
+</ul>
+
+<pre><code class="language-C">struct Foo
+{
+    int a, b, c; // Total of 96 bits. Too big to fit in one of the GPRs.
+}
+
+Foo foo_struct(int a, float b, int c)
+{
+    // Stuff happens...
+    return result; // This is a `Foo` struct.
+}
+
+Foo myStruct = foo_struct(1, 2.0f, 3);
+</code></pre>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center">argument</th>
+      <th style="text-align: center">register</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: center">*myStruct</td>
+      <td style="text-align: center">rcx</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">rdx</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">2.0f</td>
+      <td style="text-align: center">xmm2</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">3</td>
+      <td style="text-align: center">r9</td>
+    </tr>
+  </tbody>
+</table>
+
+<h5 id="return-values">Return values</h5>
+
+<ul>
+  <li>Any scalar return value less than 64-bit is passed to <code class="language-plaintext highlighter-rouge">rax</code>.</li>
+  <li>Any floating return value is passed to <code class="language-plaintext highlighter-rouge">xmm0</code>.</li>
+  <li>Any user-defined type return value with a size of 1/2/4/8/16/32/64-bit is passed to <code class="language-plaintext highlighter-rouge">rax</code>. Otherwise, a pointer to its memory shall be passed to <code class="language-plaintext highlighter-rouge">rcx</code> before function call.</li>
+</ul>
+
+<h5 id="volatile-and-non-volatile">Volatile and non-volatile</h5>
+
+<p>Registers are either volatile or non-volatile.</p>
+
+<ul>
+  <li>Volatile<br />
+Volatile registers are subject to change and are not guaranteed to be preserved between function calls and scope changes. <code class="language-plaintext highlighter-rouge">rax</code>, <code class="language-plaintext highlighter-rouge">rcx</code>, <code class="language-plaintext highlighter-rouge">rdx</code>, <code class="language-plaintext highlighter-rouge">r8</code>, <code class="language-plaintext highlighter-rouge">r9</code>, <code class="language-plaintext highlighter-rouge">r10</code>, and <code class="language-plaintext highlighter-rouge">r11</code> registers are considered volatile.</li>
+  <li>Non-volatile
+Non-volatile registers shall be guaranteed to <em>preserve</em> valid values. Therefore, we are responsible for <em>preserving</em> the state of the registers. <code class="language-plaintext highlighter-rouge">rbx</code>, <code class="language-plaintext highlighter-rouge">rbp</code>, <code class="language-plaintext highlighter-rouge">rdi</code>, <code class="language-plaintext highlighter-rouge">rsi</code>, <code class="language-plaintext highlighter-rouge">rsp</code>, and <code class="language-plaintext highlighter-rouge">r12~15</code> registers are considered non-volatile.</li>
+</ul>
+
+<h5 id="the-shadow-spacehome-space">The shadow space(home space)</h5>
+
+<p>Under the Microsoft x64 calling convention, there is an unique concept of what’s known as a <em>shadow space</em>, also referred to as a home space. This is a space that is reserved every time you enter a function and is equal to at least 32 bytes (which is enough space to hold 4 arguments). This space must be reserved whenever you’re <em>making use of the stack</em>, since it’s what is reserved for things leaving the register values on the stack for debuggers to inspect later on. While the calling convention does not explicitly require the callee to use the shadow space, you should allocate it regardless <em>when you are utilizing the stack</em>, especially in a <em>non-leaf</em> function.</p>
+
+<p>Also, as a reminder, no matter how much space you allocate for the shadow space and your own function’s variables, you still need to ensure that the stack pointer is aligned on a 16-byte boundary after all is said and done.</p>
+
+<hr />
+
+<h3 id="hello-world">Hello, World</h3>
+
+<pre><code class="language-C">bits 64
+default rel
+
+segment .data
+    msg db "Hello world!", 0xd, 0xa, 0
+
+segment .text
+global main
+extern ExitProcess
+extern _CRT_INIT
+
+extern printf
+
+main:
+    push    rbp
+    mov     rbp, rsp
+    sub     rsp, 32
+
+    call    _CRT_INIT
+
+    lea     rcx, [msg]
+    call    printf
+
+    xor     rax, rax
+    call    ExitProcess
+</code></pre>
+<hr />
+
+<h3 id="addressing-mode">Addressing mode</h3>
+
+<p>There are three types of addressing modes:</p>
+
+<ul>
+  <li>immediate addressing <code class="language-plaintext highlighter-rouge">mov rax, 0</code></li>
+  <li>register addressing <code class="language-plaintext highlighter-rouge">mov rax, rbx</code></li>
+  <li>indirect register addressing <code class="language-plaintext highlighter-rouge">mov rax, [rbx]</code></li>
+  <li>rip-relative addressing
+Before rip-relative addressing was available, the loader had to <em>fix up</em> all the codes to relocate any instances of memory addresses that were specified in an absolute manner and add displacement according the program’s base address. This <em>fix up</em> process was saved in format of instructions in <code class="language-plaintext highlighter-rouge">.reloc</code> section of PE file format. To tell our assembler(NASM) to compile our program with rip-relative addressing, the directive <code class="language-plaintext highlighter-rouge">default rel</code>  is used.</li>
+</ul>
+
+<hr />
+
+<h3 id="data-segment">Data Segment</h3>
+
+<pre><code class="language-asm">segment .data
+    msg db "Hello world!", 0xd, 0xa, 0
+</code></pre>
+
+<ul>
+  <li>define a variable named <code class="language-plaintext highlighter-rouge">msg</code> of type byte.</li>
+  <li><code class="language-plaintext highlighter-rouge">db</code> is mmemonic for “define byte”</li>
+  <li>0xd : CR(carriage return)</li>
+  <li>0xf : LF(line feed)</li>
+  <li>In Linux, only <code class="language-plaintext highlighter-rouge">LF</code> is used for line-ending.</li>
+</ul>
+
+<hr />
+
+<h3 id="importing-and-exporting-symbols">Importing and exporting symbols</h3>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">extern</code> keyword : used for <em>importing</em> symbols</li>
+  <li><code class="language-plaintext highlighter-rouge">global</code> keyword : used for <em>exporting</em> symbols</li>
+  <li><code class="language-plaintext highlighter-rouge">_CRT_INIT</code> refers to Microsoft Visual C++ standard run-time library(MSVCRT) which is Microsoft’s implementation of the C99 ISO standard. <code class="language-plaintext highlighter-rouge">libc/libc++</code> are the equivalents on Linux.</li>
+</ul>
+
+<hr />
+
+<h3 id="winmain-and-main"><code class="language-plaintext highlighter-rouge">WinMain</code> and <code class="language-plaintext highlighter-rouge">main</code></h3>
+
+<h4 id="what-is-c-runtime-crt">What is C Runtime (CRT)?</h4>
+
+<p><strong>The C Runtime Library (CRT)</strong> is a collection of functions, macros, and other resources that provide essential functionality required by C programs. It includes:</p>
+
+<ul>
+  <li>Memory management (malloc, free)</li>
+  <li>String manipulation (strcpy, strlen, etc.)</li>
+  <li>File I/O (fopen, fread, etc.)</li>
+  <li>Standard input/output (printf, scanf, etc.)</li>
+  <li>Mathematical functions (sin, cos, etc.)</li>
+  <li>Process and environment management (exit, getenv, etc.)</li>
+</ul>
+
+<h4 id="how-crt-works">How CRT Works</h4>
+
+<ol>
+  <li>Initialization Phase
+Before main() is called, the CRT sets up the environment.
+It initializes global variables, static variables, and handles command-line arguments. If necessary, it sets up thread-local storage and floating-point settings.</li>
+  <li>Execution Phase
+The actual user-defined main() function runs.</li>
+  <li>Termination Phase
+CRT cleans up resources like open file handles and allocated memory.
+Calls functions registered with atexit().
+Exits using exit() or _exit().</li>
+</ol>
+
+<h4 id="program-entry-point">Program Entry Point</h4>
+
+<p>The entry point of a C program is where execution begins. Although most programmers consider main() as the starting point, the actual entry point is determined by the runtime environment and the operating system.</p>
+
+<h4 id="common-entry-points">Common Entry Points</h4>
+
+<ul>
+  <li>Standard C Program:
+    <ul>
+      <li>The true entry point in most systems is _start (not main()).</li>
+      <li>_start is typically provided by the CRT or system startup code.</li>
+      <li>_start calls the CRT initialization routine and then calls main().</li>
+    </ul>
+  </li>
+  <li>Windows:
+    <ul>
+      <li>Windows programs use mainCRTStartup() (for console apps) or WinMainCRTStartup() (for GUI apps).</li>
+      <li>These functions initialize the CRT before calling main() or WinMain().</li>
+    </ul>
+  </li>
+  <li>Custom Entry Points:
+    <ul>
+      <li>In embedded systems or specialized environments, the entry point can be defined explicitly (e.g., using linker scripts).</li>
+    </ul>
+  </li>
+</ul>
+
+<h4 id="how-execution-flows">How Execution Flows</h4>
+
+<ol>
+  <li>OS loads the executable → Calls _start</li>
+  <li>CRT initializes → Sets up stack, heap, static/global variables</li>
+  <li>CRT calls main()</li>
+  <li>Program runs</li>
+  <li>CRT handles termination → Calls cleanup functions, exits</li>
+</ol>
+
+<blockquote>
+  <h5 id="from-microsoft-developer-networkmsdn">from Microsoft Developer Network(MSDN)</h5>
+
+  <p>If your project is built using /ENTRY, and if /ENTRY is passed a function other than <code class="language-plaintext highlighter-rouge">_DllMainCRTStartup</code>, the function must call <code class="language-plaintext highlighter-rouge">_CRT_INIT</code> to initialize the CRT. This call alone is not sufficient if your DLL uses /GS, requires static initializers, or is called in the context of MFC or ATL code. See DLLs and Visual C++ run-time library behavior for more information.</p>
+</blockquote>
+
+<hr />
+
+<h3 id="making-a-shadow-space">Making a shadow space</h3>
+
+<pre><code class="language-asm">push rbp
+mov rbp, rsp
+sub rsp, 32
+</code></pre>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">push rbp</code> : saves the base pointer of stack used by previous scope.</li>
+  <li><code class="language-plaintext highlighter-rouge">mov rbp, rsp</code> : pass the start point of stack used by current scope.</li>
+  <li><code class="language-plaintext highlighter-rouge">sub rsp, 32</code> : allocate 32-byte of stack to be used by current scope.</li>
+  <li>This snippet of code(or some variations) will be there at the beginning of every function writen in assembly!</li>
+</ul>
+
+<hr />
+
+<h3 id="shutting-down-the-program">Shutting down the program</h3>
+
+<ul>
+  <li>The return value for a function goes into <code class="language-plaintext highlighter-rouge">rax</code> register.</li>
+  <li>Example</li>
+</ul>
+
+<pre><code class="language-asm">xor rax, rax
+call ExitProcess
+</code></pre>
+
+<ul>
+  <li>It sets the return value of function <code class="language-plaintext highlighter-rouge">main</code> as <code class="language-plaintext highlighter-rouge">0</code> by xor-ing them out.</li>
+  <li>It calls Win32 ExitProcess function.</li>
+</ul>
+
+<hr />]]></content><author><name></name></author><category term="dev" /><category term="assembly" /><category term="asm" /><summary type="html"><![CDATA[This post explains Application Binary Interface(ABI), hardware, and how to write assemblies. This post is rewritten based on sonictk’s artice]]></summary></entry><entry><title type="html">State assignment rule of mealy machine</title><link href="http://localhost:4000/posts/state-assignment-rule-of-mealy-machine" rel="alternate" type="text/html" title="State assignment rule of mealy machine" /><published>2025-04-07T00:00:00+09:00</published><updated>2025-04-19T23:25:53+09:00</updated><id>http://localhost:4000/posts/state-assignment-rule-of-mealy-machine</id><content type="html" xml:base="http://localhost:4000/posts/state-assignment-rule-of-mealy-machine"><![CDATA[<p>State assignment란, sequential machine의 state에 binary값을 할당하는 작업이다.</p>
+
+<p>아무값이나 할당해도 되지만 값을 어떻게 할당하냐에 따라 좀 더 optimal한 회로가 설계된다.</p>
+
+<table>
+  <tbody>
+    <tr>
+      <td>[##_Image</td>
+      <td>kage@bxsLl7/btsFiuIeSn3/7YazSyUgqFkwFpuoWkCibk/img.png</td>
+      <td>CDM</td>
+      <td>1.3</td>
+      <td>{“originWidth”:2492,”originHeight”:1427,”style”:”alignCenter”,”width”:642,”height”:368,”caption”:”Mealy Machine”}_##]</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>위 그림은 밀리 머신이다.</p>
+
+<p>State assignment를 어떻게 하냐에 따라 combinational network이 더 복잡할 수도 있고 간단해질 수 있다.</p>
+
+<p>Optimal한 state assignment를 하기 위한 3가지 룰을 소개한다.</p>
+
+<hr />
+
+<p><strong>Rule 1.</strong> <strong>특정 input(X) condition 에 대해 next state이 같은 state는 인접한 state로 할당해라.</strong></p>
+
+<p>Next state에 대한 combinational logic을 만들 때 Karnaugh map을 그린다고 상상을 해보자.</p>
+
+<p>Karnaugh map에서 최대한 1이 많이 뭉쳐있어야 combinational logic이 간단해질 것이다.</p>
+
+<p>이를 위해 next state이 같은 state은 인접하도록 assign하자.</p>
+
+<hr />
+
+<p><strong>Rule 2. 특정 state의 next states들은 adjacent code를 부여하자.</strong></p>
+
+<p>예를 들어, state S0에서 X=0이면 S1, X=1이면 S2가 next state가 된다고 하자.</p>
+
+<p>이 경우, S1과 S2에 인접한 코드를 부여하는 것이 좋다.</p>
+
+<hr />
+
+<p><strong>Rule 3. **특정 input(X) condition 에 대해 output이 같은 state는 인접한 state로 할당해라.</strong>**</p>
+
+<p>예를 들어, state S0에서 X=0이면 S1, X=1이면 S2가 next state가 된다고 하자.</p>
+
+<p>이 경우, S1과 S2에 인접한 코드를 부여하는 것이 좋다.</p>
+
+<hr />
+
+<h2 id="rule-적용해보기"><strong>Rule 적용해보기</strong><img src="https://blog.kakaocdn.net/dn/JRpuN/btsFoJwRKzk/0h2nTG5E6g2aqhtdr0V5KK/img.png" alt="" /></h2>
+
+<p>Rule 1에 따라 (S3, S4), (S5, S6), (S1, S2)는 K-map에서 인접해야 한다.</p>
+
+<p>Rule 2에 따라 (S1, S2), (S3, S4), (S5, S6)는 K-map에서 인접해야 한다.</p>
+
+<p>Rule 3에 따라 (S0, S1, S4, S6), (S2, S3, S5), (S0, S1, S4)는 K-map에서 인접해야 한다.</p>
+
+<p>따라서 다음과 같이 state encoding을 하는 것이 효과적이다.</p>
+
+<table>
+  <tbody>
+    <tr>
+      <td>[##_Image</td>
+      <td>kage@6mOGd/btsFmfp6AVb/1Bb9KUJ9D3exMRzWFkzkq0/img.png</td>
+      <td>CDM</td>
+      <td>1.3</td>
+      <td>{“originWidth”:599,”originHeight”:381,”style”:”alignCenter”}_##]</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>end.</p>]]></content><author><name></name></author><category term="circuit" /><category term="digital" /><category term="digital" /><category term="mealy machine" /><summary type="html"><![CDATA[State assignment란, sequential machine의 state에 binary값을 할당하는 작업이다.]]></summary></entry><entry><title type="html">Frittata, the best egg-based Italian dish…</title><link href="http://localhost:4000/posts/frittata" rel="alternate" type="text/html" title="Frittata, the best egg-based Italian dish…" /><published>2025-03-09T00:00:00+09:00</published><updated>2025-04-19T23:25:53+09:00</updated><id>http://localhost:4000/posts/frittata</id><content type="html" xml:base="http://localhost:4000/posts/frittata"><![CDATA[<p><img src="/assets/posts/cook/frittata/20250309_142256.jpg" alt="Desktop View" width="300" class="right" /></p>
+<h2 id="prepare-ingredients">Prepare ingredients</h2>
+<p>Ingredients<br />
+spinach, beef, bell pepper, cherry tomatoes, shiitake mushrooms, onion, minced garlic, salt, milk, eggs</p>
+
+<p><br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br /></p>
+
+<hr />
+<p><img src="/assets/posts/cook/frittata/20250309_142909.jpg" alt="Desktop View" width="300" class="right" /></p>
+<h2 id="sauté">Sauté!!!</h2>
+<p>Heat some oil in a frying pan and sauté the spinach, onion, minced garlic, and bell pepper.
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br /></p>
+
+<hr />
+
+<p><img src="/assets/posts/cook/frittata/20250309_142949.jpg" alt="Desktop View" width="300" class="right" /></p>
+<h2 id="make-batter">Make batter</h2>
+<p>Crack 3 eggs into a bowl, add 100mL of milk, and a pinch of salt. Mix everything together to make a batter.
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br /></p>
+
+<hr />
+
+<p><img src="/assets/posts/cook/frittata/20250309_143209.jpg" alt="Desktop View" width="300" class="right" /></p>
+<h2 id="pour-it-all-in">Pour it all in</h2>
+<p>Pour the batter into the frying pan and add some beef, cherry tomatoes, and shiitake mushrooms.
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br /></p>
+
+<hr />
+
+<p><img src="/assets/posts/cook/frittata/20250309_143305.jpg" alt="Desktop View" width="300" class="right" /></p>
+<h2 id="stuff-it-in">Stuff it in!!</h2>
+<p>Press the ingredients down gently to ensure the batter covers everything.
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br /></p>
+
+<hr />
+
+<p><img src="/assets/posts/cook/frittata/20250309_150547.jpg" alt="Desktop View" width="300" class="right" /></p>
+<h2 id="time-to-be-patient">Time to be patient…</h2>
+<p>Cover the frying pan with a lid and cook on low heat for 15–20 minutes.
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br /></p>
+
+<hr />
+
+<p><img src="/assets/posts/cook/frittata/20250309_151359.jpg" alt="Desktop View" width="300" class="right" /></p>
+<h2 id="enjoy">Enjoy!</h2>
+<p>Your fritta is ready. Enjoy!</p>]]></content><author><name></name></author><category term="cook" /><category term="italian" /><category term="cook" /><summary type="html"><![CDATA[Prepare ingredients Ingredients spinach, beef, bell pepper, cherry tomatoes, shiitake mushrooms, onion, minced garlic, salt, milk, eggs Sauté!!! Heat some oil in a frying pan and sauté the spinach, onion, minced garlic, and bell pepper. Make batter Crack 3 eggs into a bowl, add 100mL of milk, and a pinch of salt. Mix everything together to make a batter. Pour it all in Pour the batter into the frying pan and add some beef, cherry tomatoes, and shiitake mushrooms. Stuff it in!! Press the ingredients down gently to ensure the batter covers everything. Time to be patient… Cover the frying pan with a lid and cook on low heat for 15–20 minutes. Enjoy! Your fritta is ready. Enjoy!]]></summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="http://localhost:4000/assets/posts/cook/frittata/20250309_151359.jpg" /><media:content medium="image" url="http://localhost:4000/assets/posts/cook/frittata/20250309_151359.jpg" xmlns:media="http://search.yahoo.com/mrss/" /></entry><entry><title type="html">How to make your own Github Blog.</title><link href="http://localhost:4000/posts/how-to-setup-github-blog" rel="alternate" type="text/html" title="How to make your own Github Blog." /><published>2025-03-09T00:00:00+09:00</published><updated>2025-04-20T00:20:13+09:00</updated><id>http://localhost:4000/posts/how-to-setup-github-blog</id><content type="html" xml:base="http://localhost:4000/posts/how-to-setup-github-blog"><![CDATA[<p>This post explains how to setup your own <a href="https://github.com">Github</a> blog.<br />
+Let’s get started!</p>
+
+<hr />
+
+<h2 id="make-github-repository">Make Github repository</h2>
+
+<p>Make your own <a href="https://github.com">Github</a> repository.<br />
+Make sure to name your repository as <code class="language-plaintext highlighter-rouge">&lt;username&gt;.github.io</code> and make it public.<br />
+Then clone your repository into your local.<br />
+<code class="language-plaintext highlighter-rouge">git clone &lt;your_repository&gt;</code></p>
+
+<hr />
+
+<h2 id="install-ruby">Install Ruby</h2>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre></td><td class="rouge-code"><pre>git clone https://github.com/rbenv/rbenv.git ~/.rbenv
+<span class="nb">cd</span> ~/.rbenv/
+<span class="nb">echo</span> <span class="s1">'export RUBYOPT='</span><span class="nt">-W0</span><span class="s1">''</span> <span class="o">&gt;&gt;</span> ~/.bashrc
+<span class="nb">echo</span> <span class="s1">'export PATH="$HOME/.rbenv/bin:$PATH"'</span> <span class="o">&gt;&gt;</span> ~/.bashrc
+<span class="nb">echo</span> <span class="s1">'eval "$(rbenv init -)"'</span> <span class="o">&gt;&gt;</span> ~/.bashrc
+git clone https://github.com/rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build
+<span class="nb">echo</span> <span class="s1">'export PATH="$HOME/.rbenv/plugins/ruby-build/bin:$PATH"'</span> <span class="o">&gt;&gt;</span> ~/.bashrc
+rbenv <span class="nb">install </span>2.7.0
+rbenv global 2.7.0
+<span class="nb">exec</span> <span class="nv">$SHELL</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<hr />
+
+<h2 id="install-bundler-and-jekyll-using-gem">Install Bundler and Jekyll using Gem</h2>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="rouge-code"><pre>gem <span class="nb">install </span>jekyll
+gem <span class="nb">install </span>bundler 
+gem <span class="nb">install </span>webrick
+gem <span class="nb">install </span>kramdown
+gem <span class="nb">install </span>rouge
+bundle update
+bundle add webrick
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<hr />
+
+<h2 id="choose-your-theme">Choose your theme</h2>
+
+<ul>
+  <li>Go to <a href="https://github.com/topics/jekyll-theme">Github</a> and choose your preferred theme.</li>
+</ul>
+
+<hr />
+
+<h2 id="install-chirpy">Install Chirpy</h2>
+
+<p>In this example we will use <a href="https://github.com/cotes2020/jekyll-theme-chirp">Chirpy Theme</a>.</p>
+
+<pre><code class="language-git">git clone git@github.com:cotes2020/jekyll-theme-chirpy.git
+git add .
+git commit -m "initial commit"
+git fetch chirpy --tags
+git tag
+git merge vX.Y.Z --squash --allow-unrelated-histories
+</code></pre>
+
+<p>Then resolve all merge conflicts.</p>
+
+<hr />
+
+<h2 id="basic-configurations">Basic configurations</h2>
+
+<p>Edit <code class="language-plaintext highlighter-rouge">./_config.yml</code> to your needs.</p>
+
+<div class="language-yml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="rouge-code"><pre><span class="na">url</span><span class="pi">:</span> <span class="s">&lt;user_name&gt;.github.io</span>
+<span class="na">baseurl</span><span class="pi">:</span> <span class="s2">"</span><span class="s">"</span>
+<span class="na">avatar</span><span class="pi">:</span> <span class="s">/path/to/your/profile/image</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<hr />
+
+<h2 id="configure-background-color">Configure: Background color</h2>
+
+<p>Each can be configured in the following files:</p>
+
+<ul>
+  <li>Background Colors(Light): <code class="language-plaintext filepath highlighter-rouge">/_sass/themes/_light.scss</code></li>
+  <li>Background Colors(Dark): <code class="language-plaintext filepath highlighter-rouge">/_sass/themes/_dark.scss</code></li>
+  <li>Fonts: <code class="language-plaintext filepath highlighter-rouge">/_sass/abstracts/_variables.scss</code></li>
+  <li>Code snippet: <code class="language-plaintext filepath highlighter-rouge">/_sass/base/_syntax.scss</code></li>
+</ul>
+
+<hr />
+
+<h2 id="configure-code-snippets">Configure: Code snippets</h2>
+
+<p>Since we have installed the necessary packages for our theme, let’s play with syntax highlighting.</p>
+
+<p>Now let’s generate <code class="language-plaintext highlighter-rouge">css</code> for our syntax highlighting.<br />
+In this example, we will generate github-style syntax.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>rougify style github <span class="o">&gt;</span> ./css/syntax.css
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>Then replace <code class="language-plaintext highlighter-rouge">/_sass/base/_syntax.scss</code> with the one we generated.</p>
+
+<hr />
+
+<h2 id="configure-favicons">Configure: Favicons</h2>
+
+<p>Create your own <a href="https://www.favicon-generator.org/about/">favicons</a> at <a href="https://www.favicon-generator.org/">Favicons Generator</a>.<br />
+Then replace all <code class="language-plaintext highlighter-rouge">png</code> files in <code class="language-plaintext highlighter-rouge">/assets/img/favicons</code> with the one your generated.</p>
+
+<hr />
+
+<h2 id="configure-jekyll-plugins">Configure: jekyll plugins</h2>
+
+<p>Jekyll plugins can be very useful.<br />
+We will learn how to add <a href="https://github.com/yegor256/jekyll-plantuml">Jekyll PlantUML</a> here.</p>
+
+<ul>
+  <li>Install <code class="language-plaintext highlighter-rouge">PlantUML</code>.</li>
+</ul>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre><span class="nb">sudo </span>apt-get <span class="nb">install </span>plantuml <span class="nt">-y</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<ul>
+  <li>Install jekyll-plantuml.</li>
+</ul>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>gem <span class="nb">install </span>jekyll-plantuml
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<ul>
+  <li>add gem to <code class="language-plaintext highlighter-rouge">_config.yml</code></li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>gems: ['jekyll-plantuml', ... your other plugins]
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<ul>
+  <li>add <code class="language-plaintext highlighter-rouge">plantuml-plugin.rb</code> into <code class="language-plaintext highlighter-rouge">_plugins</code> directory.</li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="rouge-code"><pre># _plugins/plantuml-plugin.rb
+require "jekyll-plantuml"
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<ul>
+  <li>add <code class="language-plaintext highlighter-rouge">jekyll-plantuml</code> to <code class="language-plaintext highlighter-rouge">Gemfile</code>.</li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>gem "jekyll-plantuml"
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<ul>
+  <li>Update bundle.</li>
+</ul>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>bundle update
+</pre></td></tr></tbody></table></code></pre></div></div>
+<p>Check if any error occurs.</p>
+
+<ul>
+  <li>You can draw diagrams in posts. The syntax:</li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre></td><td class="rouge-code"><pre>Caution: Make sure to exclude `!`.
+{!% plantuml %}
+[First] - [Second]
+{!% endplantuml %}
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<hr />
+
+<h2 id="google-search-console">Google Search Console</h2>
+
+<p>Go to <a href="https://search.google.com/search-console/about"><strong>Google Search Console</strong></a>.<br />
+Generate your <code class="language-plaintext highlighter-rouge">goolexxxxxx.html</code> and place it in your Github repository.<br />
+Generate your website <code class="language-plaintext highlighter-rouge">sitemap.xml</code> at <a href="https://xml-sitemaps.com">**XML-Sitemaps.com</a>.<br />
+Place the generated <code class="language-plaintext highlighter-rouge">sitemap.xml</code> at your Github repository.<br />
+Add/commit <code class="language-plaintext highlighter-rouge">sitemap.xml</code> and push.</p>
+
+<p>Navigate to <kbd>URL Check</kbd> and enter <code class="language-plaintext highlighter-rouge">https://your/website/url/sitemap.xml</code>.<br />
+Validate your URL and click <kbd>Index creation request</kbd>. This might take a while.<br />
+After, navigate to <kbd>Sitemaps</kbd> in Google Search Console and then add your new <code class="language-plaintext highlighter-rouge">sitemap.xml</code> to your Google Search Console.</p>
+
+<hr />
+
+<h2 id="commit-your-work-to-git">Commit your work to Git</h2>
+
+<p>It’s time to commit &amp; push your work.<br />
+Your modifications will be deployed by Github and displayed at <code class="language-plaintext highlighter-rouge">&lt;username&gt;.github.io</code>.<br />
+If it is not showing up at your website, go to <kbd>Actions</kbd> tab in your Github repository.<br />
+Then select <kbd>Re-run everything</kbd>.<br />
+Navigate to <kbd>Settings</kbd> - <kbd>Pages</kbd>.<br />
+Under <kbd>Build and deployment</kbd>, change <code class="language-plaintext highlighter-rouge">Source</code> to <code class="language-plaintext highlighter-rouge">Github Actions</code>.</p>
+
+<hr />]]></content><author><name></name></author><category term="dev" /><category term="git" /><category term="git" /><summary type="html"><![CDATA[This post explains how to setup your own Github blog. Let’s get started!]]></summary></entry></feed>
