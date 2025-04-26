@@ -34,6 +34,8 @@ plugins:
 feed:
   icon: assets/img/favicons/android-icon-192x192.png
   logo: assets/img/1024x1024.png
+  path: assets/feed.xml
+
 github:
   username: hxxdev # change to your GitHub username
 
