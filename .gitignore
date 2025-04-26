@@ -7,6 +7,7 @@ Gemfile.lock
 .jekyll-cache
 .jekyll-metadata
 tutorial
+_site
 
 # RubyGems
 *.gem
@@ -29,5 +30,3 @@ assets/js/dist
 # Scripts
 :kill
 :start
-_site/:kill
-_site/:start
