@@ -126,6 +126,9 @@ bind-key -nr -T prefix       C-Up              resize-pane -U
 bind-key -nr -T prefix       C-Down            resize-pane -D
 bind-key -nr -T prefix       C-Left            resize-pane -L
 bind-key -nr -T prefix       C-Right           resize-pane -R
+
+# Mouse mode. allows you to scroll in tmux.
+set -g mouse on
 ```
 
 - `-n`: No prefix — This tells tmux that the key binding should not require the prefix key (usually Ctrl+b by default). So pressing just the key will trigger the binding.
