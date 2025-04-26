@@ -29,6 +29,11 @@ plugins:
   - jekyll-admin
   - jekyll-feed
   - jekyll-plantuml
+
+# jekyll-feed
+feed:
+  icon: assets/img/favicons/android-icon-192x192.png
+  logo: assets/img/1024x1024.png
 github:
   username: hxxdev # change to your GitHub username
 
