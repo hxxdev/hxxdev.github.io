@@ -47,6 +47,7 @@ The packages include:
 - [markdown-preview.nvim](https://github.com/iamcco/markdown-preview.nvim)
 - [nvim-noice](https://github.com/folke/noice.nvim)
 - [nvim-nui](https://github.com/MunifTanjim/nui.nvim)
+- [nvim-tree](https://github.com/nvim-tree/nvim-tree.lua)
 - [nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter)
 - [image.nvim](https://github.com/3rd/image.nvim)
 
