@@ -68,7 +68,7 @@ cp -r nvim ~/.config
 
 -----------------------------------
 
-### Setting up markdown-preview
+## Setting up markdown-preview
 - Install npm. 
 
 ```shell
