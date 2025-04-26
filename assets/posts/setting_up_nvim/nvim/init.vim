@@ -19,9 +19,6 @@ set shiftwidth=4
 set expandtab
 set tabstop=4
 set cindent
-vnoremap <C-c> "+y
-nnoremap <C-v> "+p
-nmap <C-m> <Plug>MarkdownPreview
 let g:clipboard = {
     \   'name': 'WslClipboard',
     \   'copy': {
@@ -34,3 +31,8 @@ let g:clipboard = {
     \   },
     \   'cache_enabled': 0,
     \ }
+
+vnoremap <C-c> "+y
+nnoremap <C-v> "+p
+nnoremap <C-m> <Plug>MarkdownPreview
+nnoremap <C-e> :NvimTreeOpen<CR>

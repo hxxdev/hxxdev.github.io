@@ -1,9 +1,0 @@
-{
-  "dependencies": {
-    "@chemzqm/neovim": "^6.3.3",
-    "log4js": "^6.9.1",
-    "msgpack-lite": "^0.1.26",
-    "socket.io": "^4.8.1",
-    "tslib": "^2.8.1"
-  }
-}

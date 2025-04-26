@@ -8,4 +8,6 @@ Plug '~/.config/nvim/plugins/nui'
 Plug '~/.config/nvim/plugins/noice'
 Plug '~/.config/nvim/plugins/notify'
 Plug '~/.config/nvim/plugins/treesitter'
+Plug '~/.config/nvim/plugins/nvim-tree.lua'
+Plug 'nvim-tree/nvim-web-devicons'
 call plug#end()
