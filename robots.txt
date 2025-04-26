@@ -7,4 +7,4 @@ User-agent: *
 
 Disallow: /norobots/
 
-Sitemap: https://hxxdev.github.io/assets/sitemap.xml
+Sitemap: https://hxxdev.github.io/sitemap.xml
