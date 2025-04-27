@@ -5,7 +5,7 @@ alias gopost="cd \"$PATH_HXX\"/_posts"
 alias goasset="cd \"$PATH_HXX\"/_assets"
 alias start="jekyll serve &"
 alias build="jekyll build &"
-alias kill="ps aux | grep jekyll | awk '{print $2}' | xargs kill -9"
+alias kill="ps aux | grep jekyll | awk '{print \$2}' | xargs kill -9"
 
 echo "HXX ENV SETUP ********************************************"
 echo "gopost  : go to _posts"

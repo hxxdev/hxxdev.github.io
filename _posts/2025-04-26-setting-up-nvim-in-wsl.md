@@ -66,17 +66,39 @@ cp -r nvim ~/.config
 -----------------------------------
 
 ## Setting up markdown-preview
-- Install npm. 
+
+- Install ctags.  
 
 ```shell
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash
-command -v nvm
+sudo apt-get install -y exuberant-ctags
 ```
 
-- Install the current stable LTS release of Node.js.
+- Configure `~/.ctags`.
 
-```shell
-nvm install --lts
+```~/.ctags
+--recurse=yes
+--exclude=.git
+--exclude=BUILD
+--exclude=.svn
+--exclude=*.js
+--exclude=vendor/*
+--exclude=node_modules/*
+--exclude=db/*
+--exclude=log/*
+--exclude=\*.log
+--exclude=\*.min.\*
+--exclude=\*.swp
+--exclude=\*.bak
+--exclude=\*.pyc
+--exclude=\*.class
+--exclude=\*.sln
+--exclude=\*.csproj
+--exclude=\*.csproj.user
+--exclude=\*.cache
+--exclude=\*.dll
+--exclude=\*.pdb
+--exclude=\*.obj
+--exclude=\*.exe
 ``` 
 
 - Validate Node.js installation.
@@ -115,3 +137,18 @@ mdkp#util#install
 :MarkdownPreview
 ```
 
+-----------------------------------
+
+## Setting up autocompletion
+
+- Install ctags
+
+```shell
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash
+command -v nvm
+```
+
+- Install the current stable LTS release of Node.js.
+
+```shell
+nvm install --lts
