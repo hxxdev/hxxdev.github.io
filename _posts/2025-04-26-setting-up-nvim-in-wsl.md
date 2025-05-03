@@ -50,6 +50,7 @@ The packages include:
 - [nvim-tree](https://github.com/nvim-tree/nvim-tree.lua)
 - [nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter)
 - [image.nvim](https://github.com/3rd/image.nvim)
+- [vim-gutentags](https://github.com/ludovicchabant/vim-gutentags)
 
 - Move `vim-plug` into runtime autoload path.
 
@@ -139,16 +140,19 @@ mdkp#util#install
 
 -----------------------------------
 
-## Setting up autocompletion
+## Setting up ctags
 
 - Install ctags
 
 ```shell
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash
-command -v nvm
+brew install universal-ctags
 ```
 
-- Install the current stable LTS release of Node.js.
+- gu
 
 ```shell
 nvm install --lts
+
+-----------------------------------
+
+## Setting up autocompletion
