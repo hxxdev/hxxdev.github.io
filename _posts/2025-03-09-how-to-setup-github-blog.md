@@ -190,6 +190,32 @@ After, navigate to <kbd>Sitemaps</kbd> in Google Search Console and then add you
 
 ---------------------
 
+## Google Search Console
+
+`sitemap.xml` is a file that provides search engines like Google, Bing, etc., with a structured map of your site's content. It’s part of the site’s SEO (Search Engine Optimization) and helps search engines crawl and index the pages of your site more efficiently.
+However, you might not want some files or directories to be searched by the search engines.
+To achieve this, add this to your `_config.yml`.
+
+```_config.yml
+  - scope:
+      path: your_google_verification_file.html
+    values:
+      sitemap: false
+  - scope:
+      path: assets/**
+    values:
+      sitemap: false
+  - scope:
+      path: licenses/**
+    values:
+      layout: plain
+      sitemap: false
+```
+
+This tells `jekyll-sitemap` to exclude your google verification file, `assets`, and `license` when generating `sitemap.xml`.
+
+---------------------
+
 ## Commit your work to Git
 
 It's time to commit & push your work.  
