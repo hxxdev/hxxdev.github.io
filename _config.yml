@@ -203,6 +203,19 @@ defaults:
     values:
       layout: page
       permalink: /:title/
+  - scope:
+      path: googlecd63748fab0f5dad.html
+    values:
+      sitemap: false
+  - scope:
+      path: assets/**
+    values:
+      sitemap: false
+  - scope:
+      path: licenses/**
+    values:
+      layout: plain
+      sitemap: false
 
 sass:
   style: compressed
@@ -219,6 +232,16 @@ compress_html:
 exclude:
   - "*.gem"
   - "*.gemspec"
+  - Gemfile
+  - Gemfile.lock
+  - .sass-cache/
+  - .jekyll-cache/
+  - gemfiles/
+  - node_modules/
+  - vendor/bundle/
+  - vendor/cache/
+  - vendor/gems/
+  - vendor/ruby/
   - docs
   - tools
   - README.md
@@ -226,6 +249,9 @@ exclude:
   - purgecss.js
   - rollup.config.js
   - "package*.json"
+  - :start
+  - :kill
+  - .notags
 
 jekyll-archives:
   enabled: [categories, tags]
