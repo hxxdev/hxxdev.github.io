@@ -33,11 +33,15 @@ A `Makefile` is made up of a series of dependencies and rules. Each dependency i
 
 The `Makefile` is processed by the `make` command, which identifies the target file or files to build. It then checks the timestamps of the source files to determine which rules must be executed to generate the desired target. Frequently, several intermediate targets must be created before the final one is built. The make command uses the makefile to figure out the proper build order and the appropriate sequence of rules to apply.
 
+---
+
 #### Tabs vs. spaces
 
 In order for `make` to distinguish between a recipe and lines that are not part of a recipe, it relies on the presence of `TAB` characters.
 Any line that starts with a `TAB` is interpreted as part of a **recipe**; this means it's treated as a **shell command** and passed to the shell for execution. 
 Conversely, lines that do not start with a `TAB` are not considered part of a recipe; instead, they are interpreted as Makefile-syntax and not executed by the shell.
+
+---
 
 #### Dependencies
 
@@ -52,6 +56,8 @@ main.o: main.c a.h
 This `Makefile` says that `myProgram` is dependent on `main.o`, `2.o` and `3.o`.
 `main.o` is dependent on `main.c` and `a.h`.
 
+---
+
 #### Target
 
 ```
@@ -64,9 +70,11 @@ main.o: main.c a.h
 3.o: 3.c b.h c.h
   gcc -c 3.c
 ```
-Note that every `gcc` command is indented by `TAB`s.  
+Note that `gcc` commands are indented by `TAB`s.  
 This `Makefile` tells which command needs to be run to generate each file.  
-`make` command reads this `Makefile` and run `gcc -c 3.c` to generate `3.o` if needed.  
+Taking `3.o` into instance, `make` command reads this `Makefile` and run `gcc -c 3.c` to generate `3.o` if needed.  
+
+---
 
 #### Macros
 
@@ -96,48 +104,79 @@ Also, macros can be specified outside of `Makefile` using command-line; for exam
 | $<                | Represents the name of the first prerequisite in the rule.                                |
 | $*                | Denotes the name of the current prerequisite, omitting its file extension.                |
 
-#### Multiple Targets
+---
 
-It's often beneficial to produce multiple targets or group commands together in a more organized manner. To achieve this, you can enhance your `Makefile`. The example below, a `clean` target is introduced to delete unnecessary object files, while an `install` target is added to move the final application to a `/usr/local/bin` path.
+#### Phony targets
+
+The word **phony** means **false or fake**. In `Makefile`:
+- A phony target is a target that **does not correspond to an actual file**.
+- It’s essentially a name for an action you want to run, rather than something that should be built or generated.
+Take a look at this code:
 
 ```
-CC = clang 
-INSTDIR = /usr/local/bin
-INCLUDE = .
-CFLAGS = -g -Wall -ansi
-# CFLAGS = -O -Wall -ansi
+CC = gcc
+NODEPS = clean install
+CFLAGS = -Wall -g
+SRC = $(wildcard *.cpp)
+OBJ = $(SRC:.cpp=.o)
+INSTDIR = /usr/bin/local
+
+.PHONY: $(NODEPS)
+
 all: myProgram
-myProgram: main.o 2.o 3.o
-    $(CC) -o myProgram -I. main.o 2.o 3.o
-main.o: main.c a.h
-    $(CC) -c -I. main.c
-2.o: 2.c a.h b.h
-    $(CC) -c -I. 2.c
-3.o: 3.c b.h c.h
-    $(CC) -c -I. 3.c
+
+myProgram: $(OBJ)
+	$(CC) $(CFLAGS) -o $@
+
+# Compile the source files
+%.o: %.cpp
+  $(CC) $(CFLAGS) -c $< -o $@
+
 clean:
-    -rm main.o 2.o 3.o
-install: myProgram
-    @if [ -d $(INSTDIR) ]; \
-        then \
-        cp myProgram $(INSTDIR);\
-        chmod a+x $(INSTDIR)/myProgram;\
-        chmod og-w $(INSTDIR)/myProgram;\
-        echo "Installed in $(INSTDIR).";\
-    else \
-        echo "Sorry, $(INSTDIR) does not exist";\
-    fi
+	-rm -rf obj pch dep pch
+	-rm -f *.exe
+	@echo "Project has been cleaned successfully."
+
+install: myProgram.exe
+	@if [ -d $(INSTDIR) ]; \
+		then \
+		cp myProgram.exe $(INSTDIR);\
+		chmod a+x $(INSTDIR)/myProgram.exe;\
+		chmod og-w $(INSTDIR)/myProgram.exe;\
+		echo "Installed in $(INSTDIR)."\
+	else \
+		echo "Sorry, $(INSTDIR) does not exist"\
+	fi
+
 ```
+
+This tells `make` that the targets listed in `$(NODEPS)` are phony targets. Even if a file or directory named the same as any of these targets exists, `make` will still execute the rules for these targets. The `.PHONY` target in a Makefile is used to declare that certain targets are not actual files, but rather phony targets that should always be executed, even if there happens to be a file with the same name.
 
 Let's take a look at each part.  
 
-- `clean`
-First, let's take a look at `clean`.
+```
+clean:
+	-rm -rf obj pch dep pch
+	-rm -f *.exe
+	@echo "Project has been cleaned successfully."
+```
+
 The command begins with a `-`, which instructs `make` to disregard the outcome of that command. This means that even if the command encounters an error, the make clean operation will still be considered successful.  
 
-- `install`
-Now let's take a look at `install`.
-The `@` symbol instructs `make` to suppress the printing of the command to the standard output.  
+```
+@if [ -d $(INSTDIR) ]; \
+	then \
+	cp myProgram.exe $(INSTDIR);\
+	chmod a+x $(INSTDIR)/myProgram.exe;\
+	chmod og-w $(INSTDIR)/myProgram.exe;\
+	echo "Installed in $(INSTDIR).";\
+else \
+	echo "Sorry, $(INSTDIR) does not exist";\
+fi
+```
+The `@` symbol instructs `make` to suppress the printing of the command to the standard output. Also note that they are indented by `TAB` since they are written in shell scripts. Also, they are terminated by `;` and `\` each command.
+
+---
 
 #### Managing Libraries
 
@@ -167,17 +206,7 @@ Where:
 
 ---
 
-### Options to `make`
-
-| Options | Description                                                                                                |
-| :-:     | :-                                                                                                         |
-|`-k`     | keep going even when error is found.                                                                       |
-|`-n`     | prints out what it would have done whithout actually doing it.                                             |
-|`-f`     | specify which file to use as its makefile. default is `makefile` or `Makefile` in the current directory.   |
-
----
-
-### Generating dependency file by gcc
+#### Generating dependency file
 
 In large projects, it is *burdensome* to write all a dependency list manually.  
 
@@ -187,25 +216,36 @@ One can generate dependency files(`.d`) using compiler and include the dependenc
 
 
 Take a look at this code:  
+
 ```
 CC = gcc
+NODEPS = clean install
 CFLAGS = -Wall -g
 SRC = $(wildcard *.cpp) $(wildcard *.h)
 OBJ = $(SRC:.cpp=.o)
-DEP = $(OBJ:.o=.d)
+DEP = $(patsubst %.cpp, %.d, $(SRC))
 
-all: myprogram
+.PHONY: $(NODEPS)
+
+all: myProgram
+
+myProgram: $(OBJ)
+	$(CC) $(CFLAGS) -o $@
 
 # Compile the source files
-$(OBJ): %.o: %.cpp
-	$(CC) $(CFLAGS) -c $< -o $@
+%.o: %.cpp
+  $(CC) $(CFLAGS) -c $< -o $@
+
+ifeq (0, $(words $(findstring $(MAKECMDGOALS), $(NODEPS))))
+  -include $(DEP)
+endif
 
 # Include the dependency files
 -include $(DEP)
 
 # Generate the dependency files (.d)
 %.d: %.cpp
-	$(CC) $(CFLAGS) -M $< > $@
+	$(CC) $(CFLAGS) -MM $< > $@
 ```
 
 Explanation of code:  
@@ -234,23 +274,23 @@ $(OBJ): %.o: %.cpp
     $(CC) $(CFLAGS) -cpp $< -o $@
 ```
 
-`$(OBJ): %.o: %.cpp` means: For each `.o` file (listed in `OBJ`), you build it from a corresponding `.cpp` file.  
+%.o: %.cpp` means: For each `.o` file, you build it from a corresponding `.cpp` file.  
 `$(CC) $(CFLAGS) -c $< -o $@` is the command used to compile a source file into an object file:
 - `-c` tells the compiler to compile the source into an object file (not a full executable).
 - `$<` refers to the first prerequisite in the rule (the `.cpp` file).
 - `$@` refers to the target of the rule (the `.o` file).
 
 ```
--include $(DEP)
+ifeq (0, $(words $(findstring $(MAKECMDGOALS), $(NODEPS))))
+  -include $(DEP)
+endif
 ```
-
-This line tells `make` to include the `.d` files (dependencies) in the `Makefile`.  
-`-include` ensures that `make` doesn't complain if the `.d` files do not exist initially (which is usually the case when you first run make).
+The `ifeq` statement checks if the goals specified in $(MAKECMDGOALS) do not match any items in the $(NODEPS) list. `-include` tells `make` to include the `.d` files (dependencies) in the `Makefile`. It ensures that `make` doesn't complain if the `.d` files do not exist initially (which is usually the case when you first run make). This kind of setup is useful if you want to *skip including dependency files* when running specific goals (like `make clean` or `make install`), but include them for other goals (like building the program).
 
 
 ```
 %.d: %.cpp
-$(CC) $(CFLAGS) -MMD $< > $@
+  $(CC) $(CFLAGS) -MMD $< > $@
 ```
 
 This line generates dependency files (`%.d`) from the corresponding source files (`%.cpp`):
@@ -260,4 +300,50 @@ This line generates dependency files (`%.d`) from the corresponding source files
     - `gcc -MMD` will generate a `.d` file, excluding system headers.
 - `$<` is the first prerequisite (the `.c` file).
 - `$@` is the target (the `.d` file).
+
+
+
+---
+
+#### Static Pattern Rules
+
+[Static pattern rules](https://www.gnu.org/software/make/manual/html_node/Static-Pattern.html) are rules that define multiple targets and generate the prerequisite names for each target based on the target’s name. Unlike regular rules with multiple targets, these rules are more flexible, as the targets do not need to share the same exact prerequisites. While the prerequisites must follow a similar pattern, they don't have to be identical.
+
+The syntax of static pattern rules is:
+
+```
+targets : target-pattern: prereq-patterns
+  recipe
+  ...
+```
+
+The `target` is matched against the `target-pattern` to extract the `stem`, which is then substituted into the `prereq-patterns` to form the prerequisite names. Let's look at some examples:
+
+```
+CSOURCES = $(shell find ./src/ -name "*.cpp")
+COBJECTS = $(patsubst ./src/%.cpp, ./obj/%.o, $(CSOURCES))
+$(COBJECTS): ./obj/%.o: ./src/%.cpp # static pattern rule
+@mkdir -p obj
+$(CC) $(CFLAGS) -c $< -o $@
+```
+
+In this code, `$(COBJECTS)` is a list of object files(say, `./obj/a.o`, `./obj/b.o`, `./obj/c.o`).  
+`$(COBJECTS)` is used as `targets` and `target-pattern` is written as `./obj/%.o`.  
+Therefore, `./obj/a.o` will be matched against `./obj/%.o` giving `stem(%)` as `a`.
+Same principles apply to `./obj/b.o` and `./obj/c.o`.
+
+---
+
+### Options to `make`
+
+| Options | Description                                                                                                |
+| :-:     | :-                                                                                                         |
+|`-k`     | keep going even when error is found.                                                                       |
+|`-n`     | prints out what it would have done whithout actually doing it.                                             |
+|`-f`     | specify which file to use as its makefile. default is `makefile` or `Makefile` in the current directory.   |
+
+---
+
+### References
+[1] [GNU Make Manual](https://www.gnu.org/software/make/manual/)
 
