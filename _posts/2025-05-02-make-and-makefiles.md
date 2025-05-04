@@ -7,7 +7,7 @@ tags: [make]
 
 This post explains the **make command and Makefiles**
 
------------------------------------
+---
 
 ### Makefiles
 
@@ -15,7 +15,7 @@ A `Makefile` usually resides in the same directory as the other source files. It
 
 Using the `make` command together with a `Makefile` offers a highly effective way to manage and organize project builds.
 
------------------------------------
+---
 
 ### Installation
 
@@ -25,7 +25,7 @@ In Ubuntu OS, `make` can be installed by:
 sudo apt install make
 ```
 
------------------------------------
+---
 
 ### How to write Makefiles
 
@@ -41,7 +41,7 @@ Conversely, lines that do not start with a `TAB` are not considered part of a re
 
 #### Dependencies
 
-```Makefile
+```
 //The dependency list of the program above is as follows.
 myProgram: main.o 2.o 3.o
 main.o: main.c a.h
@@ -54,7 +54,7 @@ This `Makefile` says that `myProgram` is dependent on `main.o`, `2.o` and `3.o`.
 
 #### Target
 
-```Makefile
+```
 myProgram: main.o 2.o 3.o
   gcc -o myProgram main.o 2.o 3.o
 main.o: main.c a.h
@@ -72,7 +72,7 @@ This `Makefile` tells which command needs to be run to generate each file.
 
 `Makefiles` allow you to define macros, making them more flexible and reusable. Macros are defined using `MACRONAME = value` and can be referenced with `$(MACRONAME)` or `${MACRONAME}`. If a macro is left empty (i.e., after the `=`), it can be omitted from the Makefile.
 
-```Makefile
+```
 CC = gcc
 INCLUDE = .
 CFLAGS = -g -Wall –ansi
@@ -100,7 +100,7 @@ Also, macros can be specified outside of `Makefile` using command-line; for exam
 
 It's often beneficial to produce multiple targets or group commands together in a more organized manner. To achieve this, you can enhance your `Makefile`. The example below, a `clean` target is introduced to delete unnecessary object files, while an `install` target is added to move the final application to a `/usr/local/bin` path.
 
-```Makefile
+```
 CC = clang 
 INSTDIR = /usr/local/bin
 INCLUDE = .
@@ -144,7 +144,7 @@ The `@` symbol instructs `make` to suppress the printing of the command to the s
 For larger projects, it's good practice to organize multiple compilation outputs into a library. A library is typically a file with the `.a` extension (short for archive), which houses a collection of object files. The `make` command offers a dedicated syntax for working with libraries, simplifying their management. `lib(file.o)` refers to object file `file.o` stored within the library `lib.a`.
 
 Take a look at this code:  
-```Makefile
+```
 MYLIB = myLib.a
 $(MYLIB): $(MYLIB)(2.o) $(MYLIB)(3.o)
 ```
@@ -165,7 +165,7 @@ Where:
 - `r` tells ar to replace existing object files in the archive or add new files if they don't already exist.
 - `v` makes the operation verbose.
 
------------------------------------
+---
 
 ### Options to `make`
 
@@ -175,5 +175,89 @@ Where:
 |`-n`     | prints out what it would have done whithout actually doing it.                                             |
 |`-f`     | specify which file to use as its makefile. default is `makefile` or `Makefile` in the current directory.   |
 
+---
 
+### Generating dependency file by gcc
+
+In large projects, it is *burdensome* to write all a dependency list manually.  
+
+Many compilers such as `gcc` and `clang` provide automation of dependency list generation.  
+
+One can generate dependency files(`.d`) using compiler and include the dependency in `Makefile`.
+
+
+Take a look at this code:  
+```
+CC = gcc
+CFLAGS = -Wall -g
+SRC = $(wildcard *.cpp) $(wildcard *.h)
+OBJ = $(SRC:.cpp=.o)
+DEP = $(OBJ:.o=.d)
+
+all: myprogram
+
+# Compile the source files
+$(OBJ): %.o: %.cpp
+	$(CC) $(CFLAGS) -c $< -o $@
+
+# Include the dependency files
+-include $(DEP)
+
+# Generate the dependency files (.d)
+%.d: %.cpp
+	$(CC) $(CFLAGS) -M $< > $@
+```
+
+Explanation of code:  
+
+```
+SRC = $(wildcard *.cpp) $(wildcard *.h)
+```
+
+This sets the `SRC` variable to a list of all the `.cpp` and `.h` files in the current directory.
+
+```
+OBJ = $(SRC:.cpp=.o)
+```
+
+This sets the `OBJ` variable to a list of object files corresponding to the source files.  
+`$(SRC:.cpp=.o)` is a pattern substitution. It replaces the `.cpp` extension of each file in `SRC` with `.o`, essentially turning a list of C++ source files into a list of object files.  
+
+```
+DEP = $(OBJ:.o=.d)
+```
+
+This sets the `DEP` variable to a list of dependency files (with `.d` extension), one for each object file.  
+
+```
+$(OBJ): %.o: %.cpp
+    $(CC) $(CFLAGS) -cpp $< -o $@
+```
+
+`$(OBJ): %.o: %.cpp` means: For each `.o` file (listed in `OBJ`), you build it from a corresponding `.cpp` file.  
+`$(CC) $(CFLAGS) -c $< -o $@` is the command used to compile a source file into an object file:
+- `-c` tells the compiler to compile the source into an object file (not a full executable).
+- `$<` refers to the first prerequisite in the rule (the `.cpp` file).
+- `$@` refers to the target of the rule (the `.o` file).
+
+```
+-include $(DEP)
+```
+
+This line tells `make` to include the `.d` files (dependencies) in the `Makefile`.  
+`-include` ensures that `make` doesn't complain if the `.d` files do not exist initially (which is usually the case when you first run make).
+
+
+```
+%.d: %.cpp
+$(CC) $(CFLAGS) -MMD $< > $@
+```
+
+This line generates dependency files (`%.d`) from the corresponding source files (`%.cpp`):
+- `-MD` tells compiler to generate a dependency file, which lists all the header files that the source file includes.
+    - `gcc -M` will generate basic dependencies.
+    - `gcc -MM` will ignore system headers.
+    - `gcc -MMD` will generate a `.d` file, excluding system headers.
+- `$<` is the first prerequisite (the `.c` file).
+- `$@` is the target (the `.d` file).
 
