@@ -344,6 +344,132 @@ Same principles apply to `./obj/b.o` and `./obj/c.o`.
 
 ---
 
+### Final Makefile
+
+Let’s bring together the concepts we’ve covered so far. This includes defining targets and dependencies, using macros for flexibility, handling multiple build actions, and organizing output with static libraries. The following `Makefile` demonstrates a practical and comprehensive setup that incorporates these elements.
+
+```
+# Project path configurations
+PATH_CSOURCE = ./src
+PATH_CINCLUDE = ./include
+PATH_COBJECT = ./obj
+PATH_DLLSOURCE = ./dll/src
+PATH_DLLINCLUDE = ./dll/include
+PATH_DLLOBJECT = ./dll/obj
+PATH_ASMSOURCE = ./dll/asm
+PATH_ASMOBJECT = $(PATH_DLLOBJECT)
+PATH_DEBUG = ./debug
+PATH_RELEASE = ./release
+
+# Makefile verbose configurations
+ifeq ($(VERBOSE),1)
+    Q =
+else
+    Q = @
+endif
+
+# Compiler configurations
+ASM = nasm
+CC = clang++
+INSTDIR ?= /usr/local/bin
+SYSINCLUDES = -I/usr/x86_64-w64-mingw32/include
+PROJINCLUDES = -I$(PATH_CINCLUDE) -I$(PATH_DLLINCLUDE)
+INCLUDES = $(SYSINCLUDES) $(PROJINCLUDES)
+CPPFLAGS = -MMD -MP $(INCLUDES)
+CXXFLAGS = --target=x86_64-w64-mingw32 -Wall
+LDFLAGS = -lkernel32 -luser32 -lm -lstdc++
+EXE = myProgram.exe
+DLL = myDll.dll
+ifneq ($(filter release install, $(MAKECMDGOALS)),)
+    CXXFLAGS += -O2
+    BUILDDIR := $(PATH_RELEASE)
+    EXE := $(BUILDDIR)/$(EXE)
+    DLL := $(BUILDDIR)/$(DLL)
+else
+	CXXFLAGS += -g -O0 -DDEBUG
+    BUILDDIR := $(PATH_DEBUG)
+    EXE := $(BUILDDIR)/$(EXE)
+    DLL := $(BUILDDIR)/$(DLL)
+endif
+
+# Color variables
+WHITE = \033[1;37m
+GREEN = \033[0;32m
+RED = \033[0;31m
+RESET = \033[0m
+
+# dont generate dependency when running make clean, help.
+.PHONY: clean help
+
+# list of cproject files
+CSOURCES = $(shell find $(PATH_CSOURCE) -maxdepth 1 -name "*.cpp")
+COBJECTS = $(patsubst $(PATH_CSOURCE)/%.cpp, $(PATH_COBJECT)/%.o, $(CSOURCES))
+
+# list of dllproject files
+DLLSOURCES = $(shell find $(PATH_DLLSOURCE) -maxdepth 1 -name "*.cpp")
+DLLOBJECTS = $(patsubst $(PATH_DLLSOURCE)/%.cpp, $(PATH_DLLOBJECT)/%.o, $(DLLSOURCES))
+ASSEMBLIES = $(shell find $(PATH_ASMSOURCE) -maxdepth 1 -name "*.asm")
+ASMOBJECTS = $(patsubst $(PATH_ASMSOURCE)/%.asm, $(PATH_DLLOBJECT)/%.o, $(ASSEMBLIES))
+
+# echo your configurations
+ifeq ($(VERBOSE),1)
+    $(info =====Project Configuration=====)
+    $(info CSOURCES: $(CSOURCES))
+    $(info COBJECTS: $(COBJECTS))
+    $(info DLLSOURCES: $(DLLSOURCES))
+    $(info DLLOBJECTS: $(DLLOBJECTS))
+    $(info ASSEMBLIES: $(ASSEMBLIES))
+    $(info ASMOBJECTS: $(ASMOBJECTS))
+    $(info ===============================)
+endif
+
+all: debug
+
+debug: $(EXE) $(DLL)
+release: $(EXE) $(DLL)
+
+-include $(COBJECTS:.o=.d) $(DLLOBJECTS:.o=.d)
+
+$(EXE): $(COBJECTS)
+	$(Q)mkdir -p $(BUILDDIR)
+	$(Q)$(CC) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS) $(COBJECTS) -o $@ && \
+	echo "$(GREEN)Built: $@ ($$(du -h $@ | cut -f1))$(RESET)"
+	
+$(DLL): $(DLLOBJECTS) $(ASMOBJECTS)
+	$(Q)mkdir -p $(BUILDDIR)
+	$(Q)$(CC) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS) $(DLLOBJECTS) $(ASMOBJECTS) -shared -o $@ && \
+	echo "$(GREEN)Built: $@ ($$(du -h $@ | cut -f1))$(RESET)"
+
+$(COBJECTS): $(PATH_COBJECT)/%.o: $(PATH_CSOURCE)/%.cpp
+	$(Q)mkdir -p $(PATH_COBJECT)
+	$(Q)$(CC) $(CPPFLAGS) $(CXXFLAGS) -c $< -o $@
+
+$(DLLOBJECTS): $(PATH_DLLOBJECT)/%.o: $(PATH_DLLSOURCE)/%.cpp
+	$(Q)mkdir -p $(PATH_DLLOBJECT)
+	$(Q)$(CC) $(CPPFLAGS) $(CXXFLAGS) -c $< -o $@
+
+$(ASMOBJECTS): $(PATH_ASMOBJECT)/%.o: $(PATH_ASMSOURCE)/%.asm
+	$(Q)mkdir -p $(PATH_ASMOBJECT)
+	$(Q)$(ASM) $< -f win64 -o $@
+
+clean:
+	$(Q)rm -rf $(PATH_COBJECT) $(PATH_DLLOBJECT) $(PATH_ASMOBJECT) $(PATH_DEBUG) $(PATH_RELEASE)
+	$(Q)rm -f $(EXE) $(DLL)
+	$(Q)echo "Project has been cleaned successfully."
+
+install: release
+	$(Q)sudo install -m 755 $(EXE) $(INSTDIR)
+	$(Q)echo "$(GREEN)Installed release binary to $(INSTDIR)$(RESET)"
+
+help:
+	$(Q)echo "$(WHITE)release: build release$(RESET)"
+	$(Q)echo "$(WHITE)Usage: make release$(RESET)"
+	$(Q)echo "$(WHITE)VERBOSE: echo all running commands$(RESET)"
+	$(Q)echo "$(WHITE)Usage: make VERBOSE=1$(RESET)"
+```
+
+---
+
 ### References
 [1] [GNU Make Manual](https://www.gnu.org/software/make/manual/)
 
