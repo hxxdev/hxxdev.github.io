@@ -208,11 +208,11 @@ Where:
 
 #### Generating dependency file
 
-In large projects, it is *burdensome* to write all a dependency list manually.  
+In large projects, it is *burdensome* to write all dependencies by hand.  
 
-Many compilers such as `gcc` and `clang` provide automation of dependency list generation.  
+Many compilers such as `gcc` and `clang` provide automatic **dependencies generation**.  
 
-One can generate dependency files(`.d`) using compiler and include the dependency in `Makefile`.
+You can generate dependency files(`.d`) using compiler and include the dependency in `Makefile`.
 
 
 Take a look at this code:  

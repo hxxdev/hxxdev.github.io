@@ -1,23 +1,16 @@
 ---
-title: Setting up Neovim in WSL
+title: Setting up Neovim
 date: 2025-04-26
 categories: [dev, vim]
 tags: [nvim, wsl]
 ---
 
-This post explains how to setup neovim in WSL2.  
+This post explains how to install and setup neovim.  
 
 
 -----------------------------------
 
-## WSL2
-
-[WSL2](https://learn.microsoft.com/en-us/windows/wsl/about) (Windows Subsystem for Linux 2) is a compatibility layer for running Linux binaries natively on Windows. It is an upgrade over the original WSL and provides a full Linux kernel running inside a lightweight virtual machine (VM) rather than using a translation layer. This means it offers better performance, compatibility, and support for more Linux applications, including those that require specific kernel features like Docker.
-
-
------------------------------------
-
-## neovim
+## Neovim
 
 [Neovim](https://neovim.io/) (nvim) is an extensible, open-source text editor that is a refactor and improvement of Vim. It aims to enhance the usability and feature set of Vim, while maintaining compatibility with Vim's commands and configuration.
 
@@ -52,7 +45,7 @@ The packages include:
 - [image.nvim](https://github.com/3rd/image.nvim)
 - [vim-gutentags](https://github.com/ludovicchabant/vim-gutentags)
 
-- Move `vim-plug` into runtime autoload path.
+Move `vim-plug` into runtime autoload path.
 
 ```shell
 mv -r vim-plug /home/linuxbrew/.linuxbrew/Cellar/neovim/0.11.0/share/nvim/runtime/autoload
@@ -74,9 +67,9 @@ cp -r nvim ~/.config
 sudo apt-get install -y exuberant-ctags
 ```
 
-- Configure `~/.ctags`.
+- Write `~/.ctags`.
 
-```~/.ctags
+```
 --recurse=yes
 --exclude=.git
 --exclude=BUILD
@@ -128,13 +121,13 @@ sudo npm install msgpack-lite
 
 - Run this in nvim:
 
-```nvim
+```
 mdkp#util#install
 ```
 
 -  Preview markdown files.
 
-```nvim
+```
 :MarkdownPreview
 ```
 
