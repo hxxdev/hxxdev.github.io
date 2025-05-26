@@ -9,13 +9,14 @@ When developing C or C++ projects with Neovim, one of the most powerful tools to
 
 ---
 
-🛠️ What is nvim-lspconfig?
+### 🛠️ What is nvim-lspconfig?
 
 `nvim-lspconfig` is a Neovim plugin that simplifies setting up language servers, such as clangd for C/C++ or pyright for Python. It provides ready-to-use configurations so you can quickly enable IDE-like features like auto-completion, diagnostics, go-to-definition, and symbol renaming inside Neovim.
 
 ---
 
-⚡ How to Install and Setup nvim-lspconfig
+### ⚡ How to Install and Setup nvim-lspconfig
+
 You can install nvim-lspconfig easily with your favorite plugin manager. For example, using vim-plug:
 In your `init.vim` or `init.lua` for Neovim,
 
@@ -48,24 +49,22 @@ If it doesn’t have this info, it guesses defaults and can’t find Windows SDK
 
 --- 
 
-🤔 Why Does clangd Need compile_commands.json?
+### 🤔 Why Does clangd Need compile_commands.json?
 
 `clangd` powers the C/C++ LSP experience by parsing your source code and providing intelligent feedback. But to do this correctly, it needs to understand how your code is compiled — which headers are included, what macros are defined, and what flags are used.
 
 For projects using `CMake`, this information is automatically generated. But for projects using plain `Makefiles`, `clangd` often lacks this context, leading to false errors like unknown types (`LPCWSTR`, `DWORD64`) or missing system includes.
 The best way to provide clangd with this build information is via a file called `compile_commands.json`. This JSON file lists every compilation command used for every source file in your project.
 
-When clangd knows about `compile_commands.json`, it uses the exact compiler flags and include paths, so the LSP errors vanish.
+When clangd can locate `compile_commands.json`, it uses the exact compiler flags and include paths, so the LSP errors vanish.
 
 ---
 
-🐻 Generating compile_commands.json with bear
+### 🐻 Generating compile_commands.json with bear
 
-Unlike `CMake`, which can generate this file natively, plain Makefiles don’t provide it automatically. This is where bear comes in.
+Unlike `CMake`, which can generate this file natively, plain Makefiles don’t provide it automatically. This is where bear comes in.  Build EAR(`bear`) wraps your build process and records all compiler invocations. It then produces `compile_commands.json` for you.
 
-`bear` (Build EAR) wraps your build process and records all compiler invocations. It then produces `compile_commands.json` for you.
-
-Install bear on your system (
+Install bear on your system:
 
 ```bash
 sudo apt install bear
@@ -81,7 +80,7 @@ This creates `compile_commands.json` in your project root.
 
 ---
 
-🔍 Where Does clangd Look for compile_commands.json?
+### 🔍 Where Does clangd Look for compile_commands.json?
 
 `clangd` locates `compile_commands.json` by searching upward from the file’s directory you’re editing in Neovim.
 
@@ -130,7 +129,7 @@ With `compile_commands.json` in place, your LSP will accurately reflect your pro
 
 ---
 
-📚 References
-[1] [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig)
-[2] [bear - Build EAR](https://github.com/rizsotto/Bear)
-[3] [Neovim GitHub repository](https://github.com/neovim/neovim)
+### 📚 References
+[1] [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig)  
+[2] [bear - Build EAR](https://github.com/rizsotto/Bear)  
+[3] [Neovim GitHub repository](https://github.com/neovim/neovim)  
