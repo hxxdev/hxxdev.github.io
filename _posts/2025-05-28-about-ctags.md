@@ -1,5 +1,5 @@
 ---
-title: Ctags: Configuration, Options, and Language Support
+title: ctags configuration, options, and language support
 date: 2025-05-28
 categories: [dev, dev_tools]
 tags: [ctags]
