@@ -1,7 +1,7 @@
 ---
 title: Setting up nvim-lspconfig for your project.
 date: 2025-05-27
-categories: [dev, nvim]
+categories: [dev, vim]
 tags: [nvim-lspconfig]
 ---
 
