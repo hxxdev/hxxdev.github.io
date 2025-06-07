@@ -19,24 +19,23 @@ Then clone your repository into your local.
 
 ---------------------
 
-## Install Ruby
+## Install Ruby, Bundler and Jekyll using Gem
 
 ```bash
-git clone https://github.com/rbenv/rbenv.git ~/.rbenv
-cd ~/.rbenv/
-echo 'export RUBYOPT='-W0'' >> ~/.bashrc
-echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.bashrc
-echo 'eval "$(rbenv init -)"' >> ~/.bashrc
-git clone https://github.com/rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build
-echo 'export PATH="$HOME/.rbenv/plugins/ruby-build/bin:$PATH"' >> ~/.bashrc
-rbenv install 2.7.0
-rbenv global 2.7.0
+sudo pacman -Syu rbenv ruby-build # ruby-build is needed for rbenv install.
+rbenv init
 exec $SHELL
+rbenv install 3.4.4
+rbenv global 3.4.4
+rbenv local 3.4.4
+gem install bundler # install bundler
+bundle update # bundle install if you are confident with version dependencies.
+gem list # check installed gems
 ```
 
 ---------------------
 
-## Install Bundler and Jekyll using Gem
+## Install 
 
 ```bash
 gem install jekyll
@@ -125,8 +124,14 @@ We will learn how to add [Jekyll PlantUML](https://github.com/yegor256/jekyll-pl
 
 - Install `PlantUML`.
 
-```shell
+Ubuntu:
+```bash
 sudo apt-get install plantuml -y
+```
+
+Arch:
+```bash
+sudo pacman -Syu plantuml
 ```
 
 - Install jekyll-plantuml.
