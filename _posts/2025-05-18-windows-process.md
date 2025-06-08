@@ -39,7 +39,7 @@ In short:
 Object = actual resource/data structure
 Handle = reference to access the object
 
-```plantuml
+{ %plantuml% }
 class Object {
   +type
   +attributes
@@ -49,7 +49,7 @@ class Handle {
 }
 
 Handle --> Object : references
-```
+{ %endplantuml% }
 
 ---
 

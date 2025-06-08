@@ -159,7 +159,7 @@ Let’s say your PC is 192.168.1.100, and you want to ping:
 | POSTROUTING | Just before the packet leaves an interface | Used for SNAT, masquerading                                |
 ### Overall Summary
 
-```plantuml
+{ %plantuml% }
 title Linux Packet Flow with Netfilter and Interfaces
 
 ' Define external network
@@ -197,7 +197,7 @@ postrouting --> eth0
 
 ' Local path
 input --> app
-```
+{ %endplantuml% }
 
 ### 📶 Domain Name System(DNS)
 
