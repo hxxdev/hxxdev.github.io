@@ -2,7 +2,7 @@
 title: What is FUSE?
 date: 2025-06-07
 categories: [dev, os]
-tags: [linux, network]
+tags: [linux, fuse]
 ---
 
 I was trying to run AppImage for [Heynote](https://heynote.com/).
