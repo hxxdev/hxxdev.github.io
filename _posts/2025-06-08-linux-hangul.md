@@ -63,6 +63,14 @@ When the IBus configuration window opens:
 - In the **General** tab, set your preferred next input method (e.g., `<Shift> space` is commonly used)
 - Click "Close" to exit the setup
 
+#### Step 5: Start ibus at bash session starup
+
+```bash
+echo "ibus-daemon -drx" >> ~/.bashrc
+```
+
+This will append `ibus-daemon -drx` to your `.bashrc`.
+
 #### Using Hangul Input
 
 With these steps completed, you should now be able to use Korean-Hangul input on your Linux system. To switch between languages, you can typically use the
