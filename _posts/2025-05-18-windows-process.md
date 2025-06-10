@@ -87,7 +87,7 @@ Threads share the process's resources (memory, handles) but have their own:
 Multithreading enables parallel execution inside a process.
 Threads are scheduled independently by the OS.
 
-```plantuml
+{ %plantuml% }
 class Process {
   +Memory
   +Handles
@@ -99,7 +99,7 @@ class Thread {
 }
 
 Process "1" *-- "multiple" Thread : contains
-```
+{ %endplantuml% }
 
 ---
 
@@ -122,19 +122,19 @@ Kernel space is shared among all processes but protected so user-mode code canno
 This separation provides security and stability.
 PlantUML diagram for 32-bit virtual memory layout:
 
-```plantuml
+{ %plantuml% }
 rectangle "User Space\n(0x00000000 - 0x7FFFFFFF)" as UserSpace
 rectangle "Kernel Space\n(0x80000000 - 0xFFFFFFFF)" as KernelSpace
 
 UserSpace -[hidden]-> KernelSpace
-```
+{ %endplantuml% }
 
-```plantuml
+{ %plantuml% }
 rectangle "User Space\n(Low Addresses, up to ~8 TB)" as UserSpace64
 rectangle "Kernel Space\n(High Addresses: 0xFFFF800000000000 - 0xFFFFFFFFFFFFFFFF)" as KernelSpace64
 
 UserSpace64 -[hidden]-> KernelSpace64
-```
+{ %endplantuml% }
 
 ---
 

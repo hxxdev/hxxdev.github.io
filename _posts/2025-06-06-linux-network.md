@@ -300,7 +300,7 @@ Supports NAT, packet mangling, logging, etc.
 
 Nowadays, `firewalld` uses `nftables` by default instead of `iptables`.
 
-```plantuml
+{ %plantuml% }
 title firewalld Backend Architecture
 
 ' Define components
@@ -314,7 +314,7 @@ package "Backends" {
 ' Define relationships
 firewalld --> iptables : uses
 firewalld --> nftables : uses
-```
+{ %endplantuml% }
 
 > **_NOTE:_**  `iptables` is deprecated. Use `nftables` if possible.
 `firewalld` can be configured to use `nftables` by editing `/etc/firewalld/firewalld.conf`.
