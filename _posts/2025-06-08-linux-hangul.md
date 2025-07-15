@@ -9,6 +9,8 @@ tags: [linux, hangul, ibus]
 
 This guide will walk you through the process of setting up Korean (Hangul) support on your Linux system.
 
+---
+
 #### Step 1: Enable Korean Locale
 
 First, we need to enable the Korean locale in our system. This involves uncommenting the necessary entries in the /etc/locale.gen file.
@@ -27,6 +29,8 @@ ko_KR.UTF-8 UTF-8
 
 After making these changes, save the file and exit the editor.
 
+---
+
 #### Step 2: Generate Locales
 
 Now that we've enabled the Korean locale, we need to generate it:
@@ -36,6 +40,8 @@ locale-gen
 ```
 
 This command will create the necessary locale files based on the entries we uncommented earlier.
+
+---
 
 #### Step 3: Install ibus
 
@@ -48,6 +54,8 @@ sudo pacman -Syu ibus ibus-hangul
 ```
 
 This command will install the IBus and the Hangul-specific input method.
+
+---
 
 #### Step 4: Configure IBus
 
@@ -63,13 +71,15 @@ When the IBus configuration window opens:
 - In the **General** tab, set your preferred next input method (e.g., `<Shift> space` is commonly used)
 - Click "Close" to exit the setup
 
-#### Step 5: Start ibus at bash session starup
+---
 
-```bash
-echo "ibus-daemon -drx" >> ~/.bashrc
-```
+#### Step 5: Start ibus at desktop session
 
-This will append `ibus-daemon -drx` to your `.bashrc`.
+If you are using KDE, go to:  
+**Input Devices -> Virtual Keyword**.  
+Select **_IBus Wayland_** and apply.
+
+---
 
 #### Using Hangul Input
 
