@@ -15,6 +15,18 @@ A `Makefile` usually resides in the same directory as the other source files. It
 
 Using the `make` command together with a `Makefile` offers a highly effective way to manage and organize project builds.
 
+🧠 What a Makefile does?
+
+✅ Defines rules to automate tasks
+
+Each rule tells make:  
+1. What to build (target)
+2. How to build it (commands)
+3. What it depends on (dependencies)
+
+✅ 2. Tracks file changes
+make only rebuilds what’s changed, using timestamps. It makes builds efficient.
+
 ---
 
 ### Installation
@@ -466,6 +478,31 @@ help:
 	$(Q)echo "$(WHITE)Usage: make release$(RESET)"
 	$(Q)echo "$(WHITE)VERBOSE: echo all running commands$(RESET)"
 	$(Q)echo "$(WHITE)Usage: make VERBOSE=1$(RESET)"
+```
+
+---
+
+### Making your Makefile cross-platform
+
+In this section, we will talk about how to write cross-platfrom compatible Makefile.  
+
+Writing your Makefile like this for example will not allow you to use it on Windows:
+
+```makefile
+clean:
+	rm -f *.o app
+```
+
+However, OS detection can be done like this:
+```
+ifeq ($(OS),Windows_NT)
+    RM = del
+else
+    RM = rm -f
+endif
+
+clean:
+	$(RM) *.o app
 ```
 
 ---
