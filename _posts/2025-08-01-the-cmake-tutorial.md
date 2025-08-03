@@ -46,8 +46,7 @@ Let's walk through a basic example.
     It's best practice to create a separate directory for the build files to keep your source tree clean.
     ```shell
     mkdir build
-    cd build
-    cmake ..
+    cmake -B build
     ```
     After running CMake, your project directory will look like this:
     ```
@@ -66,7 +65,9 @@ Let's walk through a basic example.
 
     Now you can use the generated Makefile to compile your project.
     ```shell
-    make
+    cmake --build build
+    or
+    cd build && make
     ```
     This will create the executable in your build directory.
     ```
