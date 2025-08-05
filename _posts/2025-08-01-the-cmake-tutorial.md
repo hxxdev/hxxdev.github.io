@@ -2,151 +2,197 @@
 title: The CMake Tutorial
 date: 2025-08-01
 categories: [dev, cpp]
-tags: [cmake]
+tags: [cmake, c++, build-systems]
 ---
 
-### What is CMake?
+CMake is an essential tool for any C++ developer. It automates the process of building, testing, and packaging software. This tutorial will guide you through the basics of CMake and show you how to use it in your own projects.
 
-CMake is a cross-platform C/C++ build system generator. It's a tool that allows you
-to take your source code and a build script and then generate build files for various toolchains and platforms.
+### What is CMake and Why Should You Use It?
 
-CMake reads a script file named `CMakeLists.txt` and uses it to generate a native build script for your chosen compiler and toolchain (e.g., a Makefile for GNU Make or a solution file for Visual Studio).
+CMake is a **cross-platform build system generator**. That's a mouthful, so let's break it down.
 
----
+-   **Build System:** A set of tools that compiles source code into a usable executable or library (e.g., Make, Ninja).
+-   **Generator:** CMake doesn't build the code itself. Instead, it *generates* the configuration files for a build system (like a `Makefile` for Make or a `build.ninja` file for Ninja).
+-   **Cross-Platform:** You can use the same CMake script (`CMakeLists.txt`) to generate build files for different operating systems (Linux, macOS, Windows) and compilers (GCC, Clang, MSVC).
 
+**The Problem:** Manually writing `Makefile`s is tedious and error-prone. A simple project is manageable, but as your codebase grows, so does the complexity. Supporting different platforms and compilers can turn your build scripts into a nightmare.
 
-### Why is it needed?
-
-As a C project's size increases, so does the complexity of its Makefile.
-For example, the Makefile for the Linux kernel is over 2000 lines long!
-Makefiles become even more complicated when you add options for cross-platform compilation.
-There is a clear need to automate the generation of these build scripts, and this is where CMake fits in.
+**The Solution:** CMake provides a high-level, human-readable language to describe your project's structure and dependencies. It handles the low-level, platform-specific details for you.
 
 ---
 
-### How do you use it?
+### Getting Started: A Simple Executable
 
-Let's walk through a basic example.
+Let's start with a classic "Hello, World!" C++ project.
 
-1.  **Define your project in `CMakeLists.txt`.**
+1.  **Project Structure:**
 
-    Imagine a simple project with the following structure:
     ```
      project
-    ├──  main.c
-    ├──  helloworld.c
+    ├──  main.cpp
     └──  CMakeLists.txt
     ```
-    Your `CMakeLists.txt` file would define the project and specify the source files to build the executable:
+
+2.  **Source Code (`main.cpp`):**
+
+    ```cpp
+    #include <iostream>
+
+    int main() {
+        std::cout << "Hello, CMake!" << std::endl;
+        return 0;
+    }
+    ```
+
+3.  **The `CMakeLists.txt` script:**
+
+    This file is the heart of your CMake project. It tells CMake everything it needs to know about your project.
+
     ```cmake
+    # Specify the minimum version of CMake required.
     cmake_minimum_required(VERSION 3.10)
 
-    project(HelloWorld)
+    # Set the project name and language.
+    project(HelloWorld CXX)
 
-    add_executable(helloworld main.c helloworld.c)
+    # Add an executable target.
+    # CMake will create an executable named "helloworld"
+    # from the source file "main.cpp".
+    add_executable(helloworld main.cpp)
     ```
 
-2.  **Run CMake to generate the build files.**
+4.  **Generating the Build Files:**
 
-    It's best practice to create a separate directory for the build files to keep your source tree clean.
+    It's best practice to perform an "out-of-source" build. This keeps your source directory clean by placing all build-related files in a separate directory (e.g., `build/`).
+
     ```shell
+    # Create a build directory
     mkdir build
+
+    # Run CMake from the project root to generate build files inside ./build
     cmake -B build
     ```
-    After running CMake, your project directory will look like this:
-    ```
-     project
-    ├──  main.c
-    ├──  helloworld.c
-    ├──  CMakeLists.txt
-    └── 󱧼 build
-        ├──  Makefile
-        ├──  CMakeCache.txt
-        ├──  cmake_install.cmake
-        └── 󱧼 CMakeFiles
-    ```
 
-3.  **Build your project using the generated build system.**
+5.  **Building the Executable:**
 
-    Now you can use the generated Makefile to compile your project.
+    Now, you can use CMake's build driver, which will invoke the underlying build system (like Make).
+
     ```shell
     cmake --build build
-    or
-    cd build && make
     ```
-    This will create the executable in your build directory.
+
+    This command will compile `main.cpp` and create an executable named `helloworld` inside the `build` directory. You can run it with `./build/helloworld`.
+
+---
+
+### Adding a Library
+
+Most projects are more complex than a single file. Let's refactor our code into a library and an executable that uses it. This is a common and highly recommended practice.
+
+1.  **New Project Structure:**
+
     ```
      project
-    ├──  main.c
-    ├──  helloworld.c
-    ├──  CMakeLists.txt
-    └── 󱧼 build
-        ├──  Makefile
-        ├──  CMakeCache.txt
-        ├──  cmake_install.cmake
-        ├── 󱧼 CMakeFiles
-        └──  helloworld
+    ├──  main.cpp
+    ├──  greeter.cpp
+    ├──  greeter.h
+    └──  CMakeLists.txt
     ```
 
-4.  **Iterate on your code.**
+2.  **Source Files:**
 
-    After modifying your source code, you only need to run `make` again from within the `build` directory.
+    **`greeter.h`**
+    ```cpp
+    #pragma once
+    #include <string>
+    void greet(const std::string& name);
+    ```
 
-5.  **Update dependencies.**
+    **`greeter.cpp`**
+    ```cpp
+    #include "greeter.h"
+    #include <iostream>
+    void greet(const std::string& name) {
+        std::cout << "Hello, " << name << "!" << std::endl;
+    }
+    ```
 
-    If you add or remove source files, you'll need to update your `CMakeLists.txt` accordingly and then re-run CMake to regenerate the build files.
+    **`main.cpp`**
+    ```cpp
+    #include "greeter.h"
+    int main() {
+        greet("CMake");
+        return 0;
+    }
+    ```
+
+3.  **Updated `CMakeLists.txt`:**
+
+    We now need to tell CMake to build a library and then link our executable against it.
+
+    ```cmake
+    cmake_minimum_required(VERSION 3.10)
+    project(HelloWorld CXX)
+
+    # Create a library target named "greeter"
+    # from greeter.cpp and greeter.h.
+    add_library(greeter greeter.cpp greeter.h)
+
+    # Create the executable.
+    add_executable(helloworld main.cpp)
+
+    # Link the "helloworld" executable against the "greeter" library.
+    # This ensures the executable can use the functions from the library.
+    target_link_libraries(helloworld PRIVATE greeter)
+    ```
+
+    Now, when you run `cmake -B build` and `cmake --build build`, CMake will first compile the `greeter` library and then build the `helloworld` executable, linking them together.
 
 ---
 
-### How does it work?
+### Important CMake Commands and Variables
 
-CMake operates in three stages:
+As your projects grow, you'll use more of CMake's features. Here are some of the most important commands and variables.
 
-1.  **Configuration Stage:**
-    - Reads the `CMakeLists.txt` file.
-    - Executes the build logic defined in the script.
-    - Creates a variable cache (`CMakeCache.txt`) to store configuration options.
+#### Key Commands
 
-2.  **Generation Stage:**
-    - Runs a toolchain-specific generator.
-    - Uses the output from the configuration stage.
-    - Generates the build script for the target toolchain (e.g., `Makefile`).
+-   `add_library(name [STATIC | SHARED] source1 [source2 ...])`: Creates a library target.
+-   `target_include_directories(target [PUBLIC | PRIVATE | INTERFACE] dir1 [dir2 ...])`: Specifies include directories for a target. This is how you tell CMake where to find header files.
+-   `target_link_libraries(target [PUBLIC | PRIVATE | INTERFACE] lib1 [lib2 ...])`: Links a target against other libraries.
+-   `find_package(PackageName [VERSION] [REQUIRED])`: Finds and loads settings from an external package (e.g., Boost, Qt).
+-   `install(TARGETS ...)`: Defines rules for installing your project's targets (executables, libraries).
 
-3.  **Build Stage:**
-    - Your chosen toolchain or build system (e.g., Make) does the actual compilation and linking.
+#### Key Variables
+
+You can set these variables on the command line using the `-D` flag (e.g., `cmake -D CMAKE_BUILD_TYPE=Release ..`).
+
+| Variable                      | Description                                                                                                                            |
+| ----------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| `CMAKE_BUILD_TYPE`            | Sets the build type: `Debug`, `Release`, `RelWithDebInfo`, `MinSizeRel`.                                                                 |
+| `CMAKE_CXX_STANDARD`          | Specifies the C++ standard (e.g., `11`, `14`, `17`, `20`). Requires CMake 3.8+.                                                          |
+| `CMAKE_INSTALL_PREFIX`        | The directory where the project will be installed when you run `make install`.                                                         |
+| `CMAKE_EXPORT_COMPILE_COMMANDS` | Set to `ON` to generate a `compile_commands.json` file, which is very useful for external tools like IDEs and linters (e.g., clangd). |
+| `BUILD_TESTING`               | A common convention to enable or disable building tests (`ON`/`OFF`). Often used with CTest, CMake's testing framework.                |
 
 ---
 
-### Using the Ninja Generator
+### Choosing a Generator (e.g., Ninja)
 
-The real power of CMake is that it can generate build files for many different build systems, not just Make. Other popular generators include:
-- Ninja
-- Visual Studio
-- Xcode
+CMake's real power comes from its generator system. By default, on Linux, it generates Makefiles. But you can easily switch to another build system like **Ninja**, which is known for its speed.
 
-Ninja is another build system designed to be significantly faster than Make. While its `build.ninja` files are complex and not meant to be written by hand, CMake can generate them for you. This allows you to benefit from Ninja's speed without the manual complexity.
-
-To use the Ninja generator, you would run CMake like this:
+To use Ninja, you first need to install it (`sudo apt-get install ninja-build` or `brew install ninja`). Then, tell CMake to use the Ninja generator with the `-G` flag:
 
 ```shell
-cmake -G Ninja ..
+# Generate build files for Ninja
+cmake -G Ninja -B build
 ```
 
----
-
-### 🔧 CMake variables
-
-| Project | Configuration |
-| :-: | :- |
-| CMAKE_BUILD_TYPE | Set build type: Debug, Release, RelWithDebInfo, MinSizeRel |
-| CMAKE_INSTALL_PREFIX | Set installation directory |
-| CMAKE_PROJECT_NAME | Name of the root project |
-| CMAKE_CXX_STANDARD | C++ standard version (11, 17, 20, etc.) |
-| CMAKE_EXPORT_COMPILE_COMMANDS | Generate compile_commands.json, which is very useful for external tools like IDEs, linters, and static analyzers (e.g., clangd) |
-| BUILD_TESTING |global switch that controls whether the testing infrastructure for the entire project is enabled. |
+Now, the `cmake --build build` command will use Ninja instead of Make to build your project, which can be significantly faster.
 
 ---
 
 ### Summary
 
-> CMake is a build system generator. It takes a high-level description of a project and generates native build files for your specific platform and toolchain.
+CMake is a powerful tool that simplifies the build process for C/C++ projects. It allows you to define your project in a high-level, platform-agnostic way and generates native build files for you.
+
+This tutorial has only scratched the surface. As a next step, explore how to use `find_package` to incorporate third-party libraries and how to use CTest to write and run tests for your project.
