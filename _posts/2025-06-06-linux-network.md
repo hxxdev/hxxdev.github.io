@@ -1,7 +1,7 @@
 ---
 title: Basics of Linux Network
 date: 2025-06-06
-categories: [dev, os]
+categories: [dev, linux]
 tags: [linux, network]
 ---
 

@@ -1,7 +1,7 @@
 ---
 title: What is FUSE?
 date: 2025-06-08
-categories: [dev, os]
+categories: [dev, linux]
 tags: [linux, fuse]
 ---
 

@@ -1,7 +1,7 @@
 ---
 title: Setting up Hangul in Linux
 date: 2025-06-08
-categories: [dev, os]
+categories: [dev, linux]
 tags: [linux, hangul, ibus]
 ---
 
