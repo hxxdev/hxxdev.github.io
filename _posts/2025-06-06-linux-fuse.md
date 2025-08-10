@@ -100,5 +100,5 @@ You can extract manually by `./your_appimage.AppImage --appimage-extract` if FUS
 
 ## Reference
 
-[1] [Heynote](https://heynote.com/)
-[2] [ArchLinux Wiki](https://wiki.archlinux.org/title/FUSE)
+[1] [Heynote](https://heynote.com/)  
+[2] [ArchLinux Wiki](https://wiki.archlinux.org/title/FUSE)  
