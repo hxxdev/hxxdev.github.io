@@ -1,7 +1,7 @@
 ---
 title: ctags configuration, options, and language support
 date: 2025-05-28
-categories: [dev, dev_tools]
+categories: [dev, ctags]
 tags: [ctags]
 ---
 `ctags` is a tool used to generate an index (or "tags" file) of language objects found in source files. These tags can be used by editors like Vim to navigate code more efficiently. This post will go through a detailed explanation of how to use `ctags`, and some common usages.

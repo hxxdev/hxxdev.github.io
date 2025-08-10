@@ -1,7 +1,7 @@
 ---
 title: Mastering Terminal Multitasking, Beginner's Guide to tmux
 date: 2025-04-19
-categories: [dev, dev_tools]
+categories: [dev, tmux]
 tags: [tmux]
 ---
 
