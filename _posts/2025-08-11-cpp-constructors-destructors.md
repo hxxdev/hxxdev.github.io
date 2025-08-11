@@ -110,7 +110,7 @@ int main() {
     // Player p1; // COMPILE ERROR! No arguments provided.
 
     // C++98 style (still works, but less common now)
-    Player p2("Wizard", 80);
+    Player p2{"Wizard", 80};
     p2.print();
 
     // Modern C++ (Uniform Initialization - Preferred)
@@ -152,7 +152,7 @@ public:
 
 int main() {
     Player guest;         // Calls the default constructor
-    Player proGamer("Pro"); // Calls the parameterized constructor
+    Player proGamer{"Pro"}; // Calls the parameterized constructor
 }
 ```
 
