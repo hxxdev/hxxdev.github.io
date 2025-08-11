@@ -54,13 +54,13 @@ jobs:
         run: bundle exec jekyll b -d "_site${{ steps.pages.outputs.base_path }}"
         env:
           JEKYLL_ENV: "production"
-      - name: modify sitemap header
-        run: |
-          find . -name 'sitemap.xml' -print0 | while IFS= read -r -d '' file; do
-            if grep -q 'xsi:schemaLocation=' "$file"; then
-                sed -i 's|<urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">|<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">|' "$file"
-            fi
-          done
+      # - name: modify sitemap header
+      #   run: |
+      #     find . -name 'sitemap.xml' -print0 | while IFS= read -r -d '' file; do
+      #       if grep -q 'xsi:schemaLocation=' "$file"; then
+      #           sed -i 's|<urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">|<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">|' "$file"
+      #       fi
+      #     done
       - name: Test site
         run: |
           bundle exec htmlproofer _site \
