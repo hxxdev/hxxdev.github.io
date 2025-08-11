@@ -5,7 +5,7 @@ categories: [dev, cpp]
 tags: [cpp, modern-cpp, interface]
 ---
 
-### Separating Class Interface and Implementation
+### 1. Separating Class Interface and Implementation
 
 So far, we have defined our member functions directly inside the class definition.
 This is fine for short functions, but what happens when a member function is complex and spans over 100 lines of code?
@@ -43,7 +43,7 @@ private:
 };
 ```
 
-# 1. Separating Class Interface and Implementation (Continued)
+#### Separating Interface and Implementation
 
 Now, let's separate the interface from the implementation. The member functions are defined outside the class using the **scope resolution operator `::`**. This operator tells the compiler that the function belongs to a specific class. For example, `BankAccount::deposit` indicates that we are defining the `deposit` function that is a member of the `BankAccount` class.
 
@@ -93,7 +93,7 @@ std::string BankAccount::getAccountHolder() {
 }
 ```
 
-# 1. Separating Class Interface and Implementation (Full Example)
+#### Full Example
 
 Here is the complete source code showing the separation and how to use the class in `main`.
 
@@ -161,7 +161,7 @@ int main() {
 }
 ```
 
-# 2. Namespaces
+### 2. Namespaces
 
 A **namespace** is a declarative region that provides a scope to the identifiers (the names of types, functions, variables, etc) inside it. Namespaces are used to organize code into logical groups and to prevent name collisions that can occur especially when your code includes multiple libraries.
 
@@ -183,7 +183,7 @@ int main() {
 }
 ```
 
-# 2. Namespaces (Continued)
+#### Defining Namespaces
 
 We can also define our own namespaces. This is extremely useful in large projects to avoid conflicts.
 For example, two different parts of a system might both need a `Logger` class, but with different implementations.
@@ -221,7 +221,7 @@ int main() {
 ```
 **Best Practice:** Avoid putting `using namespace` directives in header files, as it can pollute the global namespace for every file that includes the header. It's better to explicitly qualify names (e.g., `std::string`) in headers.
 
-# 3. Separating Class Declaration and Definition into Files
+### 3. Separating Class Declaration and Definition into Files
 
 Defining member functions outside the class is a good first step. However, the most common and professional way to structure a C++ project is to separate the class into two files:
 
@@ -233,7 +233,7 @@ This approach has several advantages:
 *   **Reusability:** Other parts of your program can `#include` the header file to use your class without needing to know about the implementation details.
 *   **Faster Compilation:** If you only change the implementation in the `.cpp` file, files that include the `.h` file do not need to be recompiled, saving significant time in large projects.
 
-# 3. Separating Files (Example)
+#### Example
 
 Let's take our `BankAccount` class and split it into `BankAccount.h` and `BankAccount.cpp`. A third file, `main.cpp`, will use the class.
 
@@ -261,8 +261,6 @@ private:
 
 #endif // BANK_ACCOUNT_H
 ```
-
-# 3. Separating Files (Example Continued)
 
 **`BankAccount.cpp`**
 This file contains the implementation of the member functions. It must `#include "BankAccount.h"` to get the class declaration.
@@ -317,7 +315,7 @@ int main() {
 }
 ```
 
-# 4. Interfaces
+### 4. Interfaces
 
 In C++, an **interface** is a way to define a "contract" for a class.
 It specifies a set of public methods that a class must implement, without providing any of the implementation itself.
@@ -371,19 +369,17 @@ private:
 ```
 Interfaces are the key to enabling **polymorphism**, which we will discuss shortly.
 
-# 5. Concepts of Object-Oriented Programming (OOP)
+### 5. Concepts of Object-Oriented Programming (OOP)
 
 Now that we have a better understanding of classes, let's formally introduce the core concepts of OOP.
 
-### Encapsulation
+#### Encapsulation
 
 **Encapsulation** is the bundling of data (attributes) and the methods (functions) that operate on that data into a single unit, called a class. The primary goal is to group related information and functionality together, making the code more organized and manageable.
 
 Think of a car. The engine, wheels, and steering wheel are all encapsulated within the car's chassis. You don't interact with them individually; you interact with the car as a whole. In C++, the class is the mechanism for encapsulation.
 
-![](https://i.imgur.com/V2LdG8p.png)
-
-# 5. OOP Concepts: Encapsulation & Information Hiding
+#### Information Hiding
 
 A direct result of encapsulation is **Information Hiding**.
 
@@ -394,7 +390,7 @@ A direct result of encapsulation is **Information Hiding**.
 2.  **Flexibility:** The internal implementation can be changed without affecting any code that uses the class. If we decide to change how a `Stopwatch` stores time internally (from seconds to milliseconds), we only need to update the class methods. The client code that calls `start()` and `stop()` remains unchanged.
 3.  **Simplicity:** It makes the class easier to use. The user only needs to know about the public methods, not the complex internal workings.
 
-# 5. OOP Concepts: Information Hiding Example
+##### Information Hiding Example
 
 Consider a `Stopwatch` class. The user should only be able to `start()`, `stop()`, and `getElapsedTime()`. They should not be able to directly set the internal start or end times, as that would break the logic of the stopwatch.
 
@@ -447,15 +443,14 @@ int main() {
 }
 ```
 
-# 5. OOP Concepts: Inheritance
+#### Inheritance
 
 **Inheritance** is a mechanism that allows a new class (the **derived** or **child** class) to be based on an existing class (the **base** or **parent** class). The derived class inherits the attributes and methods of the base class, and can add its own new functionality or override existing functionality.
 
 Inheritance represents an **"is-a"** relationship. For example, a `Car` is a `Vehicle`. A `Dog` is an `Animal`. This allows for code reuse and the creation of logical hierarchies.
 
-![](https://i.imgur.com/A5O8f3c.png)
 
-# 5. OOP Concepts: Inheritance Example
+##### Inheritance Example
 
 Let's model a `Vehicle` hierarchy. The base class `Vehicle` will have common properties, and the derived classes `Car` and `Motorcycle` will inherit them and add their own specific features.
 
@@ -513,7 +508,7 @@ My bike is a " << myBike.getBrand() << std::endl;
 }
 ```
 
-# 5. OOP Concepts: Polymorphism
+#### Polymorphism
 
 **Polymorphism** (from Greek, meaning "many forms") is the ability of an object to take on many forms. In OOP, it means that a call to a member function will cause a different action depending on the runtime type of the object.
 
@@ -521,9 +516,8 @@ In C++, polymorphism is achieved through **inheritance** and **virtual functions
 
 This allows us to write very flexible and generic code. For example, we can have a function that can draw any kind of `IShape` without knowing its specific type.
 
-![](https://i.imgur.com/U3sZ3fE.png)
 
-# 5. OOP Concepts: Polymorphism Example
+##### Polymorphism Example
 
 Let's use our `IShape` interface to demonstrate polymorphism. We can create a collection of different shapes and treat them all uniformly as `IShape` pointers.
 
@@ -575,7 +569,7 @@ int main() {
 }
 ```
 
-# 6. UML Class Diagrams
+### 6. UML Class Diagrams
 
 **UML (Unified Modeling Language)** is a standardized graphical language used to visualize, specify, construct, and document the artifacts of a software system. It helps you design and review your system before writing code.
 
@@ -586,9 +580,8 @@ A class is drawn as a rectangle divided into three parts:
 2.  **Middle:** Attributes. `+` denotes `public`, `-` denotes `private`, `#` denotes `protected`.
 3.  **Bottom:** Operations.
 
-![](https://i.imgur.com/yG5zI1B.png)
 
-# 6. UML: Class Relationships
+#### Class Relationships
 
 Arrows are used to show the relationships between classes. Here are the most important ones:
 
@@ -598,6 +591,3 @@ Arrows are used to show the relationships between classes. Here are the most imp
 *   **Composition:** A solid line with a filled diamond. It's a strong "owns-a" relationship where the part cannot exist without the whole (e.g., a `House` is composed of `Rooms`).
 *   **Dependency:** A dashed line with an open arrow. It means one class uses another (e.g., a `ReportGenerator` depends on a `DatabaseConnection`).
 
-![](https://i.imgur.com/jZJkZ1X.png)
-
-# End of Chapter 3
