@@ -5,7 +5,10 @@ categories: [dev, cpp]
 tags: [cpp, modern-cpp, interface]
 ---
 
-### 1. Separating Class Interface and Implementation
+
+---
+
+#### 1. Separating Class Interface and Implementation
 
 So far, we have defined our member functions directly inside the class definition.
 This is fine for short functions, but what happens when a member function is complex and spans over 100 lines of code?
@@ -42,6 +45,9 @@ private:
     double balance = 0.0;
 };
 ```
+
+
+---
 
 #### Separating Interface and Implementation
 
@@ -92,6 +98,9 @@ std::string BankAccount::getAccountHolder() {
     return accountHolder;
 }
 ```
+
+
+---
 
 #### Full Example
 
@@ -161,7 +170,10 @@ int main() {
 }
 ```
 
-### 2. Namespaces
+
+---
+
+#### 2. Namespaces
 
 A **namespace** is a declarative region that provides a scope to the identifiers (the names of types, functions, variables, etc) inside it. Namespaces are used to organize code into logical groups and to prevent name collisions that can occur especially when your code includes multiple libraries.
 
@@ -182,6 +194,9 @@ int main() {
     return 0;
 }
 ```
+
+
+---
 
 #### Defining Namespaces
 
@@ -221,7 +236,10 @@ int main() {
 ```
 **Best Practice:** Avoid putting `using namespace` directives in header files, as it can pollute the global namespace for every file that includes the header. It's better to explicitly qualify names (e.g., `std::string`) in headers.
 
-### 3. Separating Class Declaration and Definition into Files
+
+---
+
+#### 3. Separating Class Declaration and Definition into Files
 
 Defining member functions outside the class is a good first step. However, the most common and professional way to structure a C++ project is to separate the class into two files:
 
@@ -232,6 +250,9 @@ This approach has several advantages:
 *   **Modularity:** The interface is cleanly separated from the implementation.
 *   **Reusability:** Other parts of your program can `#include` the header file to use your class without needing to know about the implementation details.
 *   **Faster Compilation:** If you only change the implementation in the `.cpp` file, files that include the `.h` file do not need to be recompiled, saving significant time in large projects.
+
+
+---
 
 #### Example
 
@@ -315,7 +336,10 @@ int main() {
 }
 ```
 
-### 4. Interfaces
+
+---
+
+#### 4. Interfaces
 
 In C++, an **interface** is a way to define a "contract" for a class.
 It specifies a set of public methods that a class must implement, without providing any of the implementation itself.
@@ -369,15 +393,23 @@ private:
 ```
 Interfaces are the key to enabling **polymorphism**, which we will discuss shortly.
 
-### 5. Concepts of Object-Oriented Programming (OOP)
+
+---
+
+#### 5. Concepts of Object-Oriented Programming (OOP)
 
 Now that we have a better understanding of classes, let's formally introduce the core concepts of OOP.
+
+
+---
 
 #### Encapsulation
 
 **Encapsulation** is the bundling of data (attributes) and the methods (functions) that operate on that data into a single unit, called a class. The primary goal is to group related information and functionality together, making the code more organized and manageable.
 
 Think of a car. The engine, wheels, and steering wheel are all encapsulated within the car's chassis. You don't interact with them individually; you interact with the car as a whole. In C++, the class is the mechanism for encapsulation.
+
+---
 
 #### Information Hiding
 
@@ -442,6 +474,8 @@ int main() {
     return 0;
 }
 ```
+
+---
 
 #### Inheritance
 
@@ -569,7 +603,7 @@ int main() {
 }
 ```
 
-### 6. UML Class Diagrams
+#### 6. UML Class Diagrams
 
 **UML (Unified Modeling Language)** is a standardized graphical language used to visualize, specify, construct, and document the artifacts of a software system. It helps you design and review your system before writing code.
 

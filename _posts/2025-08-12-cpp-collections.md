@@ -7,6 +7,10 @@ tags: [cpp, stl, vector, array, collections]
 
 ### Collections of Objects
 
+This section explores various ways to manage collections of objects in C++, from traditional C-style arrays to modern C++ Standard Library containers.
+
+---
+
 #### C-Style Object Arrays (The "Old Way")
 
 Often, we need to create many objects of the same type. For example, a game might need hundreds of `Enemy` objects. Creating individual variables for each one is not feasible.
@@ -34,11 +38,18 @@ public:
         std::cout << "Title: " << title << ", Pages: " << pages << std::endl;
     }
 
+    // Added for sorting examples
+    std::string getTitle() const { return title; }
+    int getPages() const { return pages; }
+
 private:
     std::string title;
     int pages;
 };
 ```
+
+
+---
 
 #### Using C-Style Object Arrays
 
@@ -47,15 +58,21 @@ When you declare a simple object array like `Book library[3];`, the **default co
 To access a specific object in the array, you use the index operator `[]`. You can then call its member functions using the dot `.` operator.
 
 ```cpp
+#include <iostream>
+#include <string> // Required for Book class
+
+// Assuming Book class is defined above
+
 int main() {
     Book library[3] = {
         Book("The Hobbit", 295),
         Book("Dale", 333)
-    }; // Calls the default constructor 3 times
+    }; // Calls the default constructor for library[2] and copy-constructs for others
 
-    for (int i = 0; i < 2; ++i) {
+    for (int i = 0; i < 3; ++i) { // Loop through all 3 elements
         library[i].print();
     }
+    return 0;
 }
 ```
 
@@ -69,6 +86,9 @@ While this works, it still suffers from the core limitations of C-style arrays.
 For these reasons, C-style arrays are largely replaced by modern C++ containers.
 
 Let's move on to the modern solution.
+
+
+---
 
 #### `std::vector`: The Modern Dynamic Array
 
@@ -92,6 +112,9 @@ int main() {
 }
 ```
 
+
+---
+
 #### `std::vector`: Adding and Accessing Elements
 
 The most common way to add elements is with `push_back()`, which adds an element to the end of the vector.
@@ -100,7 +123,12 @@ A more efficient method is `emplace_back()`, which constructs the object directl
 
 To access elements, you can use `[]` or the `.at()` member function. `.at()` is safer because it checks if the index is valid and throws an exception if it's out of bounds.
 
-```cpp
+#include <iostream>
+#include <vector>
+#include <string> // Required for Book class
+
+// Assuming Book class is defined above
+
 int main() {
     std::vector<Book> collection;
     std::cout << "Building collection...\n";
@@ -114,8 +142,9 @@ int main() {
     collection.at(1).print();
 
     // collection.at(2).print(); // This would throw an exception and terminate
+    return 0;
 }
-```
+
 
 
 There are three primary ways to loop through the elements of a vector.
@@ -147,7 +176,10 @@ for (auto it = collection.begin(); it != collection.end(); ++it) {
 }
 ```
 
-### `std::vector`: Size vs. Capacity
+
+---
+
+#### `std::vector`: Size vs. Capacity
 
 A vector has two different concepts of size:
 
@@ -157,20 +189,29 @@ A vector has two different concepts of size:
 You can use `reserve()` to pre-allocate capacity if you know roughly how many elements you'll need, avoiding reallocations.
 
 ```cpp
-std::vector<int> numbers;
-std::cout << "Size: " << numbers.size() << ", Capacity: " << numbers.capacity() << std::endl;
+#include <iostream>
+#include <vector>
 
-numbers.reserve(10); // Pre-allocate space for 10 integers
-std::cout << "Size: " << numbers.size() << ", Capacity: " << numbers.capacity() << std::endl;
+int main() {
+    std::vector<int> numbers;
+    std::cout << "Size: " << numbers.size() << ", Capacity: " << numbers.capacity() << std::endl;
 
-for(int i=0; i<10; ++i) numbers.push_back(i);
-std::cout << "Size: " << numbers.size() << ", Capacity: " << numbers.capacity() << std::endl;
+    numbers.reserve(10); // Pre-allocate space for 10 integers
+    std::cout << "Size: " << numbers.size() << ", Capacity: " << numbers.capacity() << std::endl;
 
-numbers.push_back(10); // Exceeds capacity, triggers reallocation
-std::cout << "Size: " << numbers.size() << ", Capacity: " << numbers.capacity() << std::endl;
+    for(int i=0; i<10; ++i) numbers.push_back(i);
+    std::cout << "Size: " << numbers.size() << ", Capacity: " << numbers.capacity() << std::endl;
+
+    numbers.push_back(10); // Exceeds capacity, triggers reallocation
+    std::cout << "Size: " << numbers.size() << ", Capacity: " << numbers.capacity() << std::endl;
+    return 0;
+}
 ```
 
-### `std::vector`: Modifying and Using Algorithms
+
+---
+
+#### `std::vector`: Modifying and Using Algorithms
 
 Vectors provide member functions like `erase()`, `insert()`, and `clear()` for modification.
 
@@ -178,26 +219,35 @@ A major advantage of using STL containers like `vector` is their compatibility w
 
 Let's sort our book collection by title using `std::sort` and a lambda expression.
 
-```cpp
+#include <iostream>
+#include <vector>
+#include <string>
 #include <algorithm> // Required for std::sort
 
-// ... Book class and main function setup ...
-std::vector<Book> collection;
-collection.emplace_back("The Lord of the Rings", 1178);
-collection.emplace_back("Dune", 412);
-collection.emplace_back("A Game of Thrones", 694);
+// Assuming Book class is defined above with getTitle()
 
-// Use a lambda function to define the sorting rule
-std::sort(collection.begin(), collection.end(), 
-    [](const Book& a, const Book& b) {
-        return a.getTitle() < b.getTitle(); // Sort alphabetically by title
-    });
+int main() {
+    std::vector<Book> collection;
+    collection.emplace_back("The Lord of the Rings", 1178);
+    collection.emplace_back("Dune", 412);
+    collection.emplace_back("A Game of Thrones", 694);
 
-std::cout << "\n--- Sorted Collection ---\n";
-for (const auto& book : collection) {
-    book.print();
+    // Use a lambda function to define the sorting rule
+    std::sort(collection.begin(), collection.end(), 
+        [](const Book& a, const Book& b) {
+            return a.getTitle() < b.getTitle(); // Sort alphabetically by title
+        });
+
+    std::cout << "\n--- Sorted Collection ---\n";
+    for (const auto& book : collection) {
+        book.print();
+    }
+    return 0;
 }
-```
+
+
+
+---
 
 #### `std::array`: The Modern Fixed-Size Array
 
@@ -210,6 +260,9 @@ What if you need a fixed-size array but want the benefits of a modern container?
 -   **Safety:** It knows its own size, preventing common errors.
 
 To use it, include the `<array>` header. The size is part of the type definition: `std::array<DataType, Size>`.
+
+
+---
 
 #### Using `std::array`
 
@@ -244,7 +297,10 @@ int main() {
 }
 
 
-### TL;DR
+
+---
+
+#### TL;DR
 
 Choosing the right container is a key skill in C++.
 

@@ -39,7 +39,7 @@ int main() {
 }
 ```
 
-**Indirect Reference:** This involves using a pointer to access a variable's value. A pointer holds the memory address of the variable. To get the value at that address, you need to "dereference" the pointer using the `*` operator.
+**Indirect Reference:** This involves using a pointer to access a variable's value. A pointer holds the memory address of the variable, obtained using the address-of operator (`&`). To get the value at that address, you need to "dereference" the pointer using the `*` operator.
 
 ```cpp
 #include <iostream>
@@ -162,7 +162,7 @@ int main() {
     // Access the object's methods using the pointer
     p_my_class->say_hello();
 
-    // Don't forget to delete the object to free the memory
+    // Don't forget to delete the object to free the memory and prevent memory leaks
     delete p_my_class;
     p_my_class = nullptr; // Good practice to null the pointer after deletion
 
