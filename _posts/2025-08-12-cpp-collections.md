@@ -1,5 +1,5 @@
 --- 
-title: Collections of Objects in C++
+title: C++ STL(Standard Template Library)
 date: 2025-08-12
 categories: [dev, cpp]
 tags: [cpp, stl, vector, array, collections]
@@ -48,18 +48,18 @@ To access a specific object in the array, you use the index operator `[]`. You c
 
 ```cpp
 int main() {
-    Book library[3]; // Calls the default constructor 3 times
+    Book library[3] = {
+        Book("The Hobbit", 295),
+        Book("Dale", 333)
+    }; // Calls the default constructor 3 times
 
-    // We must initialize the objects after creation
-    library[0] = {"The Hobbit", 295};
-    library[1] = {"Dune", 412};
-    // library[2] remains a default-constructed book
-
-    for (int i = 0; i < 3; ++i) {
+    for (int i = 0; i < 2; ++i) {
         library[i].print();
     }
 }
 ```
+
+While this works, it still suffers from the core limitations of C-style arrays.
 
 **Limitations of C-style arrays:**
 - **Fixed Size:** The size is set at compile time and cannot be changed.
@@ -68,25 +68,7 @@ int main() {
 
 For these reasons, C-style arrays are largely replaced by modern C++ containers.
 
-#### Initializing C-Style Object Arrays
-
-You can initialize the array with specific values at declaration by calling the constructors for each element in an initializer list.
-
-```cpp
-int main() {
-    Book shelf[3] = {
-        {"Foundation", 255},
-        {"Hyperion", 482},
-        {"Neuromancer", 271}
-    };
-
-    std::cout << "\n--- Shelf Contents ---\n";
-    for (int i = 0; i < 3; ++i) {
-        shelf[i].print();
-    }
-}
-```
-While this works, it still suffers from the core limitations of C-style arrays. Let's move on to the modern solution.
+Let's move on to the modern solution.
 
 #### `std::vector`: The Modern Dynamic Array
 
@@ -241,9 +223,9 @@ To use it, include the `<array>` header. The size is part of the type definition
 int main() {
     // The size (3) is part of the type
     std::array<Book, 3> bookshelf = {
-        {{"Fahrenheit 451", 249}},
-        {{"The Martian", 369}},
-        {{"Project Hail Mary", 496}}
+        Book {"Fahrenheit 451", 249},
+        Book {"The Martian", 369},
+        Book {"Project Hail Mary", 496}
     };
 
     std::cout << "Bookshelf size: " << bookshelf.size() << std::endl;
@@ -261,6 +243,8 @@ int main() {
     }
 }
 
+
+### TL;DR
 
 Choosing the right container is a key skill in C++.
 
