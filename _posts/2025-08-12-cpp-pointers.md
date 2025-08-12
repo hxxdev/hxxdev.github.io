@@ -118,6 +118,22 @@ void anotherFunction() {
 }
 ```
 
+```plantuml
+rectangle "Memory Layout" {
+  rectangle "Code Area" as code_area
+  rectangle "Data Area" as data_area
+  rectangle "Heap Area" as heap_area
+  rectangle "Stack Area" as stack_area
+  
+  code_area -[hidden]- data_area
+  data_area -[hidden]- heap_area
+  heap_area -[hidden]- stack_area
+  
+  note right of data_area : Global variables, Static variables
+  note right of heap_area : Space available for programmer\nallocation and deallocation
+  note right of stack_area : Local variables, Parameters
+}
+```
 
 ---
 
@@ -177,6 +193,9 @@ std::cout << *p_var << std::endl; // Outputs 20
 ##### Pointer Constants (Array Names)
 
 When you declare an array, the array's name acts as a *constant pointer* to the first element of the array. You cannot change the address that the array name points to.
+
+*   Instead, arr is a compile-time constant that represents the memory address of the first element of the array. When you use arr in most expressions, it "decays" into a pointer to its first element   (&arr[0]).
+*   You cannot change what arr points to (e.g., arr = some_other_address; is illegal), which is why it's often referred to as a "pointer constant." However, this "constant" nature refers to the value of  the address it represents, not that arr itself is a pointer variable occupying memory.
 
 ```cpp
 int my_array[3] = {5, 10, 15};
