@@ -38,7 +38,8 @@ In C++, you can access the value of a variable in two ways: directly or indirect
 
 int main() {
     int direct_value = 100;
-    std::cout << "Accessing value directly: " << direct_value << std::endl; // Outputs 100
+    // Expected output: Accessing value directly: 100
+    std::cout << "Accessing value directly: " << direct_value << std::endl;
     return 0;
 }
 ```
@@ -52,12 +53,15 @@ int main() {
     int value = 200;
     int* pointer_to_value = &value; // Pointer holds the address of 'value'
 
+    // Expected output: A memory address, e.g., Memory address of value: 0x7ffeed5a1a54
     std::cout << "Memory address of value: " << pointer_to_value << std::endl;
-    std::cout << "Accessing value indirectly: " << *pointer_to_value << std::endl; // Outputs 200
+    // Expected output: Accessing value indirectly: 200
+    std::cout << "Accessing value indirectly: " << *pointer_to_value << std::endl;
 
     // You can also modify the original variable's value through the pointer
     *pointer_to_value = 250;
-    std::cout << "New value of 'value': " << value << std::endl; // Outputs 250
+    // Expected output: New value of 'value': 250
+    std::cout << "New value of 'value': " << value << std::endl;
     return 0;
 }
 ```
@@ -88,11 +92,16 @@ p_int = &i; // Correct
 An uninitialized pointer holds a garbage address and is dangerous. Pointing it to a known address or setting it to `nullptr` is essential before use. The `nullptr` keyword, introduced in C++11, provides a type-safe null pointer, preventing ambiguities that existed with the older `NULL` macro.
 
 ```cpp
-int* p_safe_int = nullptr; // Good practice: always initialize pointers
+#include <iostream>
 
-if (p_safe_int) {
-    // This code will not execute
-    std::cout << *p_safe_int << std::endl;
+int main() {
+    int* p_safe_int = nullptr; // Good practice: always initialize pointers
+
+    if (p_safe_int) {
+        // This code will not execute, so there is no output.
+        std::cout << *p_safe_int << std::endl;
+    }
+    return 0;
 }
 ```
 
@@ -155,14 +164,20 @@ Dynamic memory allocation allows your program to request memory at runtime.
 Use `new` to create an object on the heap and `delete` to destroy it.
 
 ```cpp
-// Allocate an integer on the heap
-int* p_heap_int = new int(150); 
+#include <iostream>
 
-std::cout << *p_heap_int << std::endl; // Outputs 150
+int main() {
+    // Allocate an integer on the heap
+    int* p_heap_int = new int(150); 
 
-// Deallocate the memory to prevent a memory leak
-delete p_heap_int;
-p_heap_int = nullptr; // Best practice
+    // Expected output: 150
+    std::cout << *p_heap_int << std::endl;
+
+    // Deallocate the memory to prevent a memory leak
+    delete p_heap_int;
+    p_heap_int = nullptr; // Best practice
+    return 0;
+}
 ```
 
 ##### Arrays
@@ -181,8 +196,10 @@ int main() {
     srand(time(0));
     for (int i = 0; i < 10; ++i) {
         p_array[i] = rand() % 100;
+        // Expected output: A random number, e.g., 83
         std::cout << p_array[i] << " ";
     }
+    // Expected output: A newline character
     std::cout << std::endl;
 
     // CRITICAL: Use delete[] for arrays
@@ -199,7 +216,8 @@ Forgetting to `delete` allocated memory causes a **memory leak**. The program lo
 
 ### Modern C++: Smart Pointers
 
-Manual memory management with `new` and `delete` is error-prone. C++ provides **smart pointers** in the `<memory>` header to automate this process, ensuring that memory is deallocated correctly when the pointer goes out of scope. This principle is called RAII (Resource Acquisition Is Initialization).
+Manual memory management with `new` and `delete` is error-prone. C++ provides **smart pointers** in the `<memory>` header to automate this process, ensuring that memory is deallocated correctly when the pointer goes out of scope.
+This principle is called RAII (Resource Acquisition Is Initialization).
 
 #### `std::unique_ptr`
 A `unique_ptr` provides exclusive ownership of a heap-allocated object. It's lightweight and has virtually no performance overhead compared to a raw pointer.
@@ -208,6 +226,7 @@ A `unique_ptr` provides exclusive ownership of a heap-allocated object. It's lig
 *   You cannot copy a `unique_ptr`, but you can move it using `std::move()`.
 *   The memory is automatically freed when the `unique_ptr` is destroyed.
 
+```cpp
 #include <iostream>
 #include <memory>
 
@@ -220,7 +239,9 @@ public:
 
 int main() {
     // Create a Dog object on the heap owned by a unique_ptr
+    // Expected output: Dog created
     std::unique_ptr<Dog> p_dog = std::make_unique<Dog>();
+    // Expected output: Woof!
     p_dog->bark();
 
     // This design choice, where only one `unique_ptr` can own an object at a time,
@@ -230,17 +251,161 @@ int main() {
     std::unique_ptr<Dog> p_dog_moved = std::move(p_dog); // Ownership transferred to p_dog_moved
 
     // p_dog is now null and no longer owns the Dog object.
-    // p_dog->bark(); // This would cause a runtime error!
+    // p_dog->bark(); // This would cause a runtime error! 
 
+    // Expected output: Woof!
     p_dog_moved->bark(); // p_dog_moved now owns and can access the Dog object.
 
     // No need to call delete. The Dog is automatically destroyed when p_dog_moved goes out of scope.
-    return 0; // "Dog destroyed" is printed here
+    // Expected output (at end of main): Dog destroyed
+    return 0;
+}
+```
+
+
+##### Releasing and Resetting with `reset()`
+
+The `reset()` method allows you to manually control the lifetime of the managed object before the `unique_ptr` goes out of scope. Calling `reset()` does two things:
+
+1.  It **destroys** the object that the `unique_ptr` currently owns (if any). The object's destructor is called.
+2.  It sets the `unique_ptr` itself to a `nullptr`.
+
+You can also pass a new raw pointer to `reset(new_ptr)`.
+In this case, the `unique_ptr` first destroys the old object and then takes ownership of the `new_ptr`.
+
+```cpp
+#include <iostream>
+#include <memory>
+
+class Resource {
+public:
+    Resource(int id) : id_(id) { std::cout << "Resource " << id_ << " acquired.\n"; } 
+    ~Resource() { std::cout << "Resource " << id_ << " destroyed.\n"; } 
+private:
+    int id_;
+};
+
+int main() {
+    // Expected output: Resource 1 acquired.
+    auto ptr = std::make_unique<Resource>(1);
+
+    // Expected output: Calling reset()...
+    std::cout << "Calling reset()\n";
+    // Expected output: Resource 1 destroyed.
+    ptr.reset(); 
+    // Expected output: ptr is now null
+    std::cout << "ptr is now " << (ptr ? "not null" : "null") << std::endl;
+
+    // Expected output: (a blank line)
+    //                  Resetting to a new resource...
+    std::cout << "\nResetting to a new resource...\n";
+    // Expected output: Resource 2 acquired.
+    ptr.reset(new Resource(2)); // Takes ownership of a new Resource
+
+    // Expected output: Program ending...
+    std::cout << "Program ending...\n";
+    // Expected output (at end of main): Resource 2 destroyed.
+    return 0;
+}
+```
+
+
+##### Transferring Ownership with `release()`
+
+The `release()` method is different from `reset()`. It **gives up ownership** of the managed object *without destroying it*.
+
+Calling `release()` does two things:
+
+1.  It returns the **raw pointer** to the object that the `unique_ptr` was managing.
+2.  It sets the `unique_ptr` itself to a `nullptr`.
+
+**CRITICAL:** After calling `release()`, you become responsible for the memory of the object. You must manually call `delete` on the raw pointer that was returned to prevent a memory leak. This is often used when passing ownership to legacy code that expects a raw pointer.
+
+**`release()` vs. `reset()`**
+*   `reset()`: Destroys the object.
+*   `release()`: Does **not** destroy the object; it just hands you the raw pointer and the responsibility to clean it up later.
+
+```cpp
+#include <iostream>
+#include <memory>
+
+class LegacyConnector {
+public:
+    LegacyConnector(int* raw_ptr) : raw_ptr_(raw_ptr) {
+        std::cout << "LegacyConnector takes ownership of raw pointer.\n";
+    }
+    ~LegacyConnector() {
+        std::cout << "LegacyConnector deleting raw pointer.\n";
+        delete raw_ptr_; // Manages its own memory
+    }
+private:
+    int* raw_ptr_;
+};
+
+int main() {
+    auto u_ptr = std::make_unique<int>(123);
+
+    // Release ownership to pass the raw pointer to legacy code
+    int* raw_p = u_ptr.release();
+
+    // Expected output: u_ptr is now null
+    std::cout << "u_ptr is now " << (u_ptr ? "not null" : "null") << std::endl;
+
+    // The legacy code now owns the memory
+    // Expected output: LegacyConnector takes ownership of raw pointer.
+    LegacyConnector legacy(raw_p);
+
+    // We don't need to delete raw_p, because LegacyConnector will do it.
+    // If we weren't passing it to another owner, we would need to call:
+    // delete raw_p;
+
+    // Expected output (at end of main): LegacyConnector deleting raw pointer.
+    return 0;
+}
+```
+
+##### Observing the Pointer with `get()`
+
+Sometimes you need to interact with code that doesn't understand smart pointers, like a C-style library that expects a raw pointer. For this, `unique_ptr` provides the `get()` method.
+
+*   `get()` returns a **raw pointer** to the managed object.
+*   It does **not** affect ownership in any way. The `unique_ptr` continues to own the object and is responsible for its deletion.
+*   The returned pointer is a temporary, non-owning, "observing" pointer.
+
+**CRITICAL:** The raw pointer returned by `get()` is only valid for as long as the `unique_ptr` owns the object. If the `unique_ptr` is destroyed or reset, the raw pointer becomes a **dangling pointer**, and using it will lead to undefined behavior.
+
+```cpp
+#include <iostream>
+#include <memory>
+
+// A legacy function that only understands raw pointers
+void legacy_print_value(const int* p_value) {
+    if (p_value) {
+        std::cout << "Legacy function sees value: " << *p_value << std::endl;
+    } else {
+        std::cout << "Legacy function sees a null pointer.\n";
+    }
 }
 
+int main() {
+    auto ptr = std::make_unique<int>(42);
+
+    // Pass a raw pointer to the legacy function
+    // Expected output: Legacy function sees value: 42
+    legacy_print_value(ptr.get());
+
+    // The unique_ptr still owns the object
+    *ptr = 100;
+    // Expected output: Legacy function sees value: 100
+    legacy_print_value(ptr.get());
+
+    return 0; // The memory is correctly freed here by the unique_ptr
+}
+```
 
 #### `std::shared_ptr`
-A `shared_ptr` allows multiple pointers to share ownership of a heap-allocated object. It maintains a reference count to track how many `shared_ptr`s are pointing to the object.
+A `shared_ptr` allows multiple pointers to share ownership of a heap-allocated object.
+It maintains a reference count to track how many `shared_ptr`s are pointing to the object.
 
 *   The object is destroyed only when the last `shared_ptr` owning it is destroyed.
 *   Useful when an object's lifetime needs to be managed by multiple, non-hierarchical owners.
@@ -253,13 +418,13 @@ It is highly recommended to use `std::make_shared` to create `shared_ptr`s inste
 
 2.  **Exception Safety:** Consider `function(std::shared_ptr<T>(new T()), some_other_function())`. If `some_other_function()` throws an exception after `new T()` but before the `std::shared_ptr` constructor is called, the memory allocated for `T` will leak because no `shared_ptr` ever took ownership. `std::make_shared` avoids this by ensuring the object and its control block are constructed atomically.
 
-```cpp
 #include <iostream>
 #include <memory>
 
 class Project {
 public:
-    ~Project() { std::cout << "Project finished.\n"; } // Note: Destructors in C++ should not print directly. This is for demonstration.
+    // Note: Destructors in C++ should not print directly. This is for demonstration.
+    ~Project() { std::cout << "Project finished.\n"; } 
 };
 
 class Employee {
@@ -270,19 +435,23 @@ public:
 
 int main() {
     std::shared_ptr<Project> p_shared_project = std::make_shared<Project>();
-    std::cout << "Reference count: " << p_shared_project.use_count() << std::endl; // 1
+    // Expected output: Reference count: 1
+    std::cout << "Reference count: " << p_shared_project.use_count() << std::endl;
 
     {
         Employee e1(p_shared_project);
         Employee e2(p_shared_project);
-        std::cout << "Reference count: " << p_shared_project.use_count() << std::endl; // 3
+        // Expected output: Reference count: 3
+        std::cout << "Reference count: " << p_shared_project.use_count() << std::endl;
     } // e1 and e2 are destroyed, their shared_ptr copies are gone
 
-    std::cout << "Reference count: " << p_shared_project.use_count() << std::endl; // 1
+    // Expected output: Reference count: 1
+    std::cout << "Reference count: " << p_shared_project.use_count() << std::endl;
 
-    return 0; // Last shared_ptr is destroyed, "Project finished." is printed
+    // Expected output (at end of main): Project finished.
+    return 0;
 }
-```
+
 
 
 #### `std::weak_ptr`
@@ -307,13 +476,15 @@ class Person; // Forward declaration
 class Apartment {
 public:
     std::shared_ptr<Person> tenant;
-    ~Apartment() { std::cout << "Apartment destroyed.\n"; } // Note: Destructors in C++ should not print directly. This is for demonstration.
+    // Note: Destructors in C++ should not print directly. This is for demonstration.
+    ~Apartment() { std::cout << "Apartment destroyed.\n"; } 
 };
 
 class Person {
 public:
     std::shared_ptr<Apartment> apartment;
-    ~Person() { std::cout << "Person destroyed.\n"; } // Note: Destructors in C++ should not print directly. This is for demonstration.
+    // Note: Destructors in C++ should not print directly. This is for demonstration.
+    ~Person() { std::cout << "Person destroyed.\n"; } 
 };
 
 int main() {
@@ -328,7 +499,8 @@ int main() {
     // However, the objects they point to are not destroyed!
     // The Apartment holds a shared_ptr to the Person, and the Person holds one to the Apartment.
     // Their reference counts are both 1.
-    return 0; // MEMORY LEAK: Neither destructor is called.
+    // MEMORY LEAK: Neither destructor is called, so there is no output.
+    return 0;
 }
 ```
 
@@ -346,13 +518,15 @@ class Apartment {
 public:
     // The tenant doesn't own the apartment, so a weak_ptr is appropriate.
     std::weak_ptr<Person> tenant;
-    ~Apartment() { std::cout << "Apartment destroyed.\n"; } // Note: Destructors in C++ should not print directly. This is for demonstration.
+    // Note: Destructors in C++ should not print directly. This is for demonstration.
+    ~Apartment() { std::cout << "Apartment destroyed.\n"; } 
 };
 
 class Person {
 public:
     std::shared_ptr<Apartment> apartment;
-    ~Person() { std::cout << "Person destroyed.\n"; } // Note: Destructors in C++ should not print directly. This is for demonstration.
+    // Note: Destructors in C++ should not print directly. This is for demonstration.
+    ~Person() { std::cout << "Person destroyed.\n"; } 
 };
 
 int main() {
@@ -366,15 +540,16 @@ int main() {
     // The p_person shared_ptr is destroyed, Person's ref count becomes 0, and the Person object is destroyed.
     // This in turn destroys the Person's apartment member, which was the last shared_ptr to the Apartment.
     // The Apartment's ref count becomes 0, and it is destroyed.
-    return 0; // "Person destroyed." and "Apartment destroyed." are printed. No leak.
+    // Expected output (order may vary slightly based on implementation):
+    // Person destroyed.
+    // Apartment destroyed.
+    return 0;
 }
 ```
 
 ---
 
 ### Advanced Memory Layout: Classes and Pointers
-```
-
 Understanding where objects and their data live is key.
 
 #### Scenario 1: Stack-allocated object with a heap-allocated member
@@ -382,6 +557,8 @@ Understanding where objects and their data live is key.
 Consider a class where a member variable is a pointer to dynamically allocated memory.
 
 ```cpp
+#include <iostream>
+
 class DataHolder {
     int* p_data;
 public:
@@ -396,7 +573,9 @@ public:
 };
 
 int main() {
+    // Expected output: DataHolder created, member allocated on heap.
     DataHolder holder; // 'holder' object is created on the stack
+    // Expected output (at end of main): DataHolder destroyed, member deallocated from heap.
     return 0;
 }
 ```
@@ -410,10 +589,27 @@ int main() {
 Now let's allocate the `DataHolder` object itself on the heap.
 
 ```cpp
+#include <iostream>
+
+class DataHolder {
+    int* p_data;
+public:
+    DataHolder() {
+        p_data = new int[50]; // Allocate memory on the heap
+        std::cout << "DataHolder created, member allocated on heap.\n";
+    }
+    ~DataHolder() {
+        delete[] p_data; // CRUCIAL: free the heap memory
+        std::cout << "DataHolder destroyed, member deallocated from heap.\n";
+    }
+};
+
 int main() {
     // p_holder pointer is on the stack
+    // Expected output: DataHolder created, member allocated on heap.
     DataHolder* p_holder = new DataHolder(); // DataHolder object is on the heap
     
+    // Expected output: DataHolder destroyed, member deallocated from heap.
     delete p_holder; // Manually delete the heap object
     return 0;
 }
@@ -487,14 +683,20 @@ A regular pointer is a **variable** that stores an address. You can reassign it.
 An array's name acts as a **constant pointer** to its first element. You cannot reassign it.
 
 ```cpp
-int my_array[3] = {5, 10, 15};
-int another_var = 25;
+#include <iostream>
 
-// my_array points to the first element, &my_array[0]
-std::cout << *my_array << std::endl; // Outputs 5
+int main() {
+    int my_array[3] = {5, 10, 15};
+    int another_var = 25;
 
-// The following line will cause a compilation error
-// my_array = &another_var; // ILLEGAL!
+    // my_array points to the first element, &my_array[0]
+    // Expected output: 5
+    std::cout << *my_array << std::endl;
+
+    // The following line will cause a compilation error
+    // my_array = &another_var; // ILLEGAL!
+    return 0;
+}
 ```
 
 ---
@@ -510,8 +712,11 @@ The size of a pointer depends on the system's architecture, not the data type it
 #include <iostream>
 
 int main() {
+    // Expected output on a 64-bit system: Size of int pointer: 8 bytes
     std::cout << "Size of int pointer: " << sizeof(int*) << " bytes" << std::endl;
+    // Expected output on a 64-bit system: Size of double pointer: 8 bytes
     std::cout << "Size of double pointer: " << sizeof(double*) << " bytes" << std::endl;
+    // Expected output on a 64-bit system: Size of char pointer: 8 bytes
     std::cout << "Size of char pointer: " << sizeof(char*) << " bytes" << std::endl;
     return 0;
 }
@@ -522,6 +727,8 @@ On a 64-bit system, this will output 8 for all lines.
 
 #### Conclusion
 
-Pointers are a fundamental concept in C++. They provide a way to work directly with memory, which is essential for high-performance applications, dynamic data structures, and low-level programming. While raw pointers require careful handling, modern C++ offers powerful tools like smart pointers (`unique_ptr`, `shared_ptr`, and `weak_ptr`) that eliminate most of the risks associated with manual memory management. By mastering both the underlying concepts and the modern tools, you will become a much more effective and confident C++ programmer.
+Pointers are a fundamental concept in C++.
+They provide a way to work directly with memory, which is essential for high-performance applications, dynamic data structures, and low-level programming.
+While raw pointers require careful handling, modern C++ offers powerful tools like smart pointers (`unique_ptr`, `shared_ptr`, and `weak_ptr`) that eliminate most of the risks associated with manual memory management.
+By mastering both the underlying concepts and the modern tools, you will become a much more effective and confident C++ programmer.
 
-```
