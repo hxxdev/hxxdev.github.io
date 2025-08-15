@@ -418,6 +418,7 @@ It is highly recommended to use `std::make_shared` to create `shared_ptr`s inste
 
 2.  **Exception Safety:** Consider `function(std::shared_ptr<T>(new T()), some_other_function())`. If `some_other_function()` throws an exception after `new T()` but before the `std::shared_ptr` constructor is called, the memory allocated for `T` will leak because no `shared_ptr` ever took ownership. `std::make_shared` avoids this by ensuring the object and its control block are constructed atomically.
 
+```cpp
 #include <iostream>
 #include <memory>
 
@@ -451,10 +452,104 @@ int main() {
     // Expected output (at end of main): Project finished.
     return 0;
 }
+```
 
+##### Understanding `use_count()`
 
+The `shared_ptr` provides a useful method called `use_count()` which returns the number of `shared_ptr` instances that are currently sharing ownership of the managed object. This number is also known as the "reference count."
+
+*   When a new `shared_ptr` is created to point to the object (e.g., through copy construction or copy assignment), the `use_count()` increases by one.
+*   When a `shared_ptr` is destroyed or reset, the `use_count()` decreases by one.
+
+**CRITICAL:** The object's destructor is called and its memory is deallocated at the exact moment the `use_count()` drops to zero. This happens when the very last `shared_ptr` owning the object is destroyed.
+
+```cpp
+#include <iostream>
+#include <memory>
+
+class Widget {
+public:
+    Widget() { std::cout << "Widget created.\n"; }
+    ~Widget() { std::cout << "Widget destroyed.\n"; }
+};
+
+int main() {
+    // Expected output: Widget created.
+    std::shared_ptr<Widget> main_ptr = std::make_shared<Widget>();
+    // Expected output: Current use_count: 1
+    std::cout << "Current use_count: " << main_ptr.use_count() << std::endl;
+
+    {
+        // Expected output: Entering inner scope...
+        std::cout << "Entering inner scope...\n";
+        std::shared_ptr<Widget> inner_ptr = main_ptr; // Copying increases the count
+        // Expected output: Current use_count: 2
+        std::cout << "Current use_count: " << main_ptr.use_count() << std::endl;
+        // Expected output: Leaving inner scope...
+        std::cout << "Leaving inner scope...\n";
+    } // inner_ptr goes out of scope, use_count decreases
+
+    // Expected output: Current use_count: 1
+    std::cout << "Current use_count: " << main_ptr.use_count() << std::endl;
+
+    // Expected output: main_ptr is about to be destroyed...
+    std::cout << "main_ptr is about to be destroyed...\n";
+    // Expected output (at end of main): Widget destroyed.
+    return 0; // main_ptr is destroyed, use_count becomes 0, Widget is destroyed
+}
+```
+
+##### The `reset()` Method with `shared_ptr`
+
+Similar to `unique_ptr`, `shared_ptr` has a `reset()` method. However, its behavior is critically tied to the reference count.
+
+Calling `reset()` on a `shared_ptr` does two things:
+1.  It gives up its own ownership of the object, **decrementing the reference count**.
+2.  It then **checks if the reference count has become zero**.
+
+The managed object is destroyed **if and only if** that `reset()` call caused the reference count to drop to zero. If other `shared_ptr`s still own the object, it will not be destroyed.
+
+```cpp
+#include <iostream>
+#include <memory>
+
+class Resource {
+public:
+    Resource() { std::cout << "Resource acquired.\n"; }
+    ~Resource() { std::cout << "Resource DESTROYED.\n"; }
+};
+
+int main() {
+    // Expected output: Resource acquired.
+    std::shared_ptr<Resource> ptr1 = std::make_shared<Resource>();
+    // Expected output: Use count is now: 1
+    std::cout << "Use count is now: " << ptr1.use_count() << std::endl;
+
+    std::shared_ptr<Resource> ptr2 = ptr1; // Copy, count becomes 2
+    // Expected output: Use count is now: 2
+    std::cout << "Use count is now: " << ptr1.use_count() << std::endl;
+
+    // Expected output: Calling reset() on ptr1...
+    std::cout << "\nCalling reset() on ptr1...\n";
+    ptr1.reset(); // Decrements count to 1. Object is NOT destroyed.
+
+    // Expected output: Use count is now: 1
+    std::cout << "Use count is now: " << ptr2.use_count() << std::endl;
+    
+    // Expected output: Calling reset() on ptr2...
+    std::cout << "\nCalling reset() on ptr2...\n";
+    // This decrements the count from 1 to 0. The object is destroyed.
+    // Expected output: Resource DESTROYED.
+    ptr2.reset();
+
+    // Expected output: Program finished.
+    std::cout << "\nProgram finished.\n";
+    return 0;
+}
+```
 
 #### `std::weak_ptr`
+
 A `std::weak_ptr` is a non-owning, "weak" reference to an object managed by a `std::shared_ptr`. It allows you to observe an object without affecting its lifetime.
 
 *   It does not increase the reference count of the `shared_ptr`.
@@ -548,6 +643,39 @@ int main() {
 ```
 
 ---
+
+### Choosing the Right Smart Pointer
+
+The core of modern C++ memory management is choosing the right tool for the job. The decision should be based on the **ownership semantics** your design requires.
+
+#### `std::unique_ptr`: The Default Choice
+
+You should **always prefer `unique_ptr`** as your default smart pointer. It is lightweight, has virtually no performance overhead compared to a raw pointer, and clearly expresses exclusive ownership.
+
+Use `unique_ptr` when:
+
+1.  **You need exclusive, single ownership.** The object should have one clear owner responsible for its lifetime. Think of a `Car` that owns its `Engine`. If the `Car` is destroyed, the `Engine` is destroyed too.
+2.  **You are transferring ownership.** A common pattern is for a "factory" function to create an object and return a `unique_ptr`, effectively handing off ownership to the caller.
+3.  **You are implementing the PIMPL (Pointer to Implementation) idiom.** The outer class holds a `unique_ptr` to its hidden implementation details.
+4.  **You are storing pointers in STL containers** (like `std::vector<std::unique_ptr<MyObject>>`) where each object in the container is uniquely owned.
+
+**Rule of Thumb:** Start with `unique_ptr`. Only switch to `shared_ptr` if you can prove you need shared ownership.
+
+#### `std::shared_ptr`: The Specific Choice
+
+Use `shared_ptr` only when you have a situation where an object's lifetime is legitimately tied to multiple, non-hierarchical owners, and it's not clear which one will be the last to finish using it.
+
+Use `shared_ptr` when:
+
+1.  **You have shared ownership of a resource.** For example, multiple `Employee` objects might share a pointer to the same `Project` they are working on. The `Project` should only be "finished" (destroyed) when the last `Employee` working on it is gone.
+2.  **You are implementing graph-like data structures.** A node in a graph might be pointed to by several other nodes. `shared_ptr` can manage the node's lifetime. (But beware of cycles!)
+3.  **You need to keep an object alive for callbacks or asynchronous operations.** You can pass a `shared_ptr` to a callback, ensuring the object it points to remains valid until the callback is executed, even if the original owner has moved on.
+
+**The Trade-offs:** `shared_ptr` is more expensive than `unique_ptr`. It requires an extra memory allocation for its control block and uses atomic operations to manage the reference count, which adds a small performance overhead every time a `shared_ptr` is copied or destroyed.
+
+#### `std::weak_ptr`: The Observer
+
+As we saw, `weak_ptr` is the essential companion to `shared_ptr`. It solves the main problem with shared ownership: **circular references**. Use a `weak_ptr` when you need to observe or access an object managed by a `shared_ptr` without actually participating in its ownership or extending its lifetime.
 
 ### Advanced Memory Layout: Classes and Pointers
 Understanding where objects and their data live is key.
