@@ -18,6 +18,7 @@ This post is for keeping useful **git commands**.
 |`git push`    | 🎈`<remote> <tagname>` push a specific tag<br>🎈`--tags`: push all tags|
 |`git pull`    | used to fetch changes from a remote repository and merge those changes into your current branch.<br>🎈|
 |`git tag`<sup>3</sup>    | list all tags<br>🎈`<tagname>` Creates a tag to the current commit.<sup>2</sup><br>🎈`-a <tagname> -m "message"`: Creates a tag with a message<sup>2</sup><br>🎈`<tagname> <commit-hash>`: tag a specific commit<sup>2</sup><br>🎈|
+|`git blame`       | shows who last modified each line of a file, along with the commit hash and timestamp.<br>🎈`<file>`: The file to inspect.<br>🎈`-L <start>,<end>`: Restrict the blame output to the given line range.<br>🎈`-e`: Show author's email instead of name.|
 
 
 - 1: `HEAD` is a pointer that points to the latest commit of current branch. If `HEAD` is detached, it means you are not on any branch. You can see where `HEAD` points to by running `cat .git/HEAD`.
