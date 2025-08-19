@@ -298,6 +298,16 @@ int main() {
 3.  It must be declared as a `friend` if it needs to access private members.
 4.  It must return a reference to the stream (`ostream&`) to enable chaining.
 
+##### Member vs. Friend Functions: Which to Choose?
+Member functions and friend functions can sometimes accomplish similar tasks. So when should you choose one over the other? Here’s a general guideline:
+
+*   **Define as a member function if:** The operation is conceptually tied to a single object (e.g., modifying its state, like `operator++`). Unary operators are a good example.
+*   **Consider a friend function if:** The operation involves two or more distinct objects and needs access to their private members (e.g., a function that compares two different types of objects).
+
+Of course, you can often achieve the same result using public accessor methods (getters/setters) instead of a friend function. However, a friend function can be more direct and efficient.
+
+**A Word of Caution:** Remember that `friend` functions and classes break the principle of encapsulation. They should be used sparingly and only when there is a clear benefit that cannot be achieved reasonably with member functions or public interfaces.
+
 ---
 
 #### 5. Advanced Topics: Assignment, Subscript, and Pointer Operators
