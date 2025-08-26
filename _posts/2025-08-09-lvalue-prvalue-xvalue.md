@@ -1,21 +1,47 @@
 ---
-title: Understanding C++ Value Categories - lvalue, prvalue, and xvalue
+title: C++ Expression Type and Value Categories - lvalue, rvalue
 date: 2025-08-09
 categories: [dev]
 tags: [cpp, lvalue, prvalue, xvalue, move-semantics]
 ---
 
-# Understanding lvalue, prvalue, and xvalue in C++
+# Understanding C++ Expression
 
-In C++, understanding value categories is crucial for mastering modern features like move semantics and perfect forwarding. The three primary value categories are **lvalue**, **prvalue**, and **xvalue**.
+In C++, understanding expression is crucial for mastering modern features like move semantics and perfect forwarding.
 
 This post breaks down these concepts with clear explanations and examples.
 
 ---
 
-## What is an lvalue?
+## Expression
 
-An **lvalue** (short for *locator value*) refers to an object that occupies a persistent memory location. You can think of it as an object that has a name.
+In C, for compiler to determine whether a given expression is legal or not,
+there are two properties of expression: a **type** and a **value category**.
+
+---
+
+### Type of Expression
+
+Type of expression is the same as the type of the evaluated expression.
+
+For example, 
+
+```cpp
+auto a1 = 18 / 3; // this expression is int type.
+auto a2 = 18.0 / 3.0; // this expression is double type.
+```
+
+---
+
+### Value Category of Expression
+
+There are mainly two types of value categories: **lvalue** and **rvalue**.
+
+#### What is an lvalue?
+
+An **lvalue** (short for *locator value*) refers to an object that occupies a persistent memory location.
+
+You can think of it as an *identifiable* object that has a name.
 
 Because it has a persistent address, you can take its address using the `&` operator.
 
@@ -36,9 +62,94 @@ int* p = &a; // You can take its address.
 std::string s = "hello"; // 's' is an lvalue.
 ```
 
-## What is a prvalue?
+More specifically, lvalues are again composed of **modifiable lvalue** and **non-modifiable lvalue**.
 
-A **prvalue** (short for *pure rvalue*) is a temporary value that does not have a persistent memory location. It's an expression that initializes an object or computes a value.
+Non-modifiable lvalues are restricted to be modified at compile-time because they are `const` or `constexpr`.
+
+Example:
+
+```cpp
+int a;
+a = 3; // a is a modifiable lvalue.
+const int b = 9; // b is a non-modifiable lvalue.
+```
+
+> lvalue-type expressions are evaluated into an identifiable object.
+
+---
+
+#### What is an rvalue?
+
+Simply said, all expressions that is not lvalue(that is not identifiable) is **rvalue**.
+
+They are mostly literals like `3`, `3.0`.
+
+Other examples include `x+1`, `foo()`.
+
+Example:
+```cpp
+int a;
+a = 3; // 3 is a rvalue.
+```
+
+> rvalue-type expressions are evaluated into a value.
+
+---
+
+### Legal Operators
+
+Now we can answer which operands are legal to an operator.
+
+Example:
+
+```cpp
+int x;
+std::cout << 3 + 6 << std::endl; // legal
+x = 9; // legal
+9 = x; // illegal
+```
+
+`+` operator expects both operands to be a rvalue.
+While `=` operator expects left operand to be a **modifiable lvalue** and right operand to be an **rvalue**.
+
+---
+
+### lvalue to rvalue conversion
+
+Example:
+
+```cpp
+int x;
+int y = 3;
+x = y; // legal even y is lvalue.
+```
+One might be wondering, even `=` operator expects right operand to be an **rvalue**, above example is still legal.
+
+This is due to **lvalue to rvalue conversion**.
+
+Example:
+
+```cpp
+int x = 3;
+std::cout << x + 1 << std::endl;
+```
+
+Even `+` operator expects both operands to be a rvalue, the conversion is applied to `x`.
+
+> Thanks to lvalue to rvalue conversion, lvalue can replace where rvalue is expected but not vice versa.
+
+---
+
+### Appendix
+
+People who are still curious about rvalue can read this section.
+
+There are two types or rvalues: **prvalue** and **xvalue**.
+
+#### What is a prvalue?
+
+A **prvalue** (short for *pure rvalue*) is a temporary value that does not have a persistent memory location.
+It's an expression that initializes an object or computes a value.
 
 Literals (like `42` or `true`) and the results of many expressions are prvalues.
 
@@ -47,7 +158,8 @@ Literals (like `42` or `true`) and the results of many expressions are prvalues.
 - It typically appears on the right-hand side of an assignment.
 - It is a temporary value that exists only within the expression that creates it.
 
-**Examples:**
+Example:
+
 ```cpp
 int x = 42;           // 42 is a prvalue.
 int y = 10 + 20;      // The result of '10 + 20' is a prvalue.
@@ -78,7 +190,8 @@ test():
 
 ## What is an xvalue?
 
-An **xvalue** (short for *eXpiring value*) is a special kind of rvalue. It refers to an object, usually near the end of its lifetime, whose resources can be "stolen" or moved.
+An **xvalue** (short for *eXpiring value*) is a special kind of rvalue.
+It refers to an object, usually near the end of its lifetime, whose resources can be "stolen" or moved.
 
 This is the key concept that enables move semantics. An xvalue has an identity (a memory location) like an lvalue, but it is marked as movable. The most common way to create an xvalue is by using `std::move`.
 
@@ -100,6 +213,8 @@ std::string s2 = std::move(s1);
 // Its resources have been moved to s2.
 ```
 
+---
+
 ## Summary Table
 
 | Value Category | Description | Has an Identity (Addressable)? | Is Movable? | Example |
@@ -108,3 +223,8 @@ std::string s2 = std::move(s1);
 | **prvalue** | A temporary (unnamed) value. | No | Yes | `42`, `a + b`, `std::string("tmp")` |
 | **xvalue** | An expiring object whose resources can be moved. | Yes | Yes | `std::move(a)`, a function returning `T&&` |
 
+---
+
+### Reference
+[1] [learncpp](https://www.learncpp.com/cpp-tutorial/value-categories-lvalues-and-rvalues)
+[2] [cppreference](https://en.cppreference.com/w/cpp/language/value_category.html)
