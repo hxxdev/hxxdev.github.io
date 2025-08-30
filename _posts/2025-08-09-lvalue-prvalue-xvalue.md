@@ -74,7 +74,7 @@ a = 3; // a is a modifiable lvalue.
 const int b = 9; // b is a non-modifiable lvalue.
 ```
 
-> lvalue-type expressions are evaluated into an identifiable object.
+> lvalue-type expressions are evaluated into an identifiable object that persist beyond the end of the expression.
 
 ---
 
@@ -92,7 +92,7 @@ int a;
 a = 3; // 3 is a rvalue.
 ```
 
-> rvalue-type expressions are evaluated into a value.
+> rvalue-type expressions are evaluated into a values which are temporary and do not persist beyond the end of the expression.
 
 ---
 
@@ -151,8 +151,6 @@ There are two types or rvalues: **prvalue** and **xvalue**.
 A **prvalue** (short for *pure rvalue*) is a temporary value that does not have a persistent memory location.
 It's an expression that initializes an object or computes a value.
 
-Literals (like `42` or `true`) and the results of many expressions are prvalues.
-
 **Key Characteristics:**
 - It does not have a stable memory address (you can't take its address with `&`).
 - It typically appears on the right-hand side of an assignment.
@@ -160,12 +158,16 @@ Literals (like `42` or `true`) and the results of many expressions are prvalues.
 
 Example:
 
+Literals (like `42` or `true`) are rvalues.
+
 ```cpp
 int x = 42;           // 42 is a prvalue.
 int y = 10 + 20;      // The result of '10 + 20' is a prvalue.
 std::string s = "temp"; // The string literal "temp" is used to create a temporary
                         // std::string, which is a prvalue used to initialize s.
 ```
+
+Expressions (like `x*(x+1)`) are rvalues. Note that `x*(x+1)` is not identifiable.
 
 ```cpp
 int test() {
