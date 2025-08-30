@@ -5,9 +5,7 @@ categories: [dev, cpp]
 tags: [cpp, shallow-copy, deep-copy]
 ---
 
-### Understanding Shallow Copy vs Deep Copy in C++
-
-When working with C++ classes that manage dynamic memory, understanding the difference between shallow and deep copying is crucial. This distinction can mean the difference between a robust application and one that crashes unexpectedly. Let's dive deep into these concepts and explore why they matter.
+Let's dive deep into **shallow copy** and **deep copy**.
 
 ### What is Copying in C++?
 
@@ -18,11 +16,16 @@ In C++, copying occurs when you create a new object from an existing one. This h
 - **Passing objects by value** to functions
 - **Returning objects by value** from functions
 
-By default, C++ provides compiler-generated copy constructor and assignment operator that perform member-wise copying. However, this default behavior can be problematic when your class manages resources like dynamic memory.
+By default, C++ provides compiler-generated copy constructor and assignment operator that perform member-wise copying.
+However, this default behavior can be *problematic* when your class manages resources like dynamic memory.
+
+---
 
 ### Shallow Copy: The Default Behavior
 
-A shallow copy duplicates only the immediate members of an object. For primitive types (int, float, char), this works perfectly. However, for pointer members, only the pointer value (memory address) is copied, not the data it points to.
+A shallow copy duplicates only the immediate members of an object.
+For primitive types (int, float, char), this works perfectly.
+However, for pointer members, *only the pointer value (memory address) is copied*, not the data it points to.
 
 #### Example of Shallow Copy Problem
 
@@ -92,6 +95,8 @@ int main() {
 }
 ```
 
+---
+
 #### Problems with Shallow Copy
 
 1. **Memory Sharing**: Both objects point to the same memory location
@@ -99,9 +104,12 @@ int main() {
 3. **Double Deletion**: Both destructors try to delete the same memory, causing undefined behavior
 4. **Dangling Pointers**: If one object is destroyed, the other points to freed memory
 
+---
+
 ### Deep Copy: The Safe Solution
 
-A deep copy creates a completely independent copy of an object, including separate copies of any dynamically allocated memory. This ensures that each object manages its own resources.
+A deep copy creates a completely independent copy of an object, including separate copies of any dynamically allocated memory.
+This ensures that each object manages its own resources.
 
 #### Implementing Deep Copy
 
@@ -231,6 +239,8 @@ obj1.data → [0x1000] → [0, 10, 20]
 obj2.data → [0x2000] → [0, 10, 20]  (Different memory!)
 ```
 
+---
+
 ### The Rule of Three/Five
 
 When your class manages resources (like dynamic memory), you typically need to implement:
@@ -244,6 +254,8 @@ When your class manages resources (like dynamic memory), you typically need to i
 Adds move semantics:
 4. **Move Constructor**
 5. **Move Assignment Operator**
+
+---
 
 #### Example with Rule of Five
 
@@ -308,6 +320,8 @@ public:
 };
 ```
 
+---
+
 ### Modern C++ Alternatives
 
 While understanding shallow vs deep copy is important, modern C++ provides better alternatives:
@@ -354,6 +368,8 @@ public:
 };
 ```
 
+---
+
 #### Using Standard Containers
 
 ```cpp
@@ -388,6 +404,8 @@ public:
 };
 ```
 
+---
+
 ### When to Disable Copying
 
 Sometimes you don't want objects to be copyable at all. You can explicitly disable copying:
@@ -411,7 +429,9 @@ public:
 };
 ```
 
-### Summary and Best Practices
+---
+
+### Summary
 
 1. **Understand the difference**: Shallow copy shares memory, deep copy creates independent copies
 2. **Follow the Rule of Three/Five**: If you need custom destructor, you probably need custom copy operations
@@ -420,4 +440,3 @@ public:
 5. **Consider move semantics**: For performance, implement move operations in C++11 and later
 6. **Test your copy operations**: Always test that copies work independently
 
-The choice between shallow and deep copy isn't just about correctness—it's about designing robust, maintainable code that behaves predictably. While shallow copy might seem simpler, understanding when and how to implement deep copy will make you a better C++ programmer and help you avoid subtle but serious bugs in your applications.
