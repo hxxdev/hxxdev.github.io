@@ -1,0 +1,164 @@
+/* ==========================================================================
+   Site-specific customizations for kjoonha.github.io
+   ========================================================================== */
+
+/*
+   Blog/Notes archive cards
+   ------------------------
+   These cards intentionally do not modify Academic Pages' default
+   `archive-single.html`. Publications and Projects can therefore keep the
+   standard Academic Pages rendering, while Blog/Notes get the requested compact
+   list format inspired by the referenced Blog/Notes pages.
+*/
+.archive-card-list {
+  display: grid;
+  gap: 0.85rem;
+  margin-top: 1.25rem;
+}
+
+.archive-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 1rem;
+  align-items: start;
+  padding: 0.9rem 1rem;
+  border: 1px solid var(--global-border-color);
+  border-radius: 0.55rem;
+  background: var(--global-bg-color);
+  transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out,
+    transform 0.2s ease-in-out;
+}
+
+.archive-card:hover {
+  border-color: var(--global-dark-border-color);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+  transform: translateY(-1px);
+}
+
+/* Notes use a slightly dimmed region so each note item reads as a separate card. */
+.archive-card--note {
+  background: var(--global-code-background-color);
+}
+
+.archive-card__title {
+  margin: 0;
+  font-size: 1.05rem;
+  line-height: 1.35;
+}
+
+.archive-card__title a {
+  text-decoration: none;
+}
+
+.archive-card__meta {
+  margin: 0.2rem 0 0;
+  color: var(--global-text-color-light);
+  font-size: 0.78rem;
+}
+
+.archive-card__excerpt {
+  margin-top: 0.55rem;
+  color: var(--global-text-color);
+  font-size: 0.88rem;
+}
+
+.archive-card__excerpt > :first-child {
+  margin-top: 0;
+}
+
+.archive-card__excerpt > :last-child {
+  margin-bottom: 0;
+}
+
+.archive-card__tags {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.35rem;
+  max-width: 16rem;
+}
+
+.archive-card__tag {
+  display: inline-block;
+  padding: 0.12rem 0.45rem;
+  border: 1px solid var(--global-border-color);
+  border-radius: 999px;
+  background: var(--global-bg-color);
+  color: var(--global-masthead-link-color);
+  font-size: 0.68rem;
+  line-height: 1.4;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.archive-card__tag:hover {
+  border-color: var(--global-link-color);
+  color: var(--global-link-color-hover);
+  text-decoration: none;
+}
+
+@media (max-width: 48em) {
+  .archive-card {
+    grid-template-columns: 1fr;
+  }
+
+  .archive-card__tags {
+    justify-content: flex-start;
+    max-width: none;
+  }
+}
+
+/*
+   Gallery grid
+   ------------
+   Gallery items are Markdown documents in `_gallery/`. Each document supplies
+   an image, date, and short description in front matter. This CSS turns the
+   collection archive into a simple responsive photo grid.
+*/
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 160px));
+  gap: 0.6rem;
+  margin-top: 1.25rem;
+}
+
+.gallery-card {
+  overflow: hidden;
+  border: 1px solid var(--global-border-color);
+  border-radius: 0.45rem;
+  background: var(--global-bg-color);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.gallery-card__image-link {
+  display: block;
+  background: var(--global-code-background-color);
+}
+
+.gallery-card__image {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+
+.gallery-card__body {
+  padding: 0.45rem;
+}
+
+.gallery-card__title {
+  margin: 0;
+  font-size: 0.72rem;
+  line-height: 1.3;
+}
+
+.gallery-card__date {
+  margin: 0.25rem 0 0;
+  color: var(--global-text-color-light);
+  font-size: 0.58rem;
+}
+
+.gallery-card__description {
+  margin: 0.3rem 0 0;
+  font-size: 0.62rem;
+}

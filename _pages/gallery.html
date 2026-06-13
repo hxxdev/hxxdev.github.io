@@ -1,0 +1,36 @@
+---
+layout: archive
+permalink: /gallery/
+title: "Gallery"
+author_profile: true
+---
+
+{% include base_path %}
+
+{% assign gallery_items = site.gallery | sort: "date" | reverse %}
+{% if gallery_items.size > 0 %}
+  <div class="gallery-grid" aria-label="Gallery items">
+    {% for item in gallery_items %}
+      <article class="gallery-card">
+        {% if item.image %}
+          <a href="{{ item.url | prepend: base_path }}" class="gallery-card__image-link" aria-label="Open {{ item.title | default: 'gallery item' }}">
+            <img src="{{ item.image | prepend: base_path }}" alt="{{ item.title | default: 'Gallery image' }}" class="gallery-card__image">
+          </a>
+        {% endif %}
+        <div class="gallery-card__body">
+          <h2 class="gallery-card__title"><a href="{{ item.url | prepend: base_path }}">{{ item.title }}</a></h2>
+          {% if item.date %}
+            <p class="gallery-card__date"><time datetime="{{ item.date | date_to_xmlschema }}">{{ item.date | date: "%B %d, %Y" }}</time></p>
+          {% endif %}
+          {% if item.description %}
+            <p class="gallery-card__description">{{ item.description }}</p>
+          {% elsif item.excerpt %}
+            <div class="gallery-card__description">{{ item.excerpt | markdownify }}</div>
+          {% endif %}
+        </div>
+      </article>
+    {% endfor %}
+  </div>
+{% else %}
+Gallery items will be added here.
+{% endif %}

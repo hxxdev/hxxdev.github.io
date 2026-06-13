@@ -1,0 +1,13 @@
+# Main header navigation.
+# The order here is the order displayed in the Academic Pages masthead.
+main:
+  - title: "Projects"
+    url: /projects/
+  - title: "Publications"
+    url: /publications/
+  - title: "Blog"
+    url: /blog/
+  - title: "Notes"
+    url: /notes/
+  - title: "Gallery"
+    url: /gallery/

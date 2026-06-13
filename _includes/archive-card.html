@@ -1,0 +1,51 @@
+{% include base_path %}
+
+{% comment %}
+  Compact card renderer used by Blog and Notes list pages.
+
+  Why this exists:
+  - Academic Pages' default `archive-single.html` is general-purpose and shows
+    excerpts immediately under titles.
+  - The Blog/Notes references requested by the user use compact list cards and
+    a small tag area on the right, so this include keeps that page-specific
+    presentation isolated from publication/project rendering.
+
+  Supported include options:
+  - post: required document/post object to render.
+  - variant: optional CSS modifier, e.g. "note" for dimmed note cards.
+  - show_excerpt: "true" or "false"; Notes pass false to avoid showing the
+    first heading/body as a preview.
+{% endcomment %}
+
+{% assign card = include.post %}
+{% assign show_excerpt = include.show_excerpt | default: "true" %}
+{% assign variant = include.variant | default: "default" %}
+
+<article class="archive-card archive-card--{{ variant }}">
+  <div class="archive-card__main">
+    <h2 class="archive-card__title">
+      <a href="{{ card.url | prepend: base_path }}">{{ card.title }}</a>
+    </h2>
+
+    {% if card.date %}
+      <p class="archive-card__meta">
+        <time datetime="{{ card.date | date_to_xmlschema }}">{{ card.date | date: "%b %-d, %Y" }}</time>
+      </p>
+    {% endif %}
+
+    {% if show_excerpt == "true" and card.excerpt %}
+      <div class="archive-card__excerpt">
+        {{ card.excerpt | markdownify | strip }}
+      </div>
+    {% endif %}
+  </div>
+
+  {% if card.tags and card.tags.size > 0 %}
+    <aside class="archive-card__tags" aria-label="Tags for {{ card.title }}">
+      {% for tag in card.tags %}
+        {% assign tag_slug = tag | slugify %}
+        <a class="archive-card__tag" href="{{ '/tags/#' | append: tag_slug | prepend: base_path }}">#{{ tag }}</a>
+      {% endfor %}
+    </aside>
+  {% endif %}
+</article>

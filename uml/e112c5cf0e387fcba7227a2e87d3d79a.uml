@@ -1,0 +1,30 @@
+@startuml
+
+
+title System Call Transition: User Mode to Kernel Mode
+skinparam defaultTextAlignment center
+skinparam linetype ortho
+skinparam rectangle {
+  BackgroundColor<<User Mode>> #E0F7FA
+  BackgroundColor<<Kernel Mode>> #FFF3E0
+  BackgroundColor<<Interface>> #E8F5E9
+  BorderColor black
+  FontSize 12
+}
+
+database "User Application" as UA <<User>>
+rectangle "User-mode API\n(e.g., CreateFile())" as API <<User Mode>>
+cloud "System Call Interface" as SCIF <<Interface>>
+rectangle "File System Driver\n(e.g., ntfs.sys)" as FSD <<Kernel Mode>>
+database "Hardware / Disk" as HW
+
+UA -down-> API : Calls API
+API -down-> SCIF : Issues\nSystem Call
+SCIF -down-> FSD : Handles\nRequest
+FSD -down-> HW : Reads/Writes\nData
+FSD -up-> SCIF : Returns\nResult
+SCIF -up-> API : Returns to\nUser Mode
+API -up-> UA : Returns\nResult
+
+
+@enduml

@@ -1,0 +1,19 @@
+---
+layout: archive
+permalink: /blog/
+title: "Blog"
+author_profile: true
+---
+
+{% include base_path %}
+
+{% assign blog_posts = site.posts | sort: "date" | reverse %}
+{% if blog_posts.size > 0 %}
+  <div class="archive-card-list archive-card-list--blog">
+    {% for post in blog_posts %}
+      {% include archive-card.html post=post variant="blog" show_excerpt="true" %}
+    {% endfor %}
+  </div>
+{% else %}
+No blog posts yet.
+{% endif %}

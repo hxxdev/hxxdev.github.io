@@ -1,0 +1,19 @@
+---
+layout: archive
+permalink: /notes/
+title: "Notes"
+author_profile: true
+---
+
+{% include base_path %}
+
+{% assign notes = site.notes | sort: "date" | reverse %}
+{% if notes.size > 0 %}
+  <div class="archive-card-list archive-card-list--notes">
+    {% for post in notes %}
+      {% include archive-card.html post=post variant="note" show_excerpt="false" %}
+    {% endfor %}
+  </div>
+{% else %}
+No notes yet.
+{% endif %}

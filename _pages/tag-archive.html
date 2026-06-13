@@ -1,0 +1,24 @@
+---
+layout: archive
+permalink: /tags/
+title: "Posts and Notes by Tag"
+author_profile: true
+---
+
+{% include base_path %}
+
+{% comment %}
+  Academic Pages' original tag archive only grouped `site.posts`.
+  This site also uses `_notes`, and Blog/Notes archive cards link their tag
+  chips here. Concatenating both collections keeps those tag links useful.
+{% endcomment %}
+{% assign tagged_documents = site.posts | concat: site.notes %}
+{% include group-by-array collection=tagged_documents field="tags" %}
+
+{% for tag in group_names %}
+  {% assign posts = group_items[forloop.index0] %}
+  <h2 id="{{ tag | slugify }}" class="archive__subtitle">{{ tag }}</h2>
+  {% for post in posts %}
+    {% include archive-card.html post=post variant="tag" show_excerpt="false" %}
+  {% endfor %}
+{% endfor %}

@@ -1,0 +1,31 @@
+@startuml
+
+rectangle "session" as session1
+rectangle "session" as session2
+rectangle "window" as window1
+rectangle "window" as window2
+rectangle "window" as window3
+rectangle "window" as window4
+rectangle "pane" as pane1
+rectangle "pane" as pane2
+rectangle "pane" as pane3
+rectangle "pane" as pane4
+rectangle "pane" as pane5
+rectangle "pane" as pane6
+rectangle "pane" as pane7
+
+
+session1 -down-> window1
+session1 -down-> window2
+session2 -down-> window3
+session2 -down-> window4
+window1 -down-> pane1
+window1 -down-> pane2
+window2 -down-> pane3
+window3 -down-> pane4
+window3 -down-> pane5
+window3 -down-> pane6
+window4 -down-> pane7
+
+
+@enduml
